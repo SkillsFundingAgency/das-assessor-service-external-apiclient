@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2016
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.AssessorService.ExternalApi.Core", "SFA.DAS.AssessorService.ExternalApi.Core\SFA.DAS.AssessorService.ExternalApi.Core.csproj", "{E3AEA363-0ABE-41D8-9B87-3E42078B9FD3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.AssessorService.ExternalApi.Core.Tests", "SFA.DAS.AssessorService.ExternalApi.Core.Tests\SFA.DAS.AssessorService.ExternalApi.Core.Tests.csproj", "{4E066111-A800-430E-947A-00020B4C4FBC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.AssessorService.ExternalApi.Examples", "SFA.DAS.AssessorService.ExternalApi.Examples\SFA.DAS.AssessorService.ExternalApi.Examples.csproj", "{FB5D280C-CBC2-4675-9114-9A5E9B833AEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E3AEA363-0ABE-41D8-9B87-3E42078B9FD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3AEA363-0ABE-41D8-9B87-3E42078B9FD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3AEA363-0ABE-41D8-9B87-3E42078B9FD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3AEA363-0ABE-41D8-9B87-3E42078B9FD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E066111-A800-430E-947A-00020B4C4FBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E066111-A800-430E-947A-00020B4C4FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E066111-A800-430E-947A-00020B4C4FBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E066111-A800-430E-947A-00020B4C4FBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB5D280C-CBC2-4675-9114-9A5E9B833AEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB5D280C-CBC2-4675-9114-9A5E9B833AEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB5D280C-CBC2-4675-9114-9A5E9B833AEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB5D280C-CBC2-4675-9114-9A5E9B833AEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D3C166B1-33E3-4095-8534-B16AD5CC807D}
+	EndGlobalSection
+EndGlobal

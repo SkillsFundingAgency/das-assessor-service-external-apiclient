@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <StartupObject>SFA.DAS.AssessorService.ExternalApi.Examples.ProgramCsv</StartupObject>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <NoWarn>1701;1702;CA1307;CA1716;CA2007;</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="CsvFiles\createCertificates.csv" />
+    <None Remove="CsvFiles\deleteCertificates.csv" />
+    <None Remove="CsvFiles\submitCertificates.csv" />
+    <None Remove="CsvFiles\updateCertificates.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="CsvFiles\createCertificates.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CsvFiles\submitCertificates.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CsvFiles\updateCertificates.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CsvFiles\deleteCertificates.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="7.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.AssessorService.ExternalApi.Core\SFA.DAS.AssessorService.ExternalApi.Core.csproj" />
+  </ItemGroup>
+
+</Project>
