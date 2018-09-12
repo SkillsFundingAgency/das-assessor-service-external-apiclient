@@ -11,7 +11,7 @@
 
         public async Task<List<SearchResult>> Search(long uln, string lastname, int? standardCode = null)
         {
-            return await Get<List<SearchResult>>($"/search/{uln}/{lastname}/{standardCode}");
+            return await Get<List<SearchResult>>($"search/{uln}/{lastname}/{standardCode}");
         }
     }
 }

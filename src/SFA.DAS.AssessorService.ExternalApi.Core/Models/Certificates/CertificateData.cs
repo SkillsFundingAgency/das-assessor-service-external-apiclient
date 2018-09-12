@@ -1,5 +1,6 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates
 {
+    using SFA.DAS.AssessorService.ExternalApi.Core.DataAnnotations;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -8,13 +9,13 @@
     {
         public string CertificateReference { get; set; }
 
-        [Required(ErrorMessage = "Learner is required")]
+        [Required(ErrorMessage = "Learner is required"), ValidateObject]
         public Learner Learner { get; set; }
 
-        [Required(ErrorMessage = "LearningDetails is required")]
+        [Required(ErrorMessage = "LearningDetails is required"), ValidateObject]
         public LearningDetails LearningDetails { get; set; }
 
-        [Required(ErrorMessage = "PostalContact is required")]
+        [Required(ErrorMessage = "PostalContact is required"), ValidateObject]
         public PostalContact PostalContact { get; set; }
 
         #region GetHashCode, Equals and IEquatable

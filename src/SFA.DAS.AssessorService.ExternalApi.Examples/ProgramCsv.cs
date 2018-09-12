@@ -89,24 +89,22 @@
         {
             const string filePath = @"CsvFiles\updateCertificates.csv";
 
-            IEnumerable<Certificate> certificates;
+            IEnumerable<CertificateData> certificates;
 
             using (TextReader textReader = File.OpenText(filePath))
             {
                 CsvReader csv = new CsvReader(textReader);
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<Certificate>().ToList();
+                certificates = csv.GetRecords<CertificateData>().ToList();
             }
 
-            IEnumerable<CertificateData> certificatesToUpdate = certificates.Select(c => c.CertificateData);
-
             // Let's pretend the first and last apprentices got better grades
-            certificatesToUpdate.First().LearningDetails.AchievementOutcome = "MERIT";
-            certificatesToUpdate.Last().LearningDetails.AchievementOutcome = "PASS";
+            certificates.First().LearningDetails.AchievementOutcome = "MERIT";
+            certificates.Last().LearningDetails.AchievementOutcome = "PASS";
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
-            bool invalidDataSupplied = certificatesToUpdate.Any(c => !c.IsValid(out ICollection<ValidationResult> validationResults));
+            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out ICollection<ValidationResult> validationResults));
 
             if (invalidDataSupplied)
             {
@@ -114,7 +112,7 @@
             }
             else
             {
-                var response = (await _CertificateApiClient.UpdateCertificates(certificatesToUpdate)).ToList();
+                var response = (await _CertificateApiClient.UpdateCertificates(certificates)).ToList();
 
                 // NOTE: You may want to deal with good & bad records seperately
                 var goodCertificates = response.Where(c => c.Certificate != null && !c.ValidationErrors.Any());
@@ -127,17 +125,17 @@
         {
             const string filePath = @"CsvFiles\submitCertificates.csv";
 
-            IEnumerable<Certificate> certificates;
+            IEnumerable<CertificateData> certificates;
 
             using (TextReader textReader = File.OpenText(filePath))
             {
                 CsvReader csv = new CsvReader(textReader);
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<Certificate>().ToList();
+                certificates = csv.GetRecords<CertificateData>().ToList();
             }
 
-            IEnumerable<SubmitCertificate> certificatesToSubmit = certificates.Select(c => new SubmitCertificate { Uln = c.CertificateData.Learner.Uln, FamilyName = c.CertificateData.Learner.FamilyName, StandardCode = c.CertificateData.LearningDetails.StandardCode});
+            IEnumerable<SubmitCertificate> certificatesToSubmit = certificates.Select(c => new SubmitCertificate { Uln = c.Learner.Uln, FamilyName = c.Learner.FamilyName, StandardCode = c.LearningDetails.StandardCode});
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
             bool invalidDataSupplied = certificatesToSubmit.Any(c => !c.IsValid(out ICollection<ValidationResult> validationResults));
@@ -160,20 +158,20 @@
         {
             const string filePath = @"CsvFiles\deleteCertificates.csv";
 
-            IEnumerable<Certificate> certificatesToDelete;
+            IEnumerable<CertificateData> certificatesToDelete;
 
             using (TextReader textReader = File.OpenText(filePath))
             {
                 CsvReader csv = new CsvReader(textReader);
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-                certificatesToDelete = csv.GetRecords<Certificate>().ToList();
+                certificatesToDelete = csv.GetRecords<CertificateData>().ToList();
             }
 
             // NOTE: The External API does not have an batch delete (for safety reasons). You'll have to loop.
             foreach(var certificate in certificatesToDelete)
             {
-                var response = await _CertificateApiClient.DeleteCertificate(certificate.CertificateData.Learner.Uln, certificate.CertificateData.Learner.FamilyName, certificate.CertificateData.LearningDetails.StandardCode);
+                var response = await _CertificateApiClient.DeleteCertificate(certificate.Learner.Uln, certificate.Learner.FamilyName, certificate.LearningDetails.StandardCode);
 
                 if(!string.IsNullOrEmpty(Convert.ToString(response)))
                 {

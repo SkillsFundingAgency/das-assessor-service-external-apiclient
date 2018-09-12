@@ -20,10 +20,14 @@
 - Update the API Subscription Key and Base Address
 - Running the solution will launch the desktop application
 
+### SFA.DAS.AssessorService.ExternalApi.Client
+
+A simple Windows Presentation Foundation (WPF) client.
+Reads in CSV formatted files.
+
 ### SFA.DAS.AssessorService.ExternalApi.Examples
 
-Example code should you wish to implement your own client :
-
+Example code should you wish to implement your own client:
 - Program.cs - basic client
 - ProgramCsv.cs - CSV enabled client
 

@@ -1,12 +1,13 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates
 {
+    using SFA.DAS.AssessorService.ExternalApi.Core.DataAnnotations;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public sealed class Certificate : IEquatable<Certificate>
     {
-        [Required(ErrorMessage = "CertificateData is required")]
+        [Required(ErrorMessage = "CertificateData is required"), ValidateObject]
         public CertificateData CertificateData { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Status is required")]

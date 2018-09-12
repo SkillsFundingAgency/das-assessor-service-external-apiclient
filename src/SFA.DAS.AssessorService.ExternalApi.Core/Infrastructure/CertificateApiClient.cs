@@ -12,22 +12,22 @@
 
         public async Task<IEnumerable<BatchCertificateResponse>> CreateCertificates(IEnumerable<CertificateData> request)
         {
-            return await Put<IEnumerable<CertificateData>, IEnumerable<BatchCertificateResponse>>("/certificate", request);
+            return await Put<IEnumerable<CertificateData>, IEnumerable<BatchCertificateResponse>>("certificate", request);
         }
 
         public async Task<IEnumerable<BatchCertificateResponse>> UpdateCertificates(IEnumerable<CertificateData> request)
         {
-            return await Post<IEnumerable<CertificateData>, IEnumerable<BatchCertificateResponse>>("/certificate", request);
+            return await Post<IEnumerable<CertificateData>, IEnumerable<BatchCertificateResponse>>("certificate", request);
         }
 
         public async Task<IEnumerable<SubmitBatchCertificateResponse>> SubmitCertificates(IEnumerable<SubmitCertificate> request)
         {
-            return await Post<IEnumerable<SubmitCertificate>, IEnumerable<SubmitBatchCertificateResponse>>("/certificate/submit", request);
+            return await Post<IEnumerable<SubmitCertificate>, IEnumerable<SubmitBatchCertificateResponse>>("certificate/submit", request);
         }
 
         public async Task<object> DeleteCertificate(long uln, string lastname, int standardCode)
         {
-            return await Delete<object>($"/certificate/{uln}/{lastname}/{standardCode}");
+            return await Delete<object>($"certificate/{uln}/{lastname}/{standardCode}");
         }
     }
 }

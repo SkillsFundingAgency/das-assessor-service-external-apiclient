@@ -3,6 +3,7 @@
     using FizzWare.NBuilder;
     using NUnit.Framework;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
+    using System;
     using System.Linq;
 
     [TestFixture(Category = "Model")]
@@ -12,8 +13,8 @@
         public void LearnerMissing()
         {
             // arrange
-            var learningDetails = Builder<LearningDetails>.CreateNew().Build();
-            var postalContact = Builder<PostalContact>.CreateNew().Build();
+            var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.AchievementDate = DateTime.UtcNow).Build();
+            var postalContact = Builder<PostalContact>.CreateNew().With(l => l.PostCode = "ZY9 9ZY").Build();
 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.Learner = null)
                                                                         .With(cd => cd.LearningDetails = learningDetails)
@@ -32,8 +33,8 @@
         public void LearningDetailsMissing()
         {
             // arrange
-            var learner = Builder<Learner>.CreateNew().Build();
-            var postalContact = Builder<PostalContact>.CreateNew().Build();
+            var learner = Builder<Learner>.CreateNew().With(l => l.Uln = 1243567890).Build();
+            var postalContact = Builder<PostalContact>.CreateNew().With(l => l.PostCode = "ZY9 9ZY").Build();
 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.Learner = learner)
                                                                         .With(cd => cd.LearningDetails = null)
@@ -52,8 +53,8 @@
         public void PostalContactMissing()
         {
             // arrange
-            var learner = Builder<Learner>.CreateNew().Build();
-            var learningDetails = Builder<LearningDetails>.CreateNew().Build();
+            var learner = Builder<Learner>.CreateNew().With(l => l.Uln = 1243567890).Build();
+            var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.AchievementDate = DateTime.UtcNow).Build();
 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.Learner = learner)
                                                                         .With(cd => cd.LearningDetails = learningDetails)
@@ -72,9 +73,9 @@
         public void WhenValid()
         {
             // arrange
-            var learner = Builder<Learner>.CreateNew().Build();
-            var learningDetails = Builder<LearningDetails>.CreateNew().Build();
-            var postalContact = Builder<PostalContact>.CreateNew().Build();
+            var learner = Builder<Learner>.CreateNew().With(l => l.Uln = 1243567890).Build();
+            var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.AchievementDate = DateTime.UtcNow).Build();
+            var postalContact = Builder<PostalContact>.CreateNew().With(l => l.PostCode = "ZY9 9ZY").Build();
 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.Learner = learner)
                                                                         .With(cd => cd.LearningDetails = learningDetails)
