@@ -16,7 +16,7 @@
     using System.Threading.Tasks;
 
     [TestFixture(Category = "Infrastructure")]
-    public class CertificateApiClientTests
+    public sealed class CertificateApiClientTests : IDisposable
     {
         private const string apiBaseAddress = "http://localhost";
         private const string subscriptionKey = "test";
@@ -36,6 +36,12 @@
             httpClient.BaseAddress = new Uri(apiBaseAddress);
 
             _ApiClient = new CertificateApiClient(httpClient);
+        }
+
+        [TearDown]
+        public void Dispose()
+        {
+            _MockHttp?.Dispose();
         }
 
         [Test]

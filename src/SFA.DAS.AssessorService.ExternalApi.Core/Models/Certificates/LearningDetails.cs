@@ -113,8 +113,10 @@
                 {
                     return new ValidationResult("An achievement date cannot be in the future", new List<string> { "AchievementDate" });
                 }
-
-                return ValidationResult.Success;
+                else
+                {
+                    return ValidationResult.Success;
+                }
             }
         }
         #endregion

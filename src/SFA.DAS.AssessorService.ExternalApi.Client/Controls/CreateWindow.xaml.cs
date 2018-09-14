@@ -61,10 +61,9 @@
 
                 MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-                switch (rsltMessageBox)
+                if (rsltMessageBox == MessageBoxResult.No)
                 {
-                    case MessageBoxResult.No:
-                        return;
+                    return;
                 }
             }
 
@@ -88,7 +87,7 @@
 
                 var results = await certificateApiClient.CreateCertificates(_ViewModel.Certificates);
 
-                var validCertificates = results.Where(r => r.Certificate != null); ;
+                var validCertificates = results.Where(r => r.Certificate != null);
                 var invalidCertificates = results.Except(validCertificates);
 
                 if (invalidCertificates.Any())
@@ -110,10 +109,9 @@
 
             MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Error);
 
-            switch (rsltMessageBox)
+            if (rsltMessageBox == MessageBoxResult.No)
             {
-                case MessageBoxResult.No:
-                    return;
+                return;
             }
 
             SaveFileDialog saveFileDialog = new SaveFileDialog
@@ -138,10 +136,9 @@
 
             MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-            switch (rsltMessageBox)
+            if (rsltMessageBox == MessageBoxResult.No)
             {
-                case MessageBoxResult.No:
-                    return;
+                return;
             }
 
             SaveFileDialog saveFileDialog = new SaveFileDialog

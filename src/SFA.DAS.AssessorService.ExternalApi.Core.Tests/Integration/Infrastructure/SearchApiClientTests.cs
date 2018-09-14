@@ -12,7 +12,7 @@
     using System.Threading.Tasks;
 
     [TestFixture(Category = "Infrastructure")]
-    public class SearchApiClientTests
+    public sealed class SearchApiClientTests : IDisposable
     {
         private const string apiBaseAddress = "http://localhost";
         private const string subscriptionKey = "test";
@@ -32,6 +32,12 @@
             httpClient.BaseAddress = new Uri(apiBaseAddress);
 
             _ApiClient = new SearchApiClient(httpClient);
+        }
+
+        [TearDown]
+        public void Dispose()
+        {
+            _MockHttp?.Dispose();
         }
 
         [Test]

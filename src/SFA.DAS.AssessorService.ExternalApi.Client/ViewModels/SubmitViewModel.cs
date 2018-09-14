@@ -8,14 +8,18 @@
 
     public class SubmitViewModel : INotifyPropertyChanged
     {
-        public string _FilePath;
+        private string _FilePath;
         public string FilePath
         {
             get { return _FilePath; }
-            set { _FilePath = value; OnPropertyChanged(); }
+            set
+            {
+                _FilePath = value;
+                OnPropertyChanged();
+            }
         }
 
-        public ObservableCollection<SubmitCertificate> Certificates { get; set; }
+        public ObservableCollection<SubmitCertificate> Certificates { get; private set; }
 
         public CollectionViewSource ValidCertificates { get; private set; }
 
@@ -34,13 +38,13 @@
             InvalidCertificates.Source = Certificates;
         }
 
-        private void ValidCertificates_Filter(object sender, FilterEventArgs e)
+        private static void ValidCertificates_Filter(object sender, FilterEventArgs e)
         {
             SubmitCertificate certificate = e.Item as SubmitCertificate;
             e.Accepted = (certificate != null && certificate.IsValid(out var validationResults));
         }
 
-        private void InvalidCertificates_Filter(object sender, FilterEventArgs e)
+        private static void InvalidCertificates_Filter(object sender, FilterEventArgs e)
         {
             SubmitCertificate certificate = e.Item as SubmitCertificate;
             e.Accepted = (certificate != null && !certificate.IsValid(out var validationResults));

@@ -1,7 +1,7 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Models.Search
 {
     using System;
-    public class SearchResult : IEquatable<SearchResult>
+    public sealed class SearchResult : IEquatable<SearchResult>
     {
         public long Uln { get; set; }
         public string GivenNames { get; set; }

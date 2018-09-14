@@ -7,7 +7,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public abstract class ApiClient
+    public class ApiClient
     {
         private readonly HttpClient _httpClient;
 
@@ -18,7 +18,7 @@
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         };
 
-        public ApiClient(HttpClient httpClient)
+        protected ApiClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }

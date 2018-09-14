@@ -11,6 +11,6 @@
 
         public Certificate Certificate { get; set; }
 
-        public List<string> ValidationErrors { get; set; } = new List<string>();
+        public IEnumerable<string> ValidationErrors { get; set; } = new List<string>();
     }
 }

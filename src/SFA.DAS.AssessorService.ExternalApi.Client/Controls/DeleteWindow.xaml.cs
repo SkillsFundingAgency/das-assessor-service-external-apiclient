@@ -61,10 +61,9 @@
 
                 MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-                switch (rsltMessageBox)
+                if (rsltMessageBox == MessageBoxResult.No)
                 {
-                    case MessageBoxResult.No:
-                        return;
+                    return;
                 }
             }
 
@@ -106,7 +105,7 @@
                     string sMessageBoxText = "Certificates are now deleted.";
                     string sCaption = "Delete Certificates";
 
-                    MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
         }
@@ -118,10 +117,9 @@
 
             MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Error);
 
-            switch (rsltMessageBox)
+            if (rsltMessageBox == MessageBoxResult.No)
             {
-                case MessageBoxResult.No:
-                    return;
+                return;
             }
 
             SaveFileDialog saveFileDialog = new SaveFileDialog

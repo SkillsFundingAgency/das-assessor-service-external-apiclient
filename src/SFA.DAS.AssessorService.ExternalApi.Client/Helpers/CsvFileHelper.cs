@@ -10,23 +10,30 @@
     {
         public static IEnumerable<T> GetFromFile(string filePath)
         {
+            FileStream stream = null;
             try
             {
-                using (FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    using (TextReader textReader = new StreamReader(stream))
-                    {
-                        CsvReader csv = new CsvReader(textReader);
-                        csv.Configuration.HeaderValidated = null;
-                        csv.Configuration.MissingFieldFound = null;
+                stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
-                        return csv.GetRecords<T>().ToList();
-                    }
+                using (TextReader textReader = new StreamReader(stream))
+                {
+                    CsvReader csv = new CsvReader(textReader);
+                    csv.Configuration.HeaderValidated = null;
+                    csv.Configuration.MissingFieldFound = null;
+
+                    return csv.GetRecords<T>().ToList();
                 }
             }
-            catch(SystemException)
+            catch (SystemException)
             {
-                return null;
+                return new List<T>();
+            }
+            finally
+            {
+                if (stream != null)
+                {
+                    stream.Dispose();
+                }
             }
         }
 

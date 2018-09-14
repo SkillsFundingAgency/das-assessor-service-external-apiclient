@@ -61,10 +61,9 @@
 
                 MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-                switch (rsltMessageBox)
+                if (rsltMessageBox == MessageBoxResult.No)
                 {
-                    case MessageBoxResult.No:
-                        return;
+                    return;
                 }
             }
 
@@ -110,10 +109,9 @@
 
             MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Error);
 
-            switch (rsltMessageBox)
+            if (rsltMessageBox == MessageBoxResult.No)
             {
-                case MessageBoxResult.No:
-                    return;
+                return;
             }
 
             SaveFileDialog saveFileDialog = new SaveFileDialog
@@ -138,10 +136,9 @@
 
             MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-            switch (rsltMessageBox)
+            if (rsltMessageBox == MessageBoxResult.No)
             {
-                case MessageBoxResult.No:
-                    return;
+                return;
             }
 
             SaveFileDialog saveFileDialog = new SaveFileDialog
