@@ -20,60 +20,18 @@
         <Label Content="Valid Certificates" HorizontalAlignment="Left" Margin="31,74,0,0" VerticalAlignment="Top"/>
         <DataGrid x:Name="dgValidCertificates" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding ValidCertificates.View}"  HorizontalAlignment="Left" Height="243" Margin="31,105,0,0" VerticalAlignment="Top" Width="735">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Reference" Binding="{Binding Path=CertificateReference}" />
-                <DataGridTextColumn Header="Uln" Binding="{Binding Path=Learner.Uln}" />
-                <DataGridTextColumn Header="Name">
-                    <DataGridTextColumn.Binding>
-                        <MultiBinding StringFormat="{}{0} {1}">
-                            <Binding Path="Learner.GivenNames" />
-                            <Binding Path="Learner.FamilyName" />
-                        </MultiBinding>
-                    </DataGridTextColumn.Binding>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Standard" Binding="{Binding Path=LearningDetails.StandardCode}" />
-                <DataGridTextColumn Header="Overall Grade" Binding="{Binding Path=LearningDetails.OverallGrade}" />
-                <DataGridTextColumn Header="Achievement Date" Binding="{Binding Path=LearningDetails.AchievementDate, StringFormat='dd/MM/yy HH:mm'}" />
-                <DataGridTextColumn Header="Contact" Binding="{Binding Path=PostalContact.ContactName}" />
-                <DataGridTextColumn Header="Organisation" Binding="{Binding Path=PostalContact.Organisation}" />
-                <DataGridTextColumn Header="Postal Address">
-                    <DataGridTextColumn.Binding>
-                        <MultiBinding StringFormat="{}{0} {1} {2}">
-                            <Binding Path="PostalContact.AddressLine1" />
-                            <Binding Path="PostalContact.City" />
-                            <Binding Path="PostalContact.PostCode" />
-                        </MultiBinding>
-                    </DataGridTextColumn.Binding>
-                </DataGridTextColumn>
+                <DataGridTextColumn Header="Uln" Binding="{Binding Path=Uln}" />
+                <DataGridTextColumn Header="Family Name" Binding="{Binding Path=FamilyName}" />
+                <DataGridTextColumn Header="Standard" Binding="{Binding Path=StandardCode}" />
             </DataGrid.Columns>
         </DataGrid>
 
         <Label Content="Invalid Certificates" HorizontalAlignment="Left" Margin="31,366,0,0" VerticalAlignment="Top"/>
         <DataGrid x:Name="dgInvalidCertificates" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding InvalidCertificates.View}"  HorizontalAlignment="Left" Height="113" Margin="31,397,0,0" VerticalAlignment="Top" Width="735">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Reference" Binding="{Binding Path=CertificateReference}" />
-                <DataGridTextColumn Header="Uln" Binding="{Binding Path=Learner.Uln}" />
-                <DataGridTextColumn Header="Name">
-                    <DataGridTextColumn.Binding>
-                        <MultiBinding StringFormat="{}{0} {1}">
-                            <Binding Path="Learner.GivenNames" />
-                            <Binding Path="Learner.FamilyName" />
-                        </MultiBinding>
-                    </DataGridTextColumn.Binding>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Standard" Binding="{Binding Path=LearningDetails.StandardCode}" />
-                <DataGridTextColumn Header="Overall Grade" Binding="{Binding Path=LearningDetails.OverallGrade}" />
-                <DataGridTextColumn Header="Achievement Date" Binding="{Binding Path=LearningDetails.AchievementDate, StringFormat='dd/MM/yy HH:mm'}" />
-                <DataGridTextColumn Header="Contact" Binding="{Binding Path=PostalContact.ContactName}" />
-                <DataGridTextColumn Header="Organisation" Binding="{Binding Path=PostalContact.Organisation}" />
-                <DataGridTextColumn Header="Postal Address">
-                    <DataGridTextColumn.Binding>
-                        <MultiBinding StringFormat="{}{0} {1} {2}">
-                            <Binding Path="PostalContact.AddressLine1" />
-                            <Binding Path="PostalContact.City" />
-                            <Binding Path="PostalContact.PostCode" />
-                        </MultiBinding>
-                    </DataGridTextColumn.Binding>
-                </DataGridTextColumn>
+                <DataGridTextColumn Header="Uln" Binding="{Binding Path=Uln}" />
+                <DataGridTextColumn Header="Family Name" Binding="{Binding Path=FamilyName}" />
+                <DataGridTextColumn Header="Standard" Binding="{Binding Path=StandardCode}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

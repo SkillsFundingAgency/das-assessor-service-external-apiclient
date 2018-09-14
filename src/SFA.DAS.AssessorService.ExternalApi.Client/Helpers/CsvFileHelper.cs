@@ -12,13 +12,16 @@
         {
             try
             {
-                using (TextReader textReader = File.OpenText(filePath))
+                using (FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    CsvReader csv = new CsvReader(textReader);
-                    csv.Configuration.HeaderValidated = null;
-                    csv.Configuration.MissingFieldFound = null;
+                    using (TextReader textReader = new StreamReader(stream))
+                    {
+                        CsvReader csv = new CsvReader(textReader);
+                        csv.Configuration.HeaderValidated = null;
+                        csv.Configuration.MissingFieldFound = null;
 
-                    return csv.GetRecords<T>().ToList();
+                        return csv.GetRecords<T>().ToList();
+                    }
                 }
             }
             catch(SystemException)

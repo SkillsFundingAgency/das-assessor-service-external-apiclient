@@ -25,6 +25,10 @@
             SearchApiClient searchApiClient = new SearchApiClient(httpClient);
 
             Program p = new Program(certificateApiClient, searchApiClient);
+            p.CreateCertificatesExample().GetAwaiter().GetResult();
+            p.UpdateCertificatesExample().GetAwaiter().GetResult();
+            p.SubmitCertificatesExample().GetAwaiter().GetResult();
+            p.DeleteCertificateExample().GetAwaiter().GetResult();
         }
 
 
@@ -85,7 +89,7 @@
                 CreatedBy = "Example",
                 CertificateData = new CertificateData
                 {
-                    CertificateReference = "1234567890-1",
+                    CertificateReference = "00012001",
                     Learner = new Learner { Uln = 1234567890, GivenNames = "Fred", FamilyName = "Bloggs" },
                     LearningDetails = new LearningDetails
                     {
@@ -133,7 +137,18 @@
             string lastName = "Blogs";
             int standardCode = 1;
 
-            await _CertificateApiClient.DeleteCertificate(uln, lastName, standardCode);
+            DeleteCertificate certificateToDelete = new DeleteCertificate
+            {
+                Uln = uln,
+                FamilyName = lastName,
+                StandardCode = standardCode
+            };
+
+            if (certificateToDelete.IsValid(out ICollection<ValidationResult> validationResults))
+            {
+                // NOTE: The External API performs validation, however it is a good idea to check beforehand
+                await _CertificateApiClient.DeleteCertificate(certificateToDelete);
+            }            
         }
     }
 }

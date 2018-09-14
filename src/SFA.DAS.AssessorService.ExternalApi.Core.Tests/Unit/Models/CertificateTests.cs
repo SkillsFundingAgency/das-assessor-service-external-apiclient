@@ -27,9 +27,9 @@
         public void StatusMissing()
         {
             // arrange
-            var learner = Builder<Learner>.CreateNew().Build();
+            var learner = Builder<Learner>.CreateNew().With(l => l.Uln = 1243567890).Build();
             var learningDetails = Builder<LearningDetails>.CreateNew().Build();
-            var postalContact = Builder<PostalContact>.CreateNew().Build();
+            var postalContact = Builder<PostalContact>.CreateNew().With(l => l.PostCode = "ZY9 9ZY").Build();
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.Learner = learner)
                                                                         .With(cd => cd.LearningDetails = learningDetails)
                                                                         .With(cd => cd.PostalContact = postalContact).Build();
@@ -49,9 +49,9 @@
         public void CreatedByMissing()
         {
             // arrange
-            var learner = Builder<Learner>.CreateNew().Build();
+            var learner = Builder<Learner>.CreateNew().With(l => l.Uln = 1243567890).Build();
             var learningDetails = Builder<LearningDetails>.CreateNew().Build();
-            var postalContact = Builder<PostalContact>.CreateNew().Build();
+            var postalContact = Builder<PostalContact>.CreateNew().With(l => l.PostCode = "ZY9 9ZY").Build();
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.Learner = learner)
                                                                         .With(cd => cd.LearningDetails = learningDetails)
                                                                         .With(cd => cd.PostalContact = postalContact).Build();
@@ -71,9 +71,9 @@
         public void WhenValid()
         {
             // arrange
-            var learner = Builder<Learner>.CreateNew().Build();
+            var learner = Builder<Learner>.CreateNew().With(l => l.Uln = 1243567890).Build();
             var learningDetails = Builder<LearningDetails>.CreateNew().Build();
-            var postalContact = Builder<PostalContact>.CreateNew().Build();
+            var postalContact = Builder<PostalContact>.CreateNew().With(l => l.PostCode = "ZY9 9ZY").Build();
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.Learner = learner)
                                                                         .With(cd => cd.LearningDetails = learningDetails)
                                                                         .With(cd => cd.PostalContact = postalContact).Build();

@@ -4,6 +4,7 @@
     using SFA.DAS.AssessorService.ExternalApi.Client.Helpers;
     using SFA.DAS.AssessorService.ExternalApi.Client.Properties;
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Response;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
     using System;
     using System.Collections.Generic;
@@ -38,7 +39,7 @@
                 _ViewModel.FilePath = openFileDialog.FileName;
                 _ViewModel.Certificates.Clear();
 
-                foreach (var item in CsvFileHelper<CertificateData>.GetFromFile(_ViewModel.FilePath))
+                foreach (var item in CsvFileHelper<DeleteCertificate>.GetFromFile(_ViewModel.FilePath))
                 {
                     _ViewModel.Certificates.Add(item);
                 }
@@ -84,15 +85,15 @@
 
                 CertificateApiClient certificateApiClient = new CertificateApiClient(httpClient);
 
-                List<CertificateData> invalidCertificates = new List<CertificateData>();
+                List<DeleteBatchCertificateResponse> invalidCertificates = new List<DeleteBatchCertificateResponse>();
 
                 foreach (var certificate in _ViewModel.Certificates)
                 {
-                    var response = await certificateApiClient.DeleteCertificate(certificate.Learner.Uln, certificate.Learner.FamilyName, certificate.LearningDetails.StandardCode);
+                    var response = await certificateApiClient.DeleteCertificate(certificate);
 
-                    if (!string.IsNullOrEmpty(Convert.ToString(response)))
+                    if (response.Error != null)
                     {
-                        invalidCertificates.Add(certificate);
+                        invalidCertificates.Add(response);
                     }
                 }
 
@@ -110,7 +111,7 @@
             }
         }
 
-        private void SaveInvalidCertificates(IEnumerable<CertificateData> invalidCertificates)
+        private void SaveInvalidCertificates(IEnumerable<DeleteBatchCertificateResponse> invalidCertificates)
         {
             string sMessageBoxText = "There were invalid certificates. Do you want to save these to a new file to amend?";
             string sCaption = "Invalid Certificates";
@@ -131,7 +132,9 @@
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                CsvFileHelper<CertificateData>.SaveToFile(saveFileDialog.FileName, invalidCertificates);
+                var certificatesToSave = invalidCertificates.Select(ic => new { ic.Uln, ic.FamilyName, ic.StandardCode, Errors = ic.Error?.Message });
+
+                CsvFileHelper<dynamic>.SaveToFile(saveFileDialog.FileName, certificatesToSave);
                 System.Diagnostics.Process.Start(saveFileDialog.FileName);
             }
         }

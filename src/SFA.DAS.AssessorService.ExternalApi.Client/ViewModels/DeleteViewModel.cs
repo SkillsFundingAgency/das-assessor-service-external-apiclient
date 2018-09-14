@@ -15,7 +15,7 @@
             set { _FilePath = value; OnPropertyChanged(); }
         }
 
-        public ObservableCollection<CertificateData> Certificates { get; set; }
+        public ObservableCollection<DeleteCertificate> Certificates { get; set; }
 
         public CollectionViewSource ValidCertificates { get; private set; }
 
@@ -23,7 +23,7 @@
 
         public DeleteViewModel()
         {
-            Certificates = new ObservableCollection<CertificateData>();
+            Certificates = new ObservableCollection<DeleteCertificate>();
 
             ValidCertificates = new CollectionViewSource();
             ValidCertificates.Filter += ValidCertificates_Filter;
@@ -36,13 +36,13 @@
 
         private void ValidCertificates_Filter(object sender, FilterEventArgs e)
         {
-            CertificateData certificate = e.Item as CertificateData;
+            DeleteCertificate certificate = e.Item as DeleteCertificate;
             e.Accepted = (certificate != null && certificate.IsValid(out var validationResults));
         }
 
         private void InvalidCertificates_Filter(object sender, FilterEventArgs e)
         {
-            CertificateData certificate = e.Item as CertificateData;
+            DeleteCertificate certificate = e.Item as DeleteCertificate;
             e.Accepted = (certificate != null && !certificate.IsValid(out var validationResults));
         }
 

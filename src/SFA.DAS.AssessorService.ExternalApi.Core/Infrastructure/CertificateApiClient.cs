@@ -1,5 +1,6 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure
 {
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Error;
     using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Response;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
     using System.Collections.Generic;
@@ -25,9 +26,17 @@
             return await Post<IEnumerable<SubmitCertificate>, IEnumerable<SubmitBatchCertificateResponse>>("certificate/submit", request);
         }
 
-        public async Task<object> DeleteCertificate(long uln, string lastname, int standardCode)
+        public async Task<DeleteBatchCertificateResponse> DeleteCertificate(DeleteCertificate request)
         {
-            return await Delete<object>($"certificate/{uln}/{lastname}/{standardCode}");
+            var error = await Delete<ApiResponse>($"certificate/{request.Uln}/{request.FamilyName}/{request.StandardCode}");
+
+            return new DeleteBatchCertificateResponse
+            {
+                Uln = request.Uln,
+                FamilyName = request.FamilyName,
+                StandardCode = request.StandardCode,
+                Error = error
+            };
         }
     }
 }

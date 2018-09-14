@@ -316,10 +316,11 @@
                 .Respond(HttpStatusCode.OK, "application/json", string.Empty);
 
             // act
-            var actual = await _ApiClient.DeleteCertificate(uln, lastname, standardcode);
+            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode };
+            var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
-            Assert.That(actual, Is.Null);
+            Assert.That(actual.Error, Is.Null);
         }
 
         [Test]
@@ -340,13 +341,13 @@
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var json = await _ApiClient.DeleteCertificate(uln, lastname, standardcode);
-            var actual = JsonConvert.DeserializeObject<ApiResponse>(Convert.ToString(json));
+            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode };
+            var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
-            Assert.That(actual, Is.Not.Null);
-            Assert.That(actual.StatusCode, Is.EqualTo(expectedResponse.StatusCode));
-            Assert.That(actual.Message, Is.EqualTo(expectedResponse.Message));
+            Assert.That(actual.Error, Is.Not.Null);
+            Assert.That(actual.Error.StatusCode, Is.EqualTo(expectedResponse.StatusCode));
+            Assert.That(actual.Error.Message, Is.EqualTo(expectedResponse.Message));
         }
 
         [Test]
@@ -367,13 +368,13 @@
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var json = await _ApiClient.DeleteCertificate(uln, lastname, standardcode);
-            var actual = JsonConvert.DeserializeObject<ApiResponse>(Convert.ToString(json));
+            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode };
+            var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
-            Assert.That(actual, Is.Not.Null);
-            Assert.That(actual.StatusCode, Is.EqualTo(expectedResponse.StatusCode));
-            Assert.That(actual.Message, Is.EqualTo(expectedResponse.Message));
+            Assert.That(actual.Error, Is.Not.Null);
+            Assert.That(actual.Error.StatusCode, Is.EqualTo(expectedResponse.StatusCode));
+            Assert.That(actual.Error.Message, Is.EqualTo(expectedResponse.Message));
         }
 
         [Test]
@@ -394,13 +395,13 @@
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var json = await _ApiClient.DeleteCertificate(uln, lastname, standardcode);
-            var actual = JsonConvert.DeserializeObject<ApiResponse>(Convert.ToString(json));
+            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode };
+            var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
-            Assert.That(actual, Is.Not.Null);
-            Assert.That(actual.StatusCode, Is.EqualTo(expectedResponse.StatusCode));
-            Assert.That(actual.Message, Is.EqualTo(expectedResponse.Message));
+            Assert.That(actual.Error, Is.Not.Null);
+            Assert.That(actual.Error.StatusCode, Is.EqualTo(expectedResponse.StatusCode));
+            Assert.That(actual.Error.Message, Is.EqualTo(expectedResponse.Message));
         }
     }
 }

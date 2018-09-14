@@ -4,6 +4,7 @@
     using SFA.DAS.AssessorService.ExternalApi.Client.Helpers;
     using SFA.DAS.AssessorService.ExternalApi.Client.Properties;
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Response;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
     using System;
     using System.Collections.Generic;
@@ -48,12 +49,12 @@
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
             _ViewModel.Certificates.Clear();
-            _ViewModel.FilePath = string.Empty;   
+            _ViewModel.FilePath = string.Empty;
         }
 
         private async void btnCreate_Click(object sender, RoutedEventArgs e)
         {
-            if(!_ViewModel.InvalidCertificates.View.IsEmpty)
+            if (!_ViewModel.InvalidCertificates.View.IsEmpty)
             {
                 string sMessageBoxText = "Do you want to continue?";
                 string sCaption = "Invalid Certificates";
@@ -92,14 +93,17 @@
 
                 if (invalidCertificates.Any())
                 {
-                    SaveInvalidCertificates(invalidCertificates.Select(ic => ic.ProvidedCertificateData));
+                    SaveInvalidCertificates(invalidCertificates);
                 }
 
-                SaveCertificates(validCertificates.Select(r => r.Certificate));
+                if (validCertificates.Any())
+                {
+                    SaveCertificates(validCertificates.Select(r => r.Certificate.CertificateData));
+                }
             }
         }
 
-        private void SaveInvalidCertificates(IEnumerable<CertificateData> invalidCertificates)
+        private void SaveInvalidCertificates(IEnumerable<BatchCertificateResponse> invalidCertificates)
         {
             string sMessageBoxText = "There were invalid certificates. Do you want to save these to a new file to amend?";
             string sCaption = "Invalid Certificates";
@@ -120,12 +124,14 @@
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                CsvFileHelper<CertificateData>.SaveToFile(saveFileDialog.FileName, invalidCertificates);
+                var certificatesToSave = invalidCertificates.Select(ic => new { ic.ProvidedCertificateData, Errors = string.Join(", ", ic.ValidationErrors) });
+
+                CsvFileHelper<dynamic>.SaveToFile(saveFileDialog.FileName, certificatesToSave);
                 System.Diagnostics.Process.Start(saveFileDialog.FileName);
             }
         }
 
-        private void SaveCertificates(IEnumerable<Certificate> certificates)
+        private void SaveCertificates(IEnumerable<CertificateData> certificates)
         {
             string sMessageBoxText = "Do you want to save the newly created certificates?";
             string sCaption = "Save Certificates";
@@ -146,7 +152,7 @@
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                CsvFileHelper<Certificate>.SaveToFile(saveFileDialog.FileName, certificates);
+                CsvFileHelper<CertificateData>.SaveToFile(saveFileDialog.FileName, certificates);
                 System.Diagnostics.Process.Start(saveFileDialog.FileName);
             }
         }
