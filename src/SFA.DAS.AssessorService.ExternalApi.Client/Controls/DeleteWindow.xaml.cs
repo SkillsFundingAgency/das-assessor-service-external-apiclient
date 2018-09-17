@@ -86,14 +86,23 @@
 
                 List<DeleteBatchCertificateResponse> invalidCertificates = new List<DeleteBatchCertificateResponse>();
 
-                foreach (var certificate in _ViewModel.Certificates)
+                try
                 {
-                    var response = await certificateApiClient.DeleteCertificate(certificate);
+                    BusyIndicator.IsBusy = true;
 
-                    if (response.Error != null)
+                    foreach (var certificate in _ViewModel.Certificates)
                     {
-                        invalidCertificates.Add(response);
+                        var response = await certificateApiClient.DeleteCertificate(certificate);
+
+                        if (response.Error != null)
+                        {
+                            invalidCertificates.Add(response);
+                        }
                     }
+                }
+                finally
+                {
+                    BusyIndicator.IsBusy = false;
                 }
 
                 if (invalidCertificates.Any())

@@ -28,29 +28,46 @@ namespace SFA.DAS.AssessorService.ExternalApi.Client
 
         private void btnCreate_Click(object sender, RoutedEventArgs e)
         {
-            CreateWindow window = new CreateWindow();
-            window.Owner = this;
+            CreateWindow window = new CreateWindow
+            {
+                Owner = this
+            };
             window.ShowDialog();
         }
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            UpdateWindow window = new UpdateWindow();
-            window.Owner = this;
+            UpdateWindow window = new UpdateWindow
+            {
+                Owner = this
+            };
             window.ShowDialog();
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            SubmitWindow window = new SubmitWindow();
-            window.Owner = this;
+            SubmitWindow window = new SubmitWindow
+            {
+                Owner = this
+            };
             window.ShowDialog();
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            DeleteWindow window = new DeleteWindow();
-            window.Owner = this;
+            DeleteWindow window = new DeleteWindow
+            {
+                Owner = this
+            };
+            window.ShowDialog();
+        }
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            LearnerDetailsWindow window = new LearnerDetailsWindow
+            {
+                Owner = this
+            };
             window.ShowDialog();
         }
     }

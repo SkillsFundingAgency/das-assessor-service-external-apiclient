@@ -84,8 +84,17 @@
                 httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
 
                 CertificateApiClient certificateApiClient = new CertificateApiClient(httpClient);
+                IEnumerable<SubmitBatchCertificateResponse> results;
 
-                var results = await certificateApiClient.SubmitCertificates(_ViewModel.Certificates);
+                try
+                {
+                    BusyIndicator.IsBusy = true;
+                    results = await certificateApiClient.SubmitCertificates(_ViewModel.Certificates);
+                }
+                finally
+                {
+                    BusyIndicator.IsBusy = false;
+                }
 
                 var validCertificates = results.Where(r => r.Certificate != null);
                 var invalidCertificates = results.Except(validCertificates);

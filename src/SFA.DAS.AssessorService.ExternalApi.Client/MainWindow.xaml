@@ -11,7 +11,8 @@
             <Button x:Name="btnCreate" Content="_Create" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Margin="0,0,0,10" Click="btnCreate_Click"/>
             <Button x:Name="btnUpdate" Content="_Update" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Margin="0,0,0,10" Click="btnUpdate_Click"/>
             <Button x:Name="btnSubmit" Content="_Submit" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Margin="0,0,0,10" Click="btnSubmit_Click"/>
-            <Button x:Name="btnDelete" Content="_Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Click="btnDelete_Click" />
+            <Button x:Name="btnDelete" Content="_Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Margin="0,0,0,10" Click="btnDelete_Click" />
+            <Button x:Name="btnSearch" Content="_Learner Details" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Margin="0,0,0,10" Click="btnSearch_Click" />
         </StackPanel>
     </Grid>
 </Window>

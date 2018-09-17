@@ -23,7 +23,6 @@
         public string SubmittedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public string UpdatedBy { get; set; }
-        public bool ShowExtraInfo { get; set; }
 
         #region GetHashCode, Equals and IEquatable
         public override int GetHashCode()
@@ -54,7 +53,6 @@
                 hash = (hash * multiplier) ^ (SubmittedBy is null ? 0 : SubmittedBy.GetHashCode());
                 hash = (hash * multiplier) ^ (UpdatedAt is null ? 0 : UpdatedAt.GetHashCode());
                 hash = (hash * multiplier) ^ (UpdatedBy is null ? 0 : UpdatedBy.GetHashCode());
-                hash = (hash * multiplier) ^ ShowExtraInfo.GetHashCode();
                 return hash;
             }
         }
@@ -95,8 +93,7 @@
                 && Equals(SubmittedAt, other.SubmittedAt)
                 && string.Equals(SubmittedBy, other.SubmittedBy)
                 && Equals(UpdatedAt, other.UpdatedAt)
-                && string.Equals(UpdatedBy, other.UpdatedBy)
-                && Equals(ShowExtraInfo, other.ShowExtraInfo);
+                && string.Equals(UpdatedBy, other.UpdatedBy);
         }
 
         public static bool operator ==(SearchResult left, SearchResult right)
