@@ -14,7 +14,7 @@
         {
             // arrange
             DateTime firstDigitalCertificate = new DateTime(2017, 1, 1);
-            var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.AchievementDate = firstDigitalCertificate.AddDays(-1)).Build();
+            var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.AchievementDate = firstDigitalCertificate.AddDays(-1)).With(l => l.OverallGrade = "Pass").Build();
 
             // act
             bool isValid = learningDetails.IsValid(out var validationResults);
@@ -29,7 +29,7 @@
         public void AchievementDateInFuture()
         {
             // arrange
-            var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.AchievementDate = DateTime.UtcNow.AddDays(1)).Build();
+            var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.AchievementDate = DateTime.UtcNow.AddDays(1)).With(l => l.OverallGrade = "Pass").Build();
 
             // act
             bool isValid = learningDetails.IsValid(out var validationResults);
@@ -44,7 +44,7 @@
         public void AchievementDateMissing()
         {
             // arrange
-            var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.AchievementDate = null).Build();
+            var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.AchievementDate = null).With(l => l.OverallGrade = "Pass").Build();
 
             // act
             bool isValid = learningDetails.IsValid(out var validationResults);
@@ -67,14 +67,29 @@
             // assert
             Assert.IsFalse(isValid);
             Assert.That(validationResults, Has.Count.EqualTo(1));
-            StringAssert.AreEqualIgnoringCase("Enter an overall grade", validationResults.First().ErrorMessage);
+            StringAssert.AreEqualIgnoringCase("Select the grade the apprentice achieved", validationResults.First().ErrorMessage);
+        }
+
+        [Test]
+        public void OverallGradeInvalid()
+        {
+            // arrange
+            var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.AchievementDate = DateTime.UtcNow).With(l => l.OverallGrade = "INVALID").Build();
+
+            // act
+            bool isValid = learningDetails.IsValid(out var validationResults);
+
+            // assert
+            Assert.IsFalse(isValid);
+            Assert.That(validationResults, Has.Count.EqualTo(1));
+            StringAssert.StartsWith("Invalid grade. Must one of the following:", validationResults.First().ErrorMessage);
         }
 
         [Test]
         public void WhenValid()
         {
             // arrange
-            var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.AchievementDate = DateTime.UtcNow).Build();
+            var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.AchievementDate = DateTime.UtcNow).With(l => l.OverallGrade = "Pass").Build();
 
             // act
             bool isValid = learningDetails.IsValid(out var validationResults);
@@ -104,8 +119,8 @@
         public void WhenNotEqual()
         {
             // arrange
-            var learningDetails1 = Builder<LearningDetails>.CreateNew().With(l => l.OverallGrade = "PASS").Build();
-            var learningDetails2 = Builder<LearningDetails>.CreateNew().With(l => l.OverallGrade = "FAIL").Build();
+            var learningDetails1 = Builder<LearningDetails>.CreateNew().With(l => l.OverallGrade = "Pass").Build();
+            var learningDetails2 = Builder<LearningDetails>.CreateNew().With(l => l.OverallGrade = "Merit").Build();
 
             // act
             bool areNotEqual = learningDetails1 != learningDetails2;

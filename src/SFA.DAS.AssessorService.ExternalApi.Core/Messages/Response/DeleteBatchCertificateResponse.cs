@@ -7,6 +7,7 @@
         public long Uln { get; set; }
         public int StandardCode { get; set; }
         public string FamilyName { get; set; }
+        public string CertificateReference { get; set; }
 
         public ApiResponse Error { get; set; }
     }

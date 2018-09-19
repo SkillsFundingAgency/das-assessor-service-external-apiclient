@@ -82,6 +82,8 @@
                 // NOTE: You may want to deal with good & bad records seperately
                 var goodCertificates = response.Where(c => c.Certificate != null && !c.ValidationErrors.Any());
                 var badCertificates = response.Except(goodCertificates);
+
+                Console.WriteLine($"Good Certificates: {goodCertificates.Count()}, Bad Certificates: {badCertificates.Count()} ");
             }
         }
 
@@ -117,6 +119,8 @@
                 // NOTE: You may want to deal with good & bad records seperately
                 var goodCertificates = response.Where(c => c.Certificate != null && !c.ValidationErrors.Any());
                 var badCertificates = response.Except(goodCertificates);
+
+                Console.WriteLine($"Good Certificates: {goodCertificates.Count()}, Bad Certificates: {badCertificates.Count()} ");
             }
 
         }
@@ -149,6 +153,8 @@
                 // NOTE: You may want to deal with good & bad records seperately
                 var goodCertificates = response.Where(c => c.Certificate != null && !c.ValidationErrors.Any());
                 var badCertificates = response.Except(goodCertificates);
+
+                Console.WriteLine($"Good Certificates: {goodCertificates.Count()}, Bad Certificates: {badCertificates.Count()} ");
             }
         }
 

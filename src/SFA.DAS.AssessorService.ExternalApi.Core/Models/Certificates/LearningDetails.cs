@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
 
     public sealed class LearningDetails : IEquatable<LearningDetails>
     {
@@ -12,7 +13,7 @@
         public DateTime StandardPublicationDate { get; set; }
         public string CourseOption { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Enter an overall grade")]
+        [CustomValidation(typeof(OverallGradeValidator), "ValidateOverallGrade")]
         public string OverallGrade { get; set; }
         public string AchievementOutcome { get; set; }
 
@@ -112,6 +113,28 @@
                 else if (achievementDate.Value > DateTime.UtcNow)
                 {
                     return new ValidationResult("An achievement date cannot be in the future", new List<string> { "AchievementDate" });
+                }
+                else
+                {
+                    return ValidationResult.Success;
+                }
+            }
+        }
+
+        public static class OverallGradeValidator
+        {
+            public static ValidationResult ValidateOverallGrade(string overallGrade, ValidationContext validationContext)
+            {
+                var grades = new string[] { "Pass", "Merit", "Distinction", "Pass with excellence", "No grade awarded" };
+
+                if (string.IsNullOrWhiteSpace(overallGrade))
+                {
+                    return new ValidationResult($"Select the grade the apprentice achieved", new List<string> { "OverallGrade" });
+                }
+                else if (!grades.Any(g => g == overallGrade))
+                {
+                    string gradesString = string.Join(", ", grades);
+                    return new ValidationResult($"Invalid grade. Must one of the following: {gradesString}", new List<string> { "OverallGrade" });
                 }
                 else
                 {

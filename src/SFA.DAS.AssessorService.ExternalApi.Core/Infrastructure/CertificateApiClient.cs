@@ -28,13 +28,14 @@
 
         public async Task<DeleteBatchCertificateResponse> DeleteCertificate(DeleteCertificate request)
         {
-            var error = await Delete<ApiResponse>($"certificate/{request.Uln}/{request.FamilyName}/{request.StandardCode}");
+            var error = await Delete<ApiResponse>($"certificate/{request.Uln}/{request.FamilyName}/{request.StandardCode}/{request.CertificateReference}");
 
             return new DeleteBatchCertificateResponse
             {
                 Uln = request.Uln,
                 FamilyName = request.FamilyName,
                 StandardCode = request.StandardCode,
+                CertificateReference = request.CertificateReference,
                 Error = error
             };
         }

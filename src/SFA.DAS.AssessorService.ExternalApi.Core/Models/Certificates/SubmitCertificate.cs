@@ -15,6 +15,9 @@
         [Required(AllowEmptyStrings = false, ErrorMessage = "Enter the apprentice's last name")]
         public string FamilyName { get; set; }
 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Enter the certificate reference")]
+        public string CertificateReference { get; set; }
+
         #region GetHashCode, Equals and IEquatable
         public override int GetHashCode()
         {
@@ -27,6 +30,7 @@
                 hash = (hash * multiplier) ^ Uln.GetHashCode();
                 hash = (hash * multiplier) ^ StandardCode.GetHashCode();
                 hash = (hash * multiplier) ^ (FamilyName is null ? 0 : FamilyName.GetHashCode());
+                hash = (hash * multiplier) ^ (CertificateReference is null ? 0 : CertificateReference.GetHashCode());
 
                 return hash;
             }
@@ -51,7 +55,8 @@
         {
             return Equals(Uln, other.Uln)
                 && Equals(StandardCode, other.StandardCode)
-                && string.Equals(FamilyName, other.FamilyName);
+                && string.Equals(FamilyName, other.FamilyName)
+                && string.Equals(CertificateReference, other.CertificateReference);
         }
 
         public static bool operator ==(SubmitCertificate left, SubmitCertificate right)

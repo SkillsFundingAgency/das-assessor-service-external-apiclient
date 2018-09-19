@@ -54,7 +54,7 @@
                 new SearchResult { Uln = 1234567890, FamilyName = "test", StdCode = 9999, UkPrn = 12345678 }
             };
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/search/{uln}/{lastname}/")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/learner/{uln}/{lastname}/")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expected));
 
             // act
@@ -77,7 +77,7 @@
                 new SearchResult { Uln = 1234567890, FamilyName = "test", StdCode = 1234, UkPrn = 12345678 },
             };
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/search/{uln}/{lastname}/{standardcode}")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/learner/{uln}/{lastname}/{standardcode}")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expected));
 
             // act
@@ -99,7 +99,7 @@
             {
             };
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/search/{uln}/{lastname}/{standardcode}")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/learner/{uln}/{lastname}/{standardcode}")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expected));
 
             // act

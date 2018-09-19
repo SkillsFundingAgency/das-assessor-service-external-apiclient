@@ -22,6 +22,7 @@
             <Label Content="Valid Certificates" HorizontalAlignment="Left" Margin="31,74,0,0" VerticalAlignment="Top"/>
             <DataGrid x:Name="dgValidCertificates" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding ValidCertificates.View}"  HorizontalAlignment="Left" Height="243" Margin="31,105,0,0" VerticalAlignment="Top" Width="735">
                 <DataGrid.Columns>
+                    <DataGridTextColumn Header="Reference" Binding="{Binding Path=CertificateReference}" />
                     <DataGridTextColumn Header="Uln" Binding="{Binding Path=Uln}" />
                     <DataGridTextColumn Header="Family Name" Binding="{Binding Path=FamilyName}" />
                     <DataGridTextColumn Header="Standard" Binding="{Binding Path=StandardCode}" />
@@ -31,6 +32,7 @@
             <Label Content="Invalid Certificates" HorizontalAlignment="Left" Margin="31,366,0,0" VerticalAlignment="Top"/>
             <DataGrid x:Name="dgInvalidCertificates" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding InvalidCertificates.View}"  HorizontalAlignment="Left" Height="113" Margin="31,397,0,0" VerticalAlignment="Top" Width="735">
                 <DataGrid.Columns>
+                    <DataGridTextColumn Header="Reference" Binding="{Binding Path=CertificateReference}" />
                     <DataGridTextColumn Header="Uln" Binding="{Binding Path=Uln}" />
                     <DataGridTextColumn Header="Family Name" Binding="{Binding Path=FamilyName}" />
                     <DataGridTextColumn Header="Standard" Binding="{Binding Path=StandardCode}" />

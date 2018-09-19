@@ -317,12 +317,13 @@
             long uln = 1234567890;
             string lastname = "Bloggs";
             int standardcode = 1;
+            string certificateReference = "123456790";
 
-            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}")
+            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
                 .Respond(HttpStatusCode.OK, "application/json", string.Empty);
 
             // act
-            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode };
+            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode, CertificateReference = certificateReference };
             var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
@@ -336,6 +337,7 @@
             long uln = 1234567890;
             string lastname = "Bloggs";
             int standardcode = 4321;
+            string certificateReference = "1234567890";
 
             var expectedResponse = new ApiResponse
             {
@@ -343,11 +345,11 @@
                 Message = "Certificate not found"
             };
 
-            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}")
+            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode };
+            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode, CertificateReference = certificateReference };
             var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
@@ -363,6 +365,7 @@
             long uln = 1234567890;
             string lastname = "Bloggs";
             int standardcode = 1;
+            string certificateReference = "1234567890";
 
             var expectedResponse = new ApiResponse
             {
@@ -370,11 +373,11 @@
                 Message = "Certificate cannot be Deleted when in 'Submitted' status"
             };
 
-            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}")
+            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode };
+            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode, CertificateReference = certificateReference };
             var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
@@ -390,6 +393,7 @@
             long uln = 1234567890;
             string lastname = "INVALID";
             int standardcode = 1;
+            string certificateReference = "1234567890";
 
             var expectedResponse = new ApiResponse
             {
@@ -397,11 +401,11 @@
                 Message = "Cannot find entry for specified Uln, FamilyName & StandardCode"
             };
 
-            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}")
+            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode };
+            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode, CertificateReference = certificateReference };
             var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
