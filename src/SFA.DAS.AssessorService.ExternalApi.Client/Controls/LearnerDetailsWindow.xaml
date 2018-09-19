@@ -13,12 +13,15 @@
     <toolkit:BusyIndicator x:Name="BusyIndicator">
         <Grid>
             <Label Content="Uln" HorizontalAlignment="Left" Margin="31,4,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="txtUln" HorizontalAlignment="Left" Height="23" Margin="31,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" Text="{Binding Uln, Mode=TwoWay}" PreviewTextInput="txtUln_PreviewTextInput" />
+            <TextBox x:Name="txtUln" HorizontalAlignment="Left" Height="23" Margin="31,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" Text="{Binding Uln, Mode=TwoWay}" PreviewTextInput="txtUln_PreviewTextInput" />
 
-            <Label Content="Family Name" HorizontalAlignment="Left" Margin="271,4,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="txtFamilyName" HorizontalAlignment="Left" Height="23" Margin="271,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" Text="{Binding FamilyName, Mode=TwoWay}" />
+            <Label Content="Family Name" HorizontalAlignment="Left" Margin="216,4,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtFamilyName" HorizontalAlignment="Left" Height="23" Margin="216,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" Text="{Binding FamilyName, Mode=TwoWay}" />
 
-            <Button x:Name="btnSubmit" Content="Get Details" HorizontalAlignment="Left" Margin="511,35,0,0" VerticalAlignment="Top" Width="158" Click="btnSubmit_Click" />
+            <Label Content="Standard Code" HorizontalAlignment="Left" Margin="401,4,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtStandardCode" HorizontalAlignment="Left" Height="23" Margin="401,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" Text="{Binding StandardCode, Mode=TwoWay}" PreviewTextInput="txtStandardCode_PreviewTextInput" />
+
+            <Button x:Name="btnSubmit" Content="Get Details" HorizontalAlignment="Left" Margin="608,38,0,0" VerticalAlignment="Top" Width="158" Click="btnSubmit_Click" />
 
             <Label Content="Details" HorizontalAlignment="Left" Margin="31,74,0,0" VerticalAlignment="Top"/>
             <DataGrid x:Name="dgResults" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Results}"  HorizontalAlignment="Left" Height="243" Margin="31,105,0,0" VerticalAlignment="Top" Width="735">

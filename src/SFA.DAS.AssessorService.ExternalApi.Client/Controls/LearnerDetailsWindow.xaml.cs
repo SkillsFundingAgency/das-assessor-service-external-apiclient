@@ -25,6 +25,7 @@
             InitializeComponent();
 
             DataObject.AddPastingHandler(txtUln, txtUln_PastingEvent);
+            DataObject.AddPastingHandler(txtStandardCode, txtStandardCode_PastingEvent);
         }
 
         private async void btnSubmit_Click(object sender, RoutedEventArgs e)
@@ -69,7 +70,7 @@
                 try
                 {
                     BusyIndicator.IsBusy = true;
-                    results = await searchApiClient.Search(_ViewModel.Uln.Value, _ViewModel.FamilyName);
+                    results = await searchApiClient.Search(_ViewModel.Uln.Value, _ViewModel.FamilyName, _ViewModel.StandardCode);
                 }
                 finally
                 {
@@ -138,6 +139,32 @@
             try
             {
                 Convert.ToInt64(clipboard);
+            }
+            catch
+            {
+                e.CancelCommand();
+                e.Handled = true;
+            }
+        }
+
+        private void txtStandardCode_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            try
+            {
+                Convert.ToInt32(e.Text);
+            }
+            catch
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtStandardCode_PastingEvent(object sender, DataObjectPastingEventArgs e)
+        {
+            string clipboard = e.DataObject.GetData(typeof(string)) as string;
+            try
+            {
+                Convert.ToInt32(clipboard);
             }
             catch
             {

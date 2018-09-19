@@ -29,6 +29,17 @@
             }
         }
 
+        private int? _StandardCode;
+        public int? StandardCode
+        {
+            get { return _StandardCode; }
+            set
+            {
+                _StandardCode = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ObservableCollection<SearchResult> Results { get; private set; }
 
         public LearnerDetailsViewModel()
