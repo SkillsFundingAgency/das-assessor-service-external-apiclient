@@ -31,7 +31,9 @@
             p.CreateCertificatesExample().GetAwaiter().GetResult();
             p.UpdateCertificatesExample().GetAwaiter().GetResult();
             p.SubmitCertificatesExample().GetAwaiter().GetResult();
-            p.DeleteCertificatesExample().GetAwaiter().GetResult();
+            p.DeleteCertificateExample().GetAwaiter().GetResult();
+            p.GetCertificateExample().GetAwaiter().GetResult();
+            p.SearchExample().GetAwaiter().GetResult();
         }
 
 
@@ -79,7 +81,7 @@
             {
                 var response = (await _CertificateApiClient.CreateCertificates(certificatesToCreate)).ToList();
 
-                // NOTE: You may want to deal with good & bad records seperately
+                // NOTE: You may want to deal with good & bad records separately
                 var goodCertificates = response.Where(c => c.Certificate != null && !c.ValidationErrors.Any());
                 var badCertificates = response.Except(goodCertificates);
 
@@ -116,7 +118,7 @@
             {
                 var response = (await _CertificateApiClient.UpdateCertificates(certificates)).ToList();
 
-                // NOTE: You may want to deal with good & bad records seperately
+                // NOTE: You may want to deal with good & bad records separately
                 var goodCertificates = response.Where(c => c.Certificate != null && !c.ValidationErrors.Any());
                 var badCertificates = response.Except(goodCertificates);
 
@@ -150,7 +152,7 @@
             {
                 var response = (await _CertificateApiClient.SubmitCertificates(certificates)).ToList();
 
-                // NOTE: You may want to deal with good & bad records seperately
+                // NOTE: You may want to deal with good & bad records separately
                 var goodCertificates = response.Where(c => c.Certificate != null && !c.ValidationErrors.Any());
                 var badCertificates = response.Except(goodCertificates);
 
@@ -158,7 +160,7 @@
             }
         }
 
-        public async Task DeleteCertificatesExample()
+        public async Task DeleteCertificateExample()
         {
             const string filePath = @"CsvFiles\deleteCertificates.csv";
 
@@ -188,7 +190,43 @@
 
                     if (response.Error != null)
                     {
-                        // NOTE: You may want to deal with bad records seperately
+                        // NOTE: You may want to deal with bad records separately
+                    }
+                }
+            }
+        }
+
+        public async Task GetCertificateExample()
+        {
+            const string filePath = @"CsvFiles\getCertificates.csv";
+
+            IEnumerable<GetCertificate> certificates;
+
+            using (TextReader textReader = File.OpenText(filePath))
+            {
+                CsvReader csv = new CsvReader(textReader);
+                csv.Configuration.HeaderValidated = null;
+                csv.Configuration.MissingFieldFound = null;
+                certificates = csv.GetRecords<GetCertificate>().ToList();
+            }
+
+            // NOTE: The External API performs validation, however it is a good idea to check beforehand.
+            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out ICollection<ValidationResult> validationResults));
+
+            if (invalidDataSupplied)
+            {
+                throw new InvalidOperationException("The supplied CSV file contains invalid data. Please correct and then try again.");
+            }
+            else
+            {
+                // NOTE: The External API does not have an batch delete (for safety reasons). You'll have to loop.
+                foreach (var request in certificates)
+                {
+                    var response = await _CertificateApiClient.GetCertificate(request);
+
+                    if (response is null)
+                    {
+                        // NOTE: You may want to deal with bad records separately
                     }
                 }
             }

@@ -29,6 +29,8 @@
             p.UpdateCertificatesExample().GetAwaiter().GetResult();
             p.SubmitCertificatesExample().GetAwaiter().GetResult();
             p.DeleteCertificateExample().GetAwaiter().GetResult();
+            p.GetCertificateExample().GetAwaiter().GetResult();
+            p.SearchExample().GetAwaiter().GetResult();
         }
 
 
@@ -153,6 +155,28 @@
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
                 await _CertificateApiClient.DeleteCertificate(certificateToDelete);
             }            
+        }
+
+        public async Task GetCertificateExample()
+        {
+            long uln = 1234567890;
+            string lastName = "Blogs";
+            int standardCode = 1;
+            string certificateReference = "00012001";
+
+            GetCertificate certificateToGet = new GetCertificate
+            {
+                Uln = uln,
+                FamilyName = lastName,
+                StandardCode = standardCode,
+                CertificateReference = certificateReference
+            };
+
+            if (certificateToGet.IsValid(out ICollection<ValidationResult> validationResults))
+            {
+                // NOTE: The External API performs validation, however it is a good idea to check beforehand
+                await _CertificateApiClient.GetCertificate(certificateToGet);
+            }
         }
     }
 }

@@ -3,15 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SFA.DAS.AssessorService.ExternalApi.Client"
         mc:Ignorable="d"
-        Title="External Api Client" Height="350" Width="200">
+        Title="External Api Client" Height="400" Width="200">
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <Button x:Name="btnCreate" Content="_Create" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnCreate_Click"/>
             <Button x:Name="btnUpdate" Content="_Update" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnUpdate_Click"/>
             <Button x:Name="btnSubmit" Content="_Submit" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnSubmit_Click"/>
             <Button x:Name="btnDelete" Content="_Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnDelete_Click" />
+            <Button x:Name="btnGet"    Content="_Get"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnGet_Click"/>
             <Button x:Name="btnSearch" Content="_Learner Details" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnSearch_Click" />
         </StackPanel>
     </Grid>
