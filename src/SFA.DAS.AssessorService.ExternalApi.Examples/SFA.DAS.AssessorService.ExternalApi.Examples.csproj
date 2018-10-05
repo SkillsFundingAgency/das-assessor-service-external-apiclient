@@ -15,12 +15,16 @@
   <ItemGroup>
     <None Remove="CsvFiles\createCertificates.csv" />
     <None Remove="CsvFiles\deleteCertificates.csv" />
+    <None Remove="CsvFiles\getCertificates.csv" />
     <None Remove="CsvFiles\submitCertificates.csv" />
     <None Remove="CsvFiles\updateCertificates.csv" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="CsvFiles\createCertificates.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CsvFiles\getCertificates.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="CsvFiles\submitCertificates.csv">

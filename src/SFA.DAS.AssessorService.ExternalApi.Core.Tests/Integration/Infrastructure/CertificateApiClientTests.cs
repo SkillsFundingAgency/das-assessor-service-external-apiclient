@@ -413,5 +413,53 @@
             Assert.That(actual.Error.StatusCode, Is.EqualTo(expectedResponse.StatusCode));
             Assert.That(actual.Error.Message, Is.EqualTo(expectedResponse.Message));
         }
+
+        [Test]
+        public async Task GetCertificate()
+        {
+            // arrange 
+            long uln = 1234567890;
+            string lastname = "Bloggs";
+            int standardcode = 1;
+            string certificateReference = "123456790";
+
+            var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.CertificateReference = certificateReference)
+                                                            .With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
+                                                            .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
+                                                            .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
+                                                            .Build();
+
+            var expectedResponse = new Certificate { CertificateData = certificateData, Status = "Submitted", CreatedAt = DateTime.UtcNow.AddHours(-1), CreatedBy = "Test", UpdatedAt = DateTime.UtcNow, UpdatedBy = "Test" };
+
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
+                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // act
+            var request = new GetCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode, CertificateReference = certificateReference };
+            var actual = await _ApiClient.GetCertificate(request);
+
+            // assert
+            Assert.That(actual, Is.Not.Null);
+        }
+
+        [Test]
+        public async Task GetCertificate_CertificateNotFound()
+        {
+            // arrange 
+            long uln = 1234567890;
+            string lastname = "Bloggs";
+            int standardcode = 4321;
+            string certificateReference = "1234567890";
+
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
+                .Respond(HttpStatusCode.NotFound, "application/json", string.Empty);
+
+            // act
+            var request = new GetCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode, CertificateReference = certificateReference };
+            var actual = await _ApiClient.GetCertificate(request);
+
+            // assert
+            Assert.That(actual, Is.Null);
+        }
     }
 }

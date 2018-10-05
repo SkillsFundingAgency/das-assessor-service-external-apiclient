@@ -11,6 +11,11 @@
     {
         public CertificateApiClient(HttpClient httpClient) : base(httpClient) { }
 
+        public async Task<Certificate> GetCertificate(GetCertificate request)
+        {
+            return await Get<Certificate>($"certificate/{request.Uln}/{request.FamilyName}/{request.StandardCode}/{request.CertificateReference}");
+        }
+
         public async Task<IEnumerable<BatchCertificateResponse>> CreateCertificates(IEnumerable<CertificateData> request)
         {
             return await Put<IEnumerable<CertificateData>, IEnumerable<BatchCertificateResponse>>("certificate", request);
