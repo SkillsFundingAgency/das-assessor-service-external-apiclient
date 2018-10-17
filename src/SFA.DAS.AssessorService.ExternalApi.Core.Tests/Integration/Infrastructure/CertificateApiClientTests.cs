@@ -60,7 +60,7 @@
                 new BatchCertificateResponse { Certificate = certificate, ProvidedCertificateData = certificateData}
             };
 
-            _MockHttp.When(HttpMethod.Put, $"{apiBaseAddress}/certificate")
+            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -89,7 +89,7 @@
                 new BatchCertificateResponse { Certificate = null, ProvidedCertificateData = certificateData, ValidationErrors = expectedValidationErrors }
             };
 
-            _MockHttp.When(HttpMethod.Put, $"{apiBaseAddress}/certificate")
+            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -119,7 +119,7 @@
                 new BatchCertificateResponse { Certificate = certificate, ProvidedCertificateData = certificateData}
             };
 
-            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/certificate")
+            _MockHttp.When(HttpMethod.Put, $"{apiBaseAddress}/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -149,7 +149,7 @@
                 new BatchCertificateResponse { Certificate = null, ProvidedCertificateData = certificateData, ValidationErrors = expectedValidationErrors }
             };
 
-            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/certificate")
+            _MockHttp.When(HttpMethod.Put, $"{apiBaseAddress}/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -179,7 +179,7 @@
                 new BatchCertificateResponse { Certificate = null, ProvidedCertificateData = certificateData, ValidationErrors = expectedValidationErrors }
             };
 
-            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/certificate")
+            _MockHttp.When(HttpMethod.Put, $"{apiBaseAddress}/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
