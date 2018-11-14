@@ -84,7 +84,9 @@
 
                 CertificateApiClient certificateApiClient = new CertificateApiClient(httpClient);
 
-                List<Certificate> certificates = new List<Certificate>();
+                var notYetCreatedCertificates = new List<GetBatchCertificateResponse>();
+                var validCertificates = new List<GetBatchCertificateResponse>();
+                var invalidCertificates = new List<GetBatchCertificateResponse>();
 
                 try
                 {
@@ -94,9 +96,17 @@
                     {
                         var response = await certificateApiClient.GetCertificate(certificate);
 
-                        if (response != null)
+                        if(response.Error != null)
                         {
-                            certificates.Add(response);
+                            invalidCertificates.Add(response);
+                        }
+                        else if(response.Certificate != null)
+                        {
+                            validCertificates.Add(response);
+                        }
+                        else
+                        {
+                            notYetCreatedCertificates.Add(response);
                         }
                     }
                 }
@@ -105,10 +115,74 @@
                     BusyIndicator.IsBusy = false;
                 }
 
-                if (certificates.Any())
+                if (invalidCertificates.Any())
                 {
-                    SaveCertificates(certificates.Select(r => r.CertificateData));
+                    SaveInvalidCertificates(invalidCertificates);
                 }
+
+                if (notYetCreatedCertificates.Any())
+                {
+                    SaveNotYetCertificates(notYetCreatedCertificates);
+                }
+
+                if (validCertificates.Any())
+                {
+                    SaveCertificates(validCertificates.Select(r => r.Certificate.CertificateData));
+                }
+            }
+        }
+
+        private void SaveNotYetCertificates(IEnumerable<GetBatchCertificateResponse> invalidCertificates)
+        {
+            string sMessageBoxText = "There are certificates that are not yet created. Do you want to save these for later use?";
+            string sCaption = "Not Yet Created Certificates";
+
+            MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Error);
+
+            if (rsltMessageBox == MessageBoxResult.No)
+            {
+                return;
+            }
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var certificatesToSave = invalidCertificates.Select(ic => new { ic.Uln, ic.FamilyName, ic.StandardCode, Message = "This certificate is not yet created" });
+
+                CsvFileHelper<dynamic>.SaveToFile(saveFileDialog.FileName, certificatesToSave);
+                System.Diagnostics.Process.Start(saveFileDialog.FileName);
+            }
+        }
+
+        private void SaveInvalidCertificates(IEnumerable<GetBatchCertificateResponse> invalidCertificates)
+        {
+            string sMessageBoxText = "There were invalid requests. Do you want to save these to a new file to amend?";
+            string sCaption = "Invalid Requests";
+
+            MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Error);
+
+            if (rsltMessageBox == MessageBoxResult.No)
+            {
+                return;
+            }
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var certificatesToSave = invalidCertificates.Select(ic => new { ic.Uln, ic.FamilyName, ic.StandardCode, Errors = ic.Error.Message });
+
+                CsvFileHelper<dynamic>.SaveToFile(saveFileDialog.FileName, certificatesToSave);
+                System.Diagnostics.Process.Start(saveFileDialog.FileName);
             }
         }
 

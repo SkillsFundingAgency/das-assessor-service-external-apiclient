@@ -14,7 +14,7 @@
         {
             const string subscriptionKey = ""; // insert your key here
             const string apiBaseAddress = ""; // insert the API address here
-            
+
             HttpClient httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
             httpClient.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
@@ -70,7 +70,8 @@
             {
                 CertificateReference = null,
                 Learner = new Learner { Uln = uln, GivenNames = firstName, FamilyName = lastName },
-                LearningDetails = new LearningDetails { StandardCode = standardCode, OverallGrade = overallGrade, AchievementDate = DateTime.UtcNow },
+                Standard = new Standard { StandardCode = standardCode },
+                LearningDetails = new LearningDetails { OverallGrade = overallGrade, AchievementDate = DateTime.UtcNow },
                 PostalContact = new PostalContact { ContactName = contactName, Organisation = organisation, AddressLine1 = address, City = city, PostCode = postcode }
             };
 
@@ -86,17 +87,19 @@
             // NOTE: You will need to know what the certificate currently looks like
             Certificate currentCertificate = new Certificate
             {
-                Status = "Draft",
-                CreatedAt = DateTime.UtcNow,
-                CreatedBy = "Example",
+                Status = new CertificateStatus { CurrentStatus = "Draft", CreatedAt = DateTime.UtcNow, CreatedBy = "Example" },
                 CertificateData = new CertificateData
                 {
                     CertificateReference = "00012001",
                     Learner = new Learner { Uln = 1234567890, GivenNames = "Fred", FamilyName = "Bloggs" },
+                    Standard = new Standard { StandardCode = 1, Level = 1, StandardName = "Example Standard", },
                     LearningDetails = new LearningDetails
                     {
-                        StandardCode = 1, StandardLevel = 1, StandardName = "Example Standard", LearningStartDate = DateTime.UtcNow.AddYears(-1),
-                        ProviderName = "Test Provider", ProviderUkPrn = 123456, OverallGrade = "Pass", AchievementDate = DateTime.UtcNow
+                        LearningStartDate = DateTime.UtcNow.AddYears(-1),
+                        ProviderName = "Test Provider",
+                        ProviderUkPrn = 123456,
+                        OverallGrade = "Pass",
+                        AchievementDate = DateTime.UtcNow
                     },
                     PostalContact = new PostalContact { ContactName = "Shreya Smith", Organisation = "Contoso Ltd", AddressLine1 = "123 Test Road", City = "Townsville", PostCode = "ZY99ZZ" }
                 }
@@ -154,7 +157,7 @@
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
                 await _CertificateApiClient.DeleteCertificate(certificateToDelete);
-            }            
+            }
         }
 
         public async Task GetCertificateExample()
@@ -162,14 +165,12 @@
             long uln = 1234567890;
             string lastName = "Blogs";
             int standardCode = 1;
-            string certificateReference = "00012001";
 
             GetCertificate certificateToGet = new GetCertificate
             {
                 Uln = uln,
                 FamilyName = lastName,
                 StandardCode = standardCode,
-                CertificateReference = certificateReference
             };
 
             if (certificateToGet.IsValid(out ICollection<ValidationResult> validationResults))

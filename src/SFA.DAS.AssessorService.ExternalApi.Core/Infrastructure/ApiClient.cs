@@ -9,7 +9,7 @@
 
     public class ApiClient
     {
-        private readonly HttpClient _httpClient;
+        protected internal readonly HttpClient _httpClient;
 
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {

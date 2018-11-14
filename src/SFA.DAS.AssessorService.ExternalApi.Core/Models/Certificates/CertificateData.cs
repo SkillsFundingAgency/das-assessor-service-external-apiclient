@@ -9,6 +9,9 @@
     {
         public string CertificateReference { get; set; }
 
+        [Required(ErrorMessage = "Standard is required"), ValidateObject]
+        public Standard Standard { get; set; }
+
         [Required(ErrorMessage = "Learner is required"), ValidateObject]
         public Learner Learner { get; set; }
 
@@ -28,6 +31,7 @@
 
                 int hash = hashBase;
                 hash = (hash * multiplier) ^ (CertificateReference is null ? 0 : CertificateReference.GetHashCode());
+                hash = (hash * multiplier) ^ (Standard is null ? 0 : Standard.GetHashCode());
                 hash = (hash * multiplier) ^ (Learner is null ? 0 : Learner.GetHashCode());
                 hash = (hash * multiplier) ^ (LearningDetails is null ? 0 : LearningDetails.GetHashCode());
                 hash = (hash * multiplier) ^ (PostalContact is null ? 0 : PostalContact.GetHashCode());
@@ -53,6 +57,7 @@
         private bool IsEqual(CertificateData other)
         {
             return string.Equals(CertificateReference, other.CertificateReference)
+                && Equals(Standard, other.Standard)
                 && Equals(Learner, other.Learner)
                 && Equals(LearningDetails, other.LearningDetails)
                 && Equals(PostalContact, other.PostalContact);
