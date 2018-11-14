@@ -17,9 +17,6 @@
         public DateTime? UpdatedAt { get; set; }
         public string UpdatedBy { get; set; }
 
-        public DateTime? DeletedAt { get; set; }
-        public string DeletedBy { get; set; }
-
         public DateTime? PrintedAt { get; set; }
         public int? PrintedBatch { get; set; }
 
@@ -37,8 +34,6 @@
                 hash = (hash * multiplier) ^ (CreatedBy is null ? 0 : CreatedBy.GetHashCode());
                 hash = (hash * multiplier) ^ (UpdatedAt is null ? 0 : UpdatedAt.GetHashCode());
                 hash = (hash * multiplier) ^ (UpdatedBy is null ? 0 : UpdatedBy.GetHashCode());
-                hash = (hash * multiplier) ^ (DeletedAt is null ? 0 : DeletedAt.GetHashCode());
-                hash = (hash * multiplier) ^ (DeletedBy is null ? 0 : DeletedBy.GetHashCode());
                 hash = (hash * multiplier) ^ (PrintedAt is null ? 0 : PrintedAt.GetHashCode());
                 hash = (hash * multiplier) ^ (PrintedBatch is null ? 0 : PrintedBatch.GetHashCode());
                 return hash;
@@ -67,8 +62,6 @@
                 && string.Equals(CreatedBy, other.CreatedBy)
                 && Equals(UpdatedAt, other.UpdatedAt)
                 && string.Equals(UpdatedBy, other.UpdatedBy)
-                && Equals(DeletedAt, other.DeletedAt)
-                && string.Equals(DeletedBy, other.DeletedBy)
                 && Equals(PrintedAt, other.PrintedAt)
                 && Equals(PrintedBatch, other.PrintedBatch);
         }
