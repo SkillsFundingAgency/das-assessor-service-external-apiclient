@@ -12,7 +12,7 @@
         public void CertificateDataMissing()
         {
             // arrange
-            var status = Builder<CertificateStatus>.CreateNew().Build();
+            var status = Builder<Status>.CreateNew().Build();
             var certificate = Builder<Certificate>.CreateNew().With(c => c.Status = status).With(c => c.CertificateData = null).Build();
 
             // act
@@ -29,7 +29,7 @@
         public void WhenValid()
         {
             // arrange
-            var status = Builder<CertificateStatus>.CreateNew().Build();
+            var status = Builder<Status>.CreateNew().Build();
             var learner = Builder<Learner>.CreateNew().With(l => l.Uln = 1243567890).Build();
             var standard = Builder<Standard>.CreateNew().With(l => l.StandardCode = 1).Build();
             var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.OverallGrade = "Pass").Build();
@@ -54,7 +54,7 @@
         public void WhenEqual()
         {
             // arrange
-            var status = Builder<CertificateStatus>.CreateNew().Build();
+            var status = Builder<Status>.CreateNew().Build();
             var learner = Builder<Learner>.CreateNew().Build();
             var standard = Builder<Standard>.CreateNew().Build();
             var learningDetails = Builder<LearningDetails>.CreateNew().Build();
@@ -79,8 +79,8 @@
         public void WhenNotEqual()
         {
             // arrange
-            var status1 = Builder<CertificateStatus>.CreateNew().With(c => c.CreatedBy = "user 1").Build();
-            var status2 = Builder<CertificateStatus>.CreateNew().With(c => c.CreatedBy = "user 2").Build();
+            var status1 = Builder<Status>.CreateNew().With(c => c.CurrentStatus = "Draft").Build();
+            var status2 = Builder<Status>.CreateNew().With(c => c.CurrentStatus = "Deleted").Build();
 
             var learner = Builder<Learner>.CreateNew().Build();
             var standard = Builder<Standard>.CreateNew().Build();

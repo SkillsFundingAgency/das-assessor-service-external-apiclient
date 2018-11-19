@@ -4,21 +4,12 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public sealed class CertificateStatus : IEquatable<CertificateStatus>
+    public sealed class Created : IEquatable<Created>
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "CurrentStatus is required")]
-        public string CurrentStatus { get; set; }
-
         public DateTime CreatedAt { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "CreatedBy is required")]
         public string CreatedBy { get; set; }
-
-        public DateTime? UpdatedAt { get; set; }
-        public string UpdatedBy { get; set; }
-
-        public DateTime? PrintedAt { get; set; }
-        public int? PrintedBatch { get; set; }
 
         #region GetHashCode, Equals and IEquatable
         public override int GetHashCode()
@@ -29,13 +20,8 @@
                 const int multiplier = 16777619;
 
                 int hash = hashBase;
-                hash = (hash * multiplier) ^ (CurrentStatus is null ? 0 : CurrentStatus.GetHashCode());
                 hash = (hash * multiplier) ^ CreatedAt.GetHashCode();
                 hash = (hash * multiplier) ^ (CreatedBy is null ? 0 : CreatedBy.GetHashCode());
-                hash = (hash * multiplier) ^ (UpdatedAt is null ? 0 : UpdatedAt.GetHashCode());
-                hash = (hash * multiplier) ^ (UpdatedBy is null ? 0 : UpdatedBy.GetHashCode());
-                hash = (hash * multiplier) ^ (PrintedAt is null ? 0 : PrintedAt.GetHashCode());
-                hash = (hash * multiplier) ^ (PrintedBatch is null ? 0 : PrintedBatch.GetHashCode());
                 return hash;
             }
         }
@@ -45,34 +31,29 @@
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return IsEqual((CertificateStatus)obj);
+            return IsEqual((Created)obj);
         }
 
-        public bool Equals(CertificateStatus other)
+        public bool Equals(Created other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
             return IsEqual(other);
         }
 
-        private bool IsEqual(CertificateStatus other)
+        private bool IsEqual(Created other)
         {
-            return string.Equals(CurrentStatus, other.CurrentStatus)
-                && Equals(CreatedAt, other.CreatedAt)
-                && string.Equals(CreatedBy, other.CreatedBy)
-                && Equals(UpdatedAt, other.UpdatedAt)
-                && string.Equals(UpdatedBy, other.UpdatedBy)
-                && Equals(PrintedAt, other.PrintedAt)
-                && Equals(PrintedBatch, other.PrintedBatch);
+            return Equals(CreatedAt, other.CreatedAt)
+                && string.Equals(CreatedBy, other.CreatedBy);
         }
 
-        public static bool operator ==(CertificateStatus left, CertificateStatus right)
+        public static bool operator ==(Created left, Created right)
         {
             if (left is null) return right is null;
             return left.Equals(right);
         }
 
-        public static bool operator !=(CertificateStatus left, CertificateStatus right)
+        public static bool operator !=(Created left, Created right)
         {
             return !(left == right);
         }

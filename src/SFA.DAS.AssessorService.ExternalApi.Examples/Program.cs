@@ -87,7 +87,8 @@
             // NOTE: You will need to know what the certificate currently looks like
             Certificate currentCertificate = new Certificate
             {
-                Status = new CertificateStatus { CurrentStatus = "Draft", CreatedAt = DateTime.UtcNow, CreatedBy = "Example" },
+                Status = new Status { CurrentStatus = "Draft" },
+                Created = new Created { CreatedAt = DateTime.UtcNow, CreatedBy = "Example" },
                 CertificateData = new CertificateData
                 {
                     CertificateReference = "00012001",

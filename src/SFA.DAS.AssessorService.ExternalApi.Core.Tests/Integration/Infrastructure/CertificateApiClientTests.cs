@@ -54,9 +54,10 @@
                                                                         .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
                                                                         .Build();
 
-            var status = new CertificateStatus { CurrentStatus = "Draft", CreatedAt = DateTime.UtcNow, CreatedBy = "Test" };
+            var status = new Status { CurrentStatus = "Draft" };
+            var created = new Created { CreatedAt = DateTime.UtcNow, CreatedBy = "Test" };
 
-            var certificate = new Certificate { CertificateData = certificateData, Status = status };
+            var certificate = new Certificate { CertificateData = certificateData, Status = status, Created = created };
 
             var expectedResponse = new List<BatchCertificateResponse>
             {
@@ -117,9 +118,10 @@
                                                                         .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
                                                                         .Build();
 
-            var status = new CertificateStatus { CurrentStatus = "Draft", CreatedAt = DateTime.UtcNow.AddHours(-1), CreatedBy = "Test", UpdatedAt = DateTime.UtcNow, UpdatedBy = "Test" };
+            var status = new Status { CurrentStatus = "Draft" };
+            var created = new Created { CreatedAt = DateTime.UtcNow.AddHours(-1), CreatedBy = "Test" };
 
-            var certificate = new Certificate { CertificateData = certificateData, Status = status };
+            var certificate = new Certificate { CertificateData = certificateData, Status = status, Created = created };
 
             var expectedResponse = new List<BatchCertificateResponse>
             {
@@ -214,9 +216,11 @@
                                                                         .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
                                                                         .Build();
 
-            var status = new CertificateStatus { CurrentStatus = "Submitted", CreatedAt = DateTime.UtcNow.AddHours(-1), CreatedBy = "Test", UpdatedAt = DateTime.UtcNow, UpdatedBy = "Test" };
+            var status = new Status { CurrentStatus = "Submitted" };
+            var created = new Created { CreatedAt = DateTime.UtcNow.AddHours(-1), CreatedBy = "Test" };
+            var submitted = new Submitted { SubmittedAt = DateTime.UtcNow, SubmittedBy = "Test" };
 
-            var certificate = new Certificate { CertificateData = certificateData, Status = status };
+            var certificate = new Certificate { CertificateData = certificateData, Status = status, Created = created, Submitted = submitted };
 
             var expectedResponse = new List<SubmitBatchCertificateResponse>
             {
@@ -442,9 +446,11 @@
                                                             .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
                                                             .Build();
 
-            var status = new CertificateStatus { CurrentStatus = "Submitted", CreatedAt = DateTime.UtcNow.AddHours(-1), CreatedBy = "Test", UpdatedAt = DateTime.UtcNow, UpdatedBy = "Test" };
+            var status = new Status { CurrentStatus = "Submitted" };
+            var created = new Created { CreatedAt = DateTime.UtcNow.AddHours(-1), CreatedBy = "Test" };
+            var submitted = new Submitted { SubmittedAt = DateTime.UtcNow, SubmittedBy = "Test" };
 
-            var expectedResponse = new Certificate { CertificateData = certificateData, Status = status };
+            var expectedResponse = new Certificate { CertificateData = certificateData, Status = status, Created = created, Submitted = submitted };
 
             _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));

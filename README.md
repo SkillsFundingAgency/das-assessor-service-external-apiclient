@@ -1,8 +1,8 @@
 # ![crest](https://assets.publishing.service.gov.uk/government/assets/crests/org_crest_27px-916806dcf065e7273830577de490d5c7c42f36ddec83e907efe62086785f24fb.png) Digital Apprenticeships Service
 
-##  External API Client (das-assessor-service-external-apiclient)
+##  End Point Assessor Certification API (das-assessor-service-external-apiclient)
 
-![Build Status](https://sfa-gov-uk.visualstudio.com/_apis/public/build/definitions/c39e0c0b-7aff-4606-b160-3566f3bbce23/???/badge)
+![Build Status](https://sfa-gov-uk.visualstudio.com/_apis/public/build/definitions/c39e0c0b-7aff-4606-b160-3566f3bbce23/831/badge)
 
 ### Developer Setup
 
@@ -11,19 +11,22 @@
 - Install [Visual Studio 2017](https://www.visualstudio.com/downloads/) with these workloads:
     - ASP.NET and web development
     - .NET desktop development
-- Obtain External API Subscription Key and Base Address
+- Create an account on the [Developer Portal](https://developers.apprenticeships.sfa.bis.gov.uk/)
+	- Obtain External API Subscription Key and Base Address
+	- Can also be used to access the current Swagger Documentation
 
 ##### Open the solution
 
 - Open the solution
-- Set SFA.DAS.AssessorService.ExternalApi.Client as the startup project
+- Set SFA.DAS.AssessorService.ExternalApi.Client as the start-up project
 - Update the API Subscription Key and Base Address
 - Running the solution will launch the desktop application
 
 ### SFA.DAS.AssessorService.ExternalApi.Client
 
 A simple Windows Presentation Foundation (WPF) client.
-Reads in CSV formatted files.
+- Reads in CSV formatted files
+	- There are examples in the following solution folder: CsvFiles
 
 ### SFA.DAS.AssessorService.ExternalApi.Examples
 
