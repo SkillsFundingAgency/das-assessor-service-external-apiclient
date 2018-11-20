@@ -7,9 +7,6 @@
 
     public sealed class LearningDetails : IEquatable<LearningDetails>
     {
-        public int StandardCode { get; set; }
-        public string StandardName { get; set; }
-        public int StandardLevel { get; set; }
         public DateTime StandardPublicationDate { get; set; }
         public string CourseOption { get; set; }
 
@@ -32,9 +29,6 @@
                 const int multiplier = 16777619;
 
                 int hash = hashBase;
-                hash = (hash * multiplier) ^ StandardCode.GetHashCode();
-                hash = (hash * multiplier) ^ (StandardName is null ? 0 : StandardName.GetHashCode());
-                hash = (hash * multiplier) ^ StandardLevel.GetHashCode();
                 hash = (hash * multiplier) ^ StandardPublicationDate.GetHashCode();
                 hash = (hash * multiplier) ^ (CourseOption is null ? 0 : CourseOption.GetHashCode());
                 hash = (hash * multiplier) ^ (OverallGrade is null ? 0 : OverallGrade.GetHashCode());
@@ -64,10 +58,7 @@
 
         private bool IsEqual(LearningDetails other)
         {
-            return Equals(StandardCode, other.StandardCode)
-                && string.Equals(StandardName, other.StandardName)
-                && Equals(StandardLevel, other.StandardLevel)
-                && Equals(StandardPublicationDate, other.StandardPublicationDate)
+            return Equals(StandardPublicationDate, other.StandardPublicationDate)
                 && string.Equals(CourseOption, other.CourseOption)
                 && string.Equals(OverallGrade, other.OverallGrade)
                 && string.Equals(AchievementOutcome, other.AchievementOutcome)

@@ -11,9 +11,28 @@
     {
         public CertificateApiClient(HttpClient httpClient) : base(httpClient) { }
 
-        public async Task<Certificate> GetCertificate(GetCertificate request)
+        public async Task<GetBatchCertificateResponse> GetCertificate(GetCertificate request)
         {
-            return await Get<Certificate>($"certificate/{request.Uln}/{request.FamilyName}/{request.StandardCode}/{request.CertificateReference}");
+            var response = new GetBatchCertificateResponse
+            {
+                Uln = request.Uln,
+                FamilyName = request.FamilyName,
+                StandardCode = request.StandardCode
+            };
+
+            using (var apiResponse = await _httpClient.GetAsync($"certificate/{request.Uln}/{request.FamilyName}/{request.StandardCode}"))
+            {
+                if (apiResponse.IsSuccessStatusCode)
+                {
+                    response.Certificate = await apiResponse.Content.ReadAsAsync<Certificate>();
+                }
+                else
+                {
+                    response.Error = await apiResponse.Content.ReadAsAsync<ApiResponse>();
+                }
+            }
+
+            return response;
         }
 
         public async Task<IEnumerable<BatchCertificateResponse>> CreateCertificates(IEnumerable<CertificateData> request)

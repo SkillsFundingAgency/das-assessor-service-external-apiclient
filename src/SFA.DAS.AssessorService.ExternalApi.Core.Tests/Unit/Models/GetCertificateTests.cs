@@ -54,21 +54,6 @@
         }
 
         [Test]
-        public void CertificateReferenceMissing()
-        {
-            // arrange
-            var certificate = Builder<GetCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(sc => sc.StandardCode = 1).With(sc => sc.CertificateReference = null).Build();
-
-            // act
-            bool isValid = certificate.IsValid(out var validationResults);
-
-            // assert
-            Assert.IsFalse(isValid);
-            Assert.That(validationResults, Has.Count.EqualTo(1));
-            StringAssert.AreEqualIgnoringCase("Enter the certificate reference", validationResults.First().ErrorMessage);
-        }
-
-        [Test]
         public void WhenValid()
         {
             // arrange

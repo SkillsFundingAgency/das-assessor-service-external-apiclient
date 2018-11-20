@@ -10,23 +10,17 @@
         [Required(ErrorMessage = "CertificateData is required"), ValidateObject]
         public CertificateData CertificateData { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Status is required")]
-        public string Status { get; set; }
+        [Required(ErrorMessage = "Status is required"), ValidateObject]
+        public Status Status { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        [ValidateObject]
+        public Created Created { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "CreatedBy is required")]
-        public string CreatedBy { get; set; }
+        [ValidateObject]
+        public Submitted Submitted { get; set; }
 
-        public DateTime? UpdatedAt { get; set; }
-        public string UpdatedBy { get; set; }
-
-        public DateTime? DeletedAt { get; set; }
-        public string DeletedBy { get; set; }
-
-        public DateTime? PrintedAt { get; set; }
-        public int? BatchNumber { get; set; }
-
+        [ValidateObject]
+        public Printed Printed { get; set; }
 
         #region GetHashCode, Equals and IEquatable
         public override int GetHashCode()
@@ -39,14 +33,9 @@
                 int hash = hashBase;
                 hash = (hash * multiplier) ^ (CertificateData is null ? 0 : CertificateData.GetHashCode());
                 hash = (hash * multiplier) ^ (Status is null ? 0 : Status.GetHashCode());
-                hash = (hash * multiplier) ^ CreatedAt.GetHashCode();
-                hash = (hash * multiplier) ^ (CreatedBy is null ? 0 : CreatedBy.GetHashCode());
-                hash = (hash * multiplier) ^ (UpdatedAt is null ? 0 : UpdatedAt.GetHashCode());
-                hash = (hash * multiplier) ^ (UpdatedBy is null ? 0 : UpdatedBy.GetHashCode());
-                hash = (hash * multiplier) ^ (DeletedAt is null ? 0 : DeletedAt.GetHashCode());
-                hash = (hash * multiplier) ^ (DeletedBy is null ? 0 : DeletedBy.GetHashCode());
-                hash = (hash * multiplier) ^ (PrintedAt is null ? 0 : PrintedAt.GetHashCode());
-                hash = (hash * multiplier) ^ (BatchNumber is null ? 0 : BatchNumber.GetHashCode());
+                hash = (hash * multiplier) ^ (Created is null ? 0 : Created.GetHashCode());
+                hash = (hash * multiplier) ^ (Submitted is null ? 0 : Submitted.GetHashCode());
+                hash = (hash * multiplier) ^ (Printed is null ? 0 : Printed.GetHashCode());
                 return hash;
             }
         }
@@ -69,15 +58,10 @@
         private bool IsEqual(Certificate other)
         {
             return Equals(CertificateData, other.CertificateData)
-                && string.Equals(Status, other.Status)
-                && Equals(CreatedAt, other.CreatedAt)
-                && string.Equals(CreatedBy, other.CreatedBy)
-                && Equals(UpdatedAt, other.UpdatedAt)
-                && string.Equals(UpdatedBy, other.UpdatedBy)
-                && Equals(DeletedAt, other.DeletedAt)
-                && string.Equals(DeletedBy, other.DeletedBy)
-                && Equals(PrintedAt, other.PrintedAt)
-                && Equals(BatchNumber, other.BatchNumber);
+                && Equals(Status, other.Status)
+                && Equals(Created, other.Created)
+                && Equals(Submitted, other.Submitted)
+                && Equals(Printed, other.Printed);
         }
 
         public static bool operator ==(Certificate left, Certificate right)

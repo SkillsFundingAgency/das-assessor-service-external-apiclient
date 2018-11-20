@@ -102,9 +102,6 @@
     <Compile Include="Controls\DeleteWindow.xaml.cs">
       <DependentUpon>DeleteWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\LearnerDetailsWindow.xaml.cs">
-      <DependentUpon>LearnerDetailsWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\SubmitWindow.xaml.cs">
       <DependentUpon>SubmitWindow.xaml</DependentUpon>
     </Compile>
@@ -113,7 +110,6 @@
     </Compile>
     <Compile Include="Helpers\CsvFileHelper.cs" />
     <Compile Include="ViewModels\GetViewModel.cs" />
-    <Compile Include="ViewModels\LearnerDetailsViewModel.cs" />
     <Compile Include="ViewModels\UpdateViewModel.cs" />
     <Compile Include="ViewModels\SubmitViewModel.cs" />
     <Compile Include="ViewModels\DeleteViewModel.cs" />
@@ -127,10 +123,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\DeleteWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\LearnerDetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -10,14 +10,17 @@
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var results = new List<ValidationResult>();
-            var context = new ValidationContext(value);
-
-            Validator.TryValidateObject(value, context, results, true);
-
-            if (results.Count != 0)
+            if (value != null)
             {
-                return new CompositeValidationResult(results, $"Validation for {validationContext?.DisplayName} failed!");
+                var results = new List<ValidationResult>();
+                var context = new ValidationContext(value);
+
+                Validator.TryValidateObject(value, context, results, true);
+
+                if (results.Count != 0)
+                {
+                    return new CompositeValidationResult(results, $"Validation for {validationContext?.DisplayName} failed!");
+                }
             }
 
             return ValidationResult.Success;

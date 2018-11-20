@@ -49,11 +49,15 @@
         {
             // arrange 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
+                                                                        .With(cd => cd.Standard = Builder<Standard>.CreateNew().Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
                                                                         .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
                                                                         .Build();
 
-            var certificate = new Certificate { CertificateData = certificateData, Status = "Draft", CreatedAt = DateTime.UtcNow, CreatedBy = "Test" };
+            var status = new Status { CurrentStatus = "Draft" };
+            var created = new Created { CreatedAt = DateTime.UtcNow, CreatedBy = "Test" };
+
+            var certificate = new Certificate { CertificateData = certificateData, Status = status, Created = created };
 
             var expectedResponse = new List<BatchCertificateResponse>
             {
@@ -78,6 +82,7 @@
         {
             // arrange 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
+                                                                        .With(cd => cd.Standard = Builder<Standard>.CreateNew().Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
                                                                         .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
                                                                         .Build();
@@ -107,12 +112,16 @@
         {
             // arrange 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.CertificateReference = "DRAFT CERTIFICATE")
+                                                                        .With(cd => cd.Standard = Builder<Standard>.CreateNew().Build())
                                                                         .With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
                                                                         .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
                                                                         .Build();
 
-            var certificate = new Certificate { CertificateData = certificateData, Status = "Draft", CreatedAt = DateTime.UtcNow.AddHours(-1), CreatedBy = "Test", UpdatedAt = DateTime.UtcNow, UpdatedBy = "Test" };
+            var status = new Status { CurrentStatus = "Draft" };
+            var created = new Created { CreatedAt = DateTime.UtcNow.AddHours(-1), CreatedBy = "Test" };
+
+            var certificate = new Certificate { CertificateData = certificateData, Status = status, Created = created };
 
             var expectedResponse = new List<BatchCertificateResponse>
             {
@@ -137,6 +146,7 @@
         {
             // arrange 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.CertificateReference = "NOT FOUND")
+                                                                        .With(cd => cd.Standard = Builder<Standard>.CreateNew().Build())
                                                                         .With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
                                                                         .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
@@ -167,6 +177,7 @@
         {
             // arrange 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.CertificateReference = "SUBMITTED CERTIFICATE")
+                                                                        .With(cd => cd.Standard = Builder<Standard>.CreateNew().Build())
                                                                         .With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
                                                                         .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
@@ -199,12 +210,17 @@
             var submitCertificate = new SubmitCertificate { Uln = 9876543210, FamilyName = "Blogs", StandardCode = 1 };
 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.CertificateReference = "DRAFT CERTIFICATE")
+                                                                        .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardCode = 1).Build())
                                                                         .With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
                                                                         .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
                                                                         .Build();
 
-            var certificate = new Certificate { CertificateData = certificateData, Status = "Submitted", CreatedAt = DateTime.UtcNow.AddHours(-1), CreatedBy = "Test", UpdatedAt = DateTime.UtcNow, UpdatedBy = "Test" };
+            var status = new Status { CurrentStatus = "Submitted" };
+            var created = new Created { CreatedAt = DateTime.UtcNow.AddHours(-1), CreatedBy = "Test" };
+            var submitted = new Submitted { SubmittedAt = DateTime.UtcNow, SubmittedBy = "Test" };
+
+            var certificate = new Certificate { CertificateData = certificateData, Status = status, Created = created, Submitted = submitted };
 
             var expectedResponse = new List<SubmitBatchCertificateResponse>
             {
@@ -424,42 +440,77 @@
             string certificateReference = "123456790";
 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.CertificateReference = certificateReference)
+                                                            .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardCode = 1).Build())
                                                             .With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                             .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
                                                             .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
                                                             .Build();
 
-            var expectedResponse = new Certificate { CertificateData = certificateData, Status = "Submitted", CreatedAt = DateTime.UtcNow.AddHours(-1), CreatedBy = "Test", UpdatedAt = DateTime.UtcNow, UpdatedBy = "Test" };
+            var status = new Status { CurrentStatus = "Submitted" };
+            var created = new Created { CreatedAt = DateTime.UtcNow.AddHours(-1), CreatedBy = "Test" };
+            var submitted = new Submitted { SubmittedAt = DateTime.UtcNow, SubmittedBy = "Test" };
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
+            var expectedResponse = new Certificate { CertificateData = certificateData, Status = status, Created = created, Submitted = submitted };
+
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var request = new GetCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode, CertificateReference = certificateReference };
+            var request = new GetCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode };
             var actual = await _ApiClient.GetCertificate(request);
 
             // assert
-            Assert.That(actual, Is.Not.Null);
+            Assert.That(actual.Error, Is.Null);
+            Assert.That(actual.Certificate, Is.Not.Null);
         }
 
         [Test]
-        public async Task GetCertificate_CertificateNotFound()
+        public async Task GetCertificate_CertificateNotYetCreated()
         {
             // arrange 
             long uln = 1234567890;
             string lastname = "Bloggs";
             int standardcode = 4321;
-            string certificateReference = "1234567890";
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
-                .Respond(HttpStatusCode.NotFound, "application/json", string.Empty);
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}")
+                .Respond(HttpStatusCode.NoContent, "application/json", string.Empty);
 
             // act
-            var request = new GetCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode, CertificateReference = certificateReference };
+            var request = new GetCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode };
             var actual = await _ApiClient.GetCertificate(request);
 
             // assert
-            Assert.That(actual, Is.Null);
+            Assert.That(actual.Error, Is.Null);
+            Assert.That(actual.Certificate, Is.Null);
         }
+
+        [Test]
+        public async Task GetCertificate_InvalidRequest()
+        {
+            // arrange 
+            long uln = 1234567890;
+            string lastname = "INVALID";
+            int standardcode = 4321;
+
+            var expectedResponse = new ApiResponse
+            {
+                StatusCode = (int)HttpStatusCode.BadRequest,
+                Message = "Cannot find entry for specified Uln, FamilyName & StandardCode"
+            };
+
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}")
+                .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // act
+            var request = new GetCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode };
+            var actual = await _ApiClient.GetCertificate(request);
+
+            // assert
+            Assert.That(actual.Error, Is.Not.Null);
+            Assert.That(actual.Error.StatusCode, Is.EqualTo(expectedResponse.StatusCode));
+            Assert.That(actual.Error.Message, Is.EqualTo(expectedResponse.Message));
+            Assert.That(actual.Certificate, Is.Null);
+        }
+
     }
 }

@@ -4,16 +4,12 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public sealed class GetCertificate : IEquatable<GetCertificate>
+    public sealed class Created : IEquatable<Created>
     {
-        [Range(1000000000, 9999999999, ErrorMessage = "The apprentice's ULN should contain exactly 10 numbers")]
-        public long Uln { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        [Range(0, short.MaxValue, ErrorMessage = "A standard should be selected")]
-        public int StandardCode { get; set; }
-
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Enter the apprentice's last name")]
-        public string FamilyName { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "CreatedBy is required")]
+        public string CreatedBy { get; set; }
 
         #region GetHashCode, Equals and IEquatable
         public override int GetHashCode()
@@ -24,10 +20,8 @@
                 const int multiplier = 16777619;
 
                 int hash = hashBase;
-                hash = (hash * multiplier) ^ Uln.GetHashCode();
-                hash = (hash * multiplier) ^ StandardCode.GetHashCode();
-                hash = (hash * multiplier) ^ (FamilyName is null ? 0 : FamilyName.GetHashCode());
-
+                hash = (hash * multiplier) ^ CreatedAt.GetHashCode();
+                hash = (hash * multiplier) ^ (CreatedBy is null ? 0 : CreatedBy.GetHashCode());
                 return hash;
             }
         }
@@ -37,30 +31,29 @@
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return IsEqual((GetCertificate)obj);
+            return IsEqual((Created)obj);
         }
 
-        public bool Equals(GetCertificate other)
+        public bool Equals(Created other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
             return IsEqual(other);
         }
 
-        private bool IsEqual(GetCertificate other)
+        private bool IsEqual(Created other)
         {
-            return Equals(Uln, other.Uln)
-                && Equals(StandardCode, other.StandardCode)
-                && string.Equals(FamilyName, other.FamilyName);
+            return Equals(CreatedAt, other.CreatedAt)
+                && string.Equals(CreatedBy, other.CreatedBy);
         }
 
-        public static bool operator ==(GetCertificate left, GetCertificate right)
+        public static bool operator ==(Created left, Created right)
         {
             if (left is null) return right is null;
             return left.Equals(right);
         }
 
-        public static bool operator !=(GetCertificate left, GetCertificate right)
+        public static bool operator !=(Created left, Created right)
         {
             return !(left == right);
         }
