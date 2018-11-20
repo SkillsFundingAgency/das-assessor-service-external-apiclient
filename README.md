@@ -51,6 +51,7 @@ Unit and mocked Integration tests.
 ```http
 GET /ap1/v1/certificate/{uln}/{familyName}/{standardCode}
 ```
+
 returns status code
 
 - 204 if certificate can be created
@@ -61,9 +62,12 @@ returns status code
 
 #### 2.   To request a certificate when no certificate found at step 1, or skipped step 1
 
-```POST /api/v1/certificate```
+```http
+POST /api/v1/certificate
+```
 
 application/json body posted should contain an array for the requested certificate
+
 ```json
 [{
 	"standard": {
@@ -90,6 +94,7 @@ application/json body posted should contain an array for the requested certifica
 	}
 }]
 ```
+
 returns status code
 - 200 plus application/json containing response for the requested certificate
    * if EPAO has the correct profile to assess the requested Standard and all required data has been provided and is valid, certificate details will be returned with a status of 'ready',
@@ -100,9 +105,11 @@ returns status code
 Certificate can only be submitted after all validation checks have been performed, and the certificate is 'ready'
   
 ```http
-POST /api/v1/certificate/submit```
+POST /api/v1/certificate/submit
+```
   
 application/json body posted should contain an array of submitted certificate
+
 ```json  
 [{
 	"uln": 0,
@@ -111,6 +118,7 @@ application/json body posted should contain an array of submitted certificate
 	"certificateReference": "string"
 }]
 ```
+
 returns status code
 - 200 plus application/json containing response for the submitted certificate
    * if EPAO created the certificate and status is 'ready', certificate details will be returned and the certificate will have a status of 'submitted',
@@ -122,9 +130,11 @@ returns status code
 #### 1.   To request multiple certificates
 
 ```http
-POST /api/v1/certificate```
+POST /api/v1/certificate
+```
 
 application/json body posted should contain an array of certificate requests
+
 ```json
 [{"standard": .. },{"standard": .. },{"standard": .. }]
 ```
@@ -137,12 +147,15 @@ returns status code
 Certificates can only be submitted after all validation checks have been performed, and the certificate is 'ready'.
   
 ```http
-POST /api/v1/certificate/submit```
-  
+POST /api/v1/certificate/submit
+```
+
 application/json body posted should contain an array of submitted certificates
+
 ```json  
 [{"uln": .. },{"uln": .. },{"uln": .. }]
 ```
+
 returns status code
 - 200 plus application/json response for each requested certificate
    * if EPAO created the certificate and status is 'ready', certificate details will be returned and the certificate will have a status of 'submitted',
@@ -157,10 +170,10 @@ returns status code
 ```http
 POST /api/v1/certificate/{uln}/{familyName}/{standardCode}/{certificateReference}
 ```
+
 returns status code
 - 204 to confirm certificate has been deleted.
-    
-    
+ 
 
 
 ## License
