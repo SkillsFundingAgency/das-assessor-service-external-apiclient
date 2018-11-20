@@ -22,35 +22,21 @@
             httpClient.BaseAddress = new Uri(apiBaseAddress);
 
             CertificateApiClient certificateApiClient = new CertificateApiClient(httpClient);
-            SearchApiClient searchApiClient = new SearchApiClient(httpClient);
 
-            Program p = new Program(certificateApiClient, searchApiClient);
+            Program p = new Program(certificateApiClient);
             p.CreateCertificatesExample().GetAwaiter().GetResult();
             p.UpdateCertificatesExample().GetAwaiter().GetResult();
             p.SubmitCertificatesExample().GetAwaiter().GetResult();
             p.DeleteCertificateExample().GetAwaiter().GetResult();
             p.GetCertificateExample().GetAwaiter().GetResult();
-            p.SearchExample().GetAwaiter().GetResult();
         }
 
 
         private readonly CertificateApiClient _CertificateApiClient;
-        private readonly SearchApiClient _SearchApiClient;
 
-
-        public Program(CertificateApiClient certificateApiClient, SearchApiClient searchApiClient)
+        public Program(CertificateApiClient certificateApiClient)
         {
             _CertificateApiClient = certificateApiClient;
-            _SearchApiClient = searchApiClient;
-        }
-
-        public async Task SearchExample()
-        {
-            long uln = 1234567890;
-            string lastName = "Blogs";
-            int? standardCode = null;
-
-            await _SearchApiClient.Search(uln, lastName, standardCode);
         }
 
         public async Task CreateCertificatesExample()

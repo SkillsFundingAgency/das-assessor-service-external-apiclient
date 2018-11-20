@@ -70,14 +70,5 @@ namespace SFA.DAS.AssessorService.ExternalApi.Client
             };
             window.ShowDialog();
         }
-
-        private void btnSearch_Click(object sender, RoutedEventArgs e)
-        {
-            LearnerDetailsWindow window = new LearnerDetailsWindow
-            {
-                Owner = this
-            };
-            window.ShowDialog();
-        }
     }
 }
