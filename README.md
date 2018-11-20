@@ -99,7 +99,8 @@ returns status code
 #### 3.   To submit a certificate created at step 2
 Certificate can only be submitted after all validation checks have been performed, and the certificate is 'ready'
   
-```POST /api/v1/certificate/submit```
+```http
+POST /api/v1/certificate/submit```
   
 application/json body posted should contain an array of submitted certificate
 ```json  
@@ -120,11 +121,12 @@ returns status code
 
 #### 1.   To request multiple certificates
 
-```POST /api/v1/certificate```
+```http
+POST /api/v1/certificate```
 
 application/json body posted should contain an array of certificate requests
 ```json
-[{"standard": ... },{"standard": ...},{"standard": ...}]
+[{"standard": .. },{"standard": .. },{"standard": .. }]
 ```
 returns status code
 - 200 plus application/json response for each requested certificate
@@ -134,11 +136,12 @@ returns status code
 #### 2.   To submit a certificates created at step 1
 Certificates can only be submitted after all validation checks have been performed, and the certificate is 'ready'.
   
-```POST /api/v1/certificate/submit```
+```http
+POST /api/v1/certificate/submit```
   
 application/json body posted should contain an array of submitted certificates
 ```json  
-[{"uln": ...},{"uln": ...},{"uln": ...}]
+[{"uln": .. },{"uln": .. },{"uln": .. }]
 ```
 returns status code
 - 200 plus application/json response for each requested certificate
