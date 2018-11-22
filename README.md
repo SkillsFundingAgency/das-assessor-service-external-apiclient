@@ -43,6 +43,7 @@ Core functionality to interact with the External API.
 Unit and mocked Integration tests.
 
 ## Sample Scenarios
+For details see the online Swagger documentation in the [Developer Portal](https://developers.apprenticeships.sfa.bis.gov.uk/).
 
 ### Request a single Certificate for a Learner with a Standard Code
 
@@ -70,6 +71,7 @@ application/json body posted should contain an array for the requested certifica
 
 ```json
 [{
+	"requestId" : "string",
 	"standard": {
 		"standardCode": 0
 	},
@@ -96,7 +98,7 @@ application/json body posted should contain an array for the requested certifica
 ```
 
 returns status code
-- 200 plus application/json containing response for the requested certificate
+- 200 plus application/json containing response for the requested certificate, by your provided "requestId"
    * if EPAO has the correct profile to assess the requested Standard and all required data has been provided and is valid, certificate details will be returned with a status of 'ready',
    * otherwise validation error(s) will be returned 
 
@@ -108,10 +110,11 @@ Certificate can only be submitted after all validation checks have been performe
 POST /api/v1/certificate/submit
 ```
   
-application/json body posted should contain an array of submitted certificate
+application/json body posted should contain an array of submitted certificates, each with your own unique "requestId" which will be used in the response body
 
 ```json  
 [{
+	"requestId" : "string",
 	"uln": 0,
 	"standardCode": 0,
 	"familyName": "string",
@@ -120,7 +123,7 @@ application/json body posted should contain an array of submitted certificate
 ```
 
 returns status code
-- 200 plus application/json containing response for the submitted certificate
+- 200 plus application/json containing response for the submitted certificate, by your provided "requestId"
    * if EPAO created the certificate and status is 'ready', certificate details will be returned and the certificate will have a status of 'submitted',
    * otherwise validation error(s) will be returned 
    
@@ -133,13 +136,13 @@ returns status code
 POST /api/v1/certificate
 ```
 
-application/json body posted should contain an array of certificate requests
+application/json body posted should contain an array of certificate requests, each with your own unique "requestId" which will be used in the response body
 
 ```json
-[{"standard": .. },{"standard": .. },{"standard": .. }]
+[{"requestId": .. },{"requestId": .. },{"requestId": .. }]
 ```
 returns status code
-- 200 plus application/json response for each requested certificate
+- 200 plus application/json response for each requested certificate, by your provided "requestId"
    * if EPAO has the correct profile to assess the requested Standard and all required data has been provided and is valid, certificate details will be returned each certificate will have a status of 'ready',
    * otherwise validation error(s) will be returned for each certificate failing validation
 
@@ -150,14 +153,14 @@ Certificates can only be submitted after all validation checks have been perform
 POST /api/v1/certificate/submit
 ```
 
-application/json body posted should contain an array of submitted certificates
+application/json body posted should contain an array of submitted certificates, each with your own unique "requestId" which will be used in the response body
 
 ```json  
-[{"uln": .. },{"uln": .. },{"uln": .. }]
+[{"requestId": .. },{"requestId": .. },{"requestId": .. }]
 ```
 
 returns status code
-- 200 plus application/json response for each requested certificate
+- 200 plus application/json response for each requested certificate, by your provided "requestId"
    * if EPAO created the certificate and status is 'ready', certificate details will be returned and the certificate will have a status of 'submitted',
    * otherwise validation error(s) will be returned 
    
@@ -168,7 +171,7 @@ returns status code
    It is possible to delete a certificate that has been created by the EPAO using the API when the status is not 'submitted'. 
 
 ```http
-POST /api/v1/certificate/{uln}/{familyName}/{standardCode}/{certificateReference}
+DELETE /api/v1/certificate/{uln}/{familyName}/{standardCode}/{certificateReference}
 ```
 
 returns status code
