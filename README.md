@@ -26,13 +26,13 @@
 
 A simple Windows Presentation Foundation (WPF) client.
 - Reads in CSV formatted files
-	- There are examples in the following solution folder: CsvFiles
+	- There are examples in the following solution folder: [CsvFiles](https://github.com/SkillsFundingAgency/das-assessor-service-external-apiclient/tree/master/src/SFA.DAS.AssessorService.ExternalApi.Examples/CsvFiles)
 
 ####  SFA.DAS.AssessorService.ExternalApi.Examples
 
 Example code should you wish to implement your own client:
-- Program.cs - basic client
-- ProgramCsv.cs - CSV enabled client
+- [Program.cs](https://github.com/SkillsFundingAgency/das-assessor-service-external-apiclient/blob/master/src/SFA.DAS.AssessorService.ExternalApi.Examples/Program.cs) - basic client
+- [ProgramCsv.cs](https://github.com/SkillsFundingAgency/das-assessor-service-external-apiclient/blob/master/src/SFA.DAS.AssessorService.ExternalApi.Examples/ProgramCsv.cs) - CSV enabled client
 
 ####  SFA.DAS.AssessorService.ExternalApi.Core
 

@@ -5,9 +5,9 @@
 
     public class BatchCertificateResponse
     {
-        public Certificate Certificate { get; set; }
+        public string RequestId { get; set; }
 
-        public CertificateData ProvidedCertificateData { get; set; }
+        public Certificate Certificate { get; set; }
 
         public IEnumerable<string> ValidationErrors { get; set; } = new List<string>();
     }

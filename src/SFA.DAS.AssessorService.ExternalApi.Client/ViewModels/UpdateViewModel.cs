@@ -19,7 +19,7 @@
             }
         }
 
-        public ObservableCollection<CertificateData> Certificates { get; private set; }
+        public ObservableCollection<UpdateCertificate> Certificates { get; private set; }
 
         public CollectionViewSource ValidCertificates { get; private set; }
 
@@ -27,7 +27,7 @@
 
         public UpdateViewModel()
         {
-            Certificates = new ObservableCollection<CertificateData>();
+            Certificates = new ObservableCollection<UpdateCertificate>();
 
             ValidCertificates = new CollectionViewSource();
             ValidCertificates.Filter += ValidCertificates_Filter;
@@ -40,13 +40,13 @@
 
         private static void ValidCertificates_Filter(object sender, FilterEventArgs e)
         {
-            CertificateData certificate = e.Item as CertificateData;
+            UpdateCertificate certificate = e.Item as UpdateCertificate;
             e.Accepted = (certificate != null && certificate.IsValid(out var validationResults));
         }
 
         private static void InvalidCertificates_Filter(object sender, FilterEventArgs e)
         {
-            CertificateData certificate = e.Item as CertificateData;
+            UpdateCertificate certificate = e.Item as UpdateCertificate;
             e.Accepted = (certificate != null && !certificate.IsValid(out var validationResults));
         }
 

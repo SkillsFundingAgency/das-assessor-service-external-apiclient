@@ -46,14 +46,14 @@
         {
             const string filePath = @"CsvFiles\createCertificates.csv";
 
-            IEnumerable<CertificateData> certificatesToCreate;
+            IEnumerable<CreateCertificate> certificatesToCreate;
 
             using (TextReader textReader = File.OpenText(filePath))
             {
                 CsvReader csv = new CsvReader(textReader);
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-                certificatesToCreate = csv.GetRecords<CertificateData>().ToList();
+                certificatesToCreate = csv.GetRecords<CreateCertificate>().ToList();
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
@@ -79,14 +79,14 @@
         {
             const string filePath = @"CsvFiles\updateCertificates.csv";
 
-            IEnumerable<CertificateData> certificates;
+            IEnumerable<UpdateCertificate> certificates;
 
             using (TextReader textReader = File.OpenText(filePath))
             {
                 CsvReader csv = new CsvReader(textReader);
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<CertificateData>().ToList();
+                certificates = csv.GetRecords<UpdateCertificate>().ToList();
             }
 
             // Let's pretend the first and last apprentices got better grades

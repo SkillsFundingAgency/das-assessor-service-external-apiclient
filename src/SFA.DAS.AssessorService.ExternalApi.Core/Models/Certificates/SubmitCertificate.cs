@@ -6,6 +6,8 @@
 
     public sealed class SubmitCertificate : IEquatable<SubmitCertificate>
     {
+        public string RequestId { get; set; }
+
         [Range(1000000000, 9999999999, ErrorMessage = "The apprentice's ULN should contain exactly 10 numbers")]
         public long Uln { get; set; }
 

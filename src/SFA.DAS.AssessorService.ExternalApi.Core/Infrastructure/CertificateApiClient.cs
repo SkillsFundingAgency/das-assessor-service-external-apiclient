@@ -35,14 +35,14 @@
             return response;
         }
 
-        public async Task<IEnumerable<BatchCertificateResponse>> CreateCertificates(IEnumerable<CertificateData> request)
+        public async Task<IEnumerable<BatchCertificateResponse>> CreateCertificates(IEnumerable<CreateCertificate> request)
         {
-            return await Post<IEnumerable<CertificateData>, IEnumerable<BatchCertificateResponse>>("certificate", request);
+            return await Post<IEnumerable<CreateCertificate>, IEnumerable<BatchCertificateResponse>>("certificate", request);
         }
 
-        public async Task<IEnumerable<BatchCertificateResponse>> UpdateCertificates(IEnumerable<CertificateData> request)
+        public async Task<IEnumerable<BatchCertificateResponse>> UpdateCertificates(IEnumerable<UpdateCertificate> request)
         {
-            return await Put<IEnumerable<CertificateData>, IEnumerable<BatchCertificateResponse>>("certificate", request);
+            return await Put<IEnumerable<UpdateCertificate>, IEnumerable<BatchCertificateResponse>>("certificate", request);
         }
 
         public async Task<IEnumerable<SubmitBatchCertificateResponse>> SubmitCertificates(IEnumerable<SubmitCertificate> request)

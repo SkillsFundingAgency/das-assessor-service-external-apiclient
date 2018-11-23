@@ -39,7 +39,7 @@
                 _ViewModel.FilePath = openFileDialog.FileName;
                 _ViewModel.Certificates.Clear();
 
-                foreach (var item in CsvFileHelper<CertificateData>.GetFromFile(_ViewModel.FilePath))
+                foreach (var item in CsvFileHelper<CreateCertificate>.GetFromFile(_ViewModel.FilePath))
                 {
                     _ViewModel.Certificates.Add(item);
                 }
@@ -131,7 +131,7 @@
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                var certificatesToSave = invalidCertificates.Select(ic => new { ic.ProvidedCertificateData, Errors = string.Join(", ", ic.ValidationErrors) });
+                var certificatesToSave = invalidCertificates.Select(ic => new { ic.RequestId, Errors = string.Join(", ", ic.ValidationErrors) });
 
                 CsvFileHelper<dynamic>.SaveToFile(saveFileDialog.FileName, certificatesToSave);
                 System.Diagnostics.Process.Start(saveFileDialog.FileName);
