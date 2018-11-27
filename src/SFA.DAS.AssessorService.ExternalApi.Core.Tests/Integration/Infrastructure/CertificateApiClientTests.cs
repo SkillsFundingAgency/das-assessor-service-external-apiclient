@@ -71,7 +71,7 @@
                 new BatchCertificateResponse { Certificate = certificate }
             };
 
-            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/certificate")
+            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -100,7 +100,7 @@
                 new BatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
-            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/certificate")
+            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -141,7 +141,7 @@
                 new BatchCertificateResponse { Certificate = certificate }
             };
 
-            _MockHttp.When(HttpMethod.Put, $"{apiBaseAddress}/certificate")
+            _MockHttp.When(HttpMethod.Put, $"{apiBaseAddress}/api/v1/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -171,7 +171,7 @@
                 new BatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
-            _MockHttp.When(HttpMethod.Put, $"{apiBaseAddress}/certificate")
+            _MockHttp.When(HttpMethod.Put, $"{apiBaseAddress}/api/v1/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -201,7 +201,7 @@
                 new BatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
-            _MockHttp.When(HttpMethod.Put, $"{apiBaseAddress}/certificate")
+            _MockHttp.When(HttpMethod.Put, $"{apiBaseAddress}/api/v1/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -237,7 +237,7 @@
                 new SubmitBatchCertificateResponse { Certificate = certificate }
             };
 
-            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/certificate/submit")
+            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate/submit")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -262,7 +262,7 @@
                 new SubmitBatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
-            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/certificate/submit")
+            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate/submit")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -287,7 +287,7 @@
                 new SubmitBatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
-            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/certificate/submit")
+            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate/submit")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -312,7 +312,7 @@
                 new SubmitBatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
-            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/certificate/submit")
+            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate/submit")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -333,7 +333,7 @@
             int standardcode = 1;
             string certificateReference = "123456790";
 
-            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
+            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
                 .Respond(HttpStatusCode.OK, "application/json", string.Empty);
 
             // act
@@ -359,7 +359,7 @@
                 Message = "Certificate not found"
             };
 
-            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
+            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -387,7 +387,7 @@
                 Message = "Cannot delete a submitted Certificate"
             };
 
-            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
+            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -415,7 +415,7 @@
                 Message = "Cannot find apprentice with the specified Uln, FamilyName & StandardCode"
             };
 
-            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
+            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -450,7 +450,7 @@
 
             var expectedResponse = new Certificate { CertificateData = certificateData, Status = status, Created = created, Submitted = submitted };
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standardcode}")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -470,7 +470,7 @@
             string lastname = "Bloggs";
             int standardcode = 4321;
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standardcode}")
                 .Respond(HttpStatusCode.NoContent, "application/json", string.Empty);
 
             // act
@@ -496,7 +496,7 @@
                 Message = "Cannot find apprentice with the specified Uln, FamilyName & StandardCode"
             };
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/certificate/{uln}/{lastname}/{standardcode}")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standardcode}")
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
