@@ -52,9 +52,8 @@
             string city = "Townsville";
             string postcode = "ZY9 9ZY";
 
-            CertificateData newCertificate = new CertificateData
+            CreateCertificate newCertificate = new CreateCertificate
             {
-                CertificateReference = null,
                 Learner = new Learner { Uln = uln, GivenNames = firstName, FamilyName = lastName },
                 Standard = new Standard { StandardCode = standardCode },
                 LearningDetails = new LearningDetails { OverallGrade = overallGrade, AchievementDate = DateTime.UtcNow },
@@ -64,7 +63,7 @@
             if (newCertificate.IsValid(out ICollection<ValidationResult> validationResults))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
-                await _CertificateApiClient.CreateCertificates(new List<CertificateData> { newCertificate });
+                await _CertificateApiClient.CreateCertificates(new List<CreateCertificate> { newCertificate });
             }
         }
 
@@ -93,13 +92,21 @@
             };
 
             // Let's pretend the apprentice got a better grade
-            CertificateData updatedCertificate = currentCertificate.CertificateData;
+            UpdateCertificate updatedCertificate = new UpdateCertificate
+            {
+                CertificateReference = currentCertificate.CertificateData.CertificateReference,
+                Learner = currentCertificate.CertificateData.Learner,
+                Standard = currentCertificate.CertificateData.Standard,
+                LearningDetails = currentCertificate.CertificateData.LearningDetails,
+                PostalContact = currentCertificate.CertificateData.PostalContact,
+            };
+
             updatedCertificate.LearningDetails.OverallGrade = "Merit";
 
             if (updatedCertificate.IsValid(out ICollection<ValidationResult> validationResults))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
-                await _CertificateApiClient.UpdateCertificates(new List<CertificateData> { updatedCertificate });
+                await _CertificateApiClient.UpdateCertificates(new List<UpdateCertificate> { updatedCertificate });
             }
         }
 

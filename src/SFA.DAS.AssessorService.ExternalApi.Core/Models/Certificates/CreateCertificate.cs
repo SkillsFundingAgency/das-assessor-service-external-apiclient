@@ -5,10 +5,9 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public sealed class CertificateData : IEquatable<CertificateData>
+    public sealed class CreateCertificate : IEquatable<CreateCertificate>
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Enter the certificate reference")]
-        public string CertificateReference { get; set; }
+        public string RequestId { get; set; }
 
         [Required(ErrorMessage = "Standard is required"), ValidateObject]
         public Standard Standard { get; set; }
@@ -31,7 +30,6 @@
                 const int multiplier = 16777619;
 
                 int hash = hashBase;
-                hash = (hash * multiplier) ^ (CertificateReference is null ? 0 : CertificateReference.GetHashCode());
                 hash = (hash * multiplier) ^ (Standard is null ? 0 : Standard.GetHashCode());
                 hash = (hash * multiplier) ^ (Learner is null ? 0 : Learner.GetHashCode());
                 hash = (hash * multiplier) ^ (LearningDetails is null ? 0 : LearningDetails.GetHashCode());
@@ -45,32 +43,31 @@
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return IsEqual((CertificateData)obj);
+            return IsEqual((CreateCertificate)obj);
         }
 
-        public bool Equals(CertificateData other)
+        public bool Equals(CreateCertificate other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
             return IsEqual(other);
         }
 
-        private bool IsEqual(CertificateData other)
+        private bool IsEqual(CreateCertificate other)
         {
-            return string.Equals(CertificateReference, other.CertificateReference)
-                && Equals(Standard, other.Standard)
+            return Equals(Standard, other.Standard)
                 && Equals(Learner, other.Learner)
                 && Equals(LearningDetails, other.LearningDetails)
                 && Equals(PostalContact, other.PostalContact);
         }
 
-        public static bool operator ==(CertificateData left, CertificateData right)
+        public static bool operator ==(CreateCertificate left, CreateCertificate right)
         {
             if (left is null) return right is null;
             return left.Equals(right);
         }
 
-        public static bool operator !=(CertificateData left, CertificateData right)
+        public static bool operator !=(CreateCertificate left, CreateCertificate right)
         {
             return !(left == right);
         }

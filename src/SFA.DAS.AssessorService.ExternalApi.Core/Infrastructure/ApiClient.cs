@@ -7,7 +7,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class ApiClient
+    public abstract class ApiClient
     {
         protected internal readonly HttpClient _httpClient;
 

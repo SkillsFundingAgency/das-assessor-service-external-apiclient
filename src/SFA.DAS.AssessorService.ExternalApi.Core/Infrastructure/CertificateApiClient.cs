@@ -20,7 +20,7 @@
                 StandardCode = request.StandardCode
             };
 
-            using (var apiResponse = await _httpClient.GetAsync($"certificate/{request.Uln}/{request.FamilyName}/{request.StandardCode}"))
+            using (var apiResponse = await _httpClient.GetAsync($"api/v1/certificate/{request.Uln}/{request.FamilyName}/{request.StandardCode}"))
             {
                 if (apiResponse.IsSuccessStatusCode)
                 {
@@ -35,24 +35,24 @@
             return response;
         }
 
-        public async Task<IEnumerable<BatchCertificateResponse>> CreateCertificates(IEnumerable<CertificateData> request)
+        public async Task<IEnumerable<BatchCertificateResponse>> CreateCertificates(IEnumerable<CreateCertificate> request)
         {
-            return await Post<IEnumerable<CertificateData>, IEnumerable<BatchCertificateResponse>>("certificate", request);
+            return await Post<IEnumerable<CreateCertificate>, IEnumerable<BatchCertificateResponse>>("api/v1/certificate", request);
         }
 
-        public async Task<IEnumerable<BatchCertificateResponse>> UpdateCertificates(IEnumerable<CertificateData> request)
+        public async Task<IEnumerable<BatchCertificateResponse>> UpdateCertificates(IEnumerable<UpdateCertificate> request)
         {
-            return await Put<IEnumerable<CertificateData>, IEnumerable<BatchCertificateResponse>>("certificate", request);
+            return await Put<IEnumerable<UpdateCertificate>, IEnumerable<BatchCertificateResponse>>("api/v1/certificate", request);
         }
 
         public async Task<IEnumerable<SubmitBatchCertificateResponse>> SubmitCertificates(IEnumerable<SubmitCertificate> request)
         {
-            return await Post<IEnumerable<SubmitCertificate>, IEnumerable<SubmitBatchCertificateResponse>>("certificate/submit", request);
+            return await Post<IEnumerable<SubmitCertificate>, IEnumerable<SubmitBatchCertificateResponse>>("api/v1/certificate/submit", request);
         }
 
         public async Task<DeleteBatchCertificateResponse> DeleteCertificate(DeleteCertificate request)
         {
-            var error = await Delete<ApiResponse>($"certificate/{request.Uln}/{request.FamilyName}/{request.StandardCode}/{request.CertificateReference}");
+            var error = await Delete<ApiResponse>($"api/v1/certificate/{request.Uln}/{request.FamilyName}/{request.StandardCode}/{request.CertificateReference}");
 
             return new DeleteBatchCertificateResponse
             {
