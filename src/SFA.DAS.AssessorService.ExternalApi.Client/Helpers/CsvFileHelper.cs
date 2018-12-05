@@ -1,6 +1,7 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Client.Helpers
 {
     using CsvHelper;
+    using CsvHelper.TypeConversion;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -20,6 +21,8 @@
                     CsvReader csv = new CsvReader(textReader);
                     csv.Configuration.HeaderValidated = null;
                     csv.Configuration.MissingFieldFound = null;
+                    csv.Configuration.BadDataFound = null;
+                    csv.Configuration.ReadingExceptionOccurred = null;
 
                     return csv.GetRecords<T>().ToList();
                 }
