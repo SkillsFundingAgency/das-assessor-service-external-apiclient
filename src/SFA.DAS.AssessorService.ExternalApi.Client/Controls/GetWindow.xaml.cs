@@ -39,9 +39,21 @@
                 _ViewModel.FilePath = openFileDialog.FileName;
                 _ViewModel.Certificates.Clear();
 
-                foreach (var item in CsvFileHelper<GetCertificate>.GetFromFile(_ViewModel.FilePath))
+                var items = CsvFileHelper<GetCertificate>.GetFromFile(_ViewModel.FilePath);
+
+                if (items is null || !items.Any())
                 {
-                    _ViewModel.Certificates.Add(item);
+                    string sMessageBoxText = "The file you selected has invalid data or is empty";
+                    string sCaption = "Invalid File Selected";
+
+                    MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    foreach (var item in items)
+                    {
+                        _ViewModel.Certificates.Add(item);
+                    }
                 }
             }
         }

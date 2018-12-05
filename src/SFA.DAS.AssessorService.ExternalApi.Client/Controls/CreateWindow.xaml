@@ -34,6 +34,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Standard" Binding="{Binding Path=Standard.StandardCode}" />
                     <DataGridTextColumn Header="Overall Grade" Binding="{Binding Path=LearningDetails.OverallGrade}" />
+                    <DataGridTextColumn Header="Course Option" Binding="{Binding Path=LearningDetails.CourseOption}" />
                     <DataGridTextColumn Header="Achievement Date" Binding="{Binding Path=LearningDetails.AchievementDate, StringFormat='dd/MM/yy HH:mm'}" />
                     <DataGridTextColumn Header="Contact" Binding="{Binding Path=PostalContact.ContactName}" />
                     <DataGridTextColumn Header="Organisation" Binding="{Binding Path=PostalContact.Organisation}" />
@@ -64,6 +65,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Standard" Binding="{Binding Path=Standard.StandardCode}" />
                     <DataGridTextColumn Header="Overall Grade" Binding="{Binding Path=LearningDetails.OverallGrade}" />
+                    <DataGridTextColumn Header="Course Option" Binding="{Binding Path=LearningDetails.CourseOption}" />
                     <DataGridTextColumn Header="Achievement Date" Binding="{Binding Path=LearningDetails.AchievementDate, StringFormat='dd/MM/yy HH:mm'}" />
                     <DataGridTextColumn Header="Contact" Binding="{Binding Path=PostalContact.ContactName}" />
                     <DataGridTextColumn Header="Organisation" Binding="{Binding Path=PostalContact.Organisation}" />
