@@ -42,6 +42,12 @@ Core functionality to interact with the External API.
 
 Unit and mocked Integration tests.
 
+## Beta Testing
+
+This is a new service - your feedback will help us to improve it 
+https://www.smartsurvey.co.uk/s/certification-API/
+
+
 ## Sample Scenarios
 For details see the online Swagger documentation in the [Developer Portal](https://developers.apprenticeships.sfa.bis.gov.uk/).
 
