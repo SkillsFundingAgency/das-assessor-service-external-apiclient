@@ -113,6 +113,64 @@
         }
 
         [Test]
+        public async Task CreateCertificate_InvalidCourseOption()
+        {
+            // arrange 
+            var certificateRequest = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
+                                                                        .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardCode = 1).Build())
+                                                                        .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().With(ld => ld.CourseOption = "INVALID").Build())
+                                                                        .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
+                                                                        .Build();
+
+            var expectedValidationErrors = new List<string> { "Invalid course option for this Standard. Must be one of the following: English, French, German" };
+
+            var expectedResponse = new List<BatchCertificateResponse>
+            {
+                new BatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
+            };
+
+            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate")
+                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // act
+            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificate> { certificateRequest });
+
+            // assert
+            Assert.That(actual, Has.Count.EqualTo(1));
+            Assert.That(actual.First().ValidationErrors, Is.EqualTo(expectedResponse.First().ValidationErrors));
+            Assert.That(actual.First().Certificate, Is.Null);
+        }
+
+        [Test]
+        public async Task CreateCertificate_InvalidGrade()
+        {
+            // arrange 
+            var certificateRequest = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
+                                                                        .With(cd => cd.Standard = Builder<Standard>.CreateNew().Build())
+                                                                        .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().With(ld => ld.OverallGrade = "INVALID").Build())
+                                                                        .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
+                                                                        .Build();
+
+            var expectedValidationErrors = new List<string> { "Invalid grade. Must be one of the following: Pass, Credit, Merit, Distinction, Pass with excellence, No grade awarded" };
+
+            var expectedResponse = new List<BatchCertificateResponse>
+            {
+                new BatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
+            };
+
+            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate")
+                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // act
+            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificate> { certificateRequest });
+
+            // assert
+            Assert.That(actual, Has.Count.EqualTo(1));
+            Assert.That(actual.First().ValidationErrors, Is.EqualTo(expectedResponse.First().ValidationErrors));
+            Assert.That(actual.First().Certificate, Is.Null);
+        }
+
+        [Test]
         public async Task CreateCertificate_Using_StandardCode_NotFound()
         {
             // arrange 
