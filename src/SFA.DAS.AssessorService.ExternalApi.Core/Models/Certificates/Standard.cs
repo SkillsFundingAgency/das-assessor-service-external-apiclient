@@ -1,13 +1,16 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates
 {
+    using SFA.DAS.AssessorService.ExternalApi.Core.DataAnnotations;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public sealed class Standard : IEquatable<Standard>
     {
-        [Range(1, short.MaxValue, ErrorMessage = "A standard should be selected")]
-        public int StandardCode { get; set; }
+        [StandardCodeValidation(nameof(StandardReference), ErrorMessage = "A standard should be selected")]
+        public int? StandardCode { get; set; }
+        public string StandardReference { get; set; }
+
         public string StandardName { get; set; }
         public int Level { get; set; }
 
@@ -21,6 +24,7 @@
 
                 int hash = hashBase;
                 hash = (hash * multiplier) ^ StandardCode.GetHashCode();
+                hash = (hash * multiplier) ^ (StandardReference is null ? 0 : StandardReference.GetHashCode());
                 hash = (hash * multiplier) ^ (StandardName is null ? 0 : StandardName.GetHashCode());
                 hash = (hash * multiplier) ^ Level.GetHashCode();
                 return hash;
@@ -45,6 +49,7 @@
         private bool IsEqual(Standard other)
         {
             return Equals(StandardCode, other.StandardCode)
+                && string.Equals(StandardReference, other.StandardReference)
                 && string.Equals(StandardName, other.StandardName)
                 && Equals(Level, other.Level);
         }

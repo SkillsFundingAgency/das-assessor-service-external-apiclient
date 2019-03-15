@@ -151,7 +151,7 @@
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                var certificatesToSave = invalidCertificates.Select(ic => new { ic.Uln, ic.FamilyName, ic.StandardCode, Errors = ic.Error?.Message });
+                var certificatesToSave = invalidCertificates.Select(ic => new { ic.Uln, ic.FamilyName, ic.Standard, Errors = ic.Error?.Message });
 
                 CsvFileHelper<dynamic>.SaveToFile(saveFileDialog.FileName, certificatesToSave);
                 System.Diagnostics.Process.Start(saveFileDialog.FileName);

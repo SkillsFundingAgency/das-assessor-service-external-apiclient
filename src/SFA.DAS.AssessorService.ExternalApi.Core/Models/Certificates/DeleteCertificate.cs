@@ -9,8 +9,8 @@
         [Range(1000000000, 9999999999, ErrorMessage = "The apprentice's ULN should contain exactly 10 numbers")]
         public long Uln { get; set; }
 
-        [Range(0, short.MaxValue, ErrorMessage = "A standard should be selected")]
-        public int StandardCode { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "A standard should be selected")]
+        public string Standard { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Enter the apprentice's last name")]
         public string FamilyName { get; set; }
@@ -28,7 +28,7 @@
 
                 int hash = hashBase;
                 hash = (hash * multiplier) ^ Uln.GetHashCode();
-                hash = (hash * multiplier) ^ StandardCode.GetHashCode();
+                hash = (hash * multiplier) ^ (Standard is null ? 0 : Standard.GetHashCode());
                 hash = (hash * multiplier) ^ (FamilyName is null ? 0 : FamilyName.GetHashCode());
                 hash = (hash * multiplier) ^ (CertificateReference is null ? 0 : CertificateReference.GetHashCode());
 
@@ -54,7 +54,7 @@
         private bool IsEqual(DeleteCertificate other)
         {
             return Equals(Uln, other.Uln)
-                && Equals(StandardCode, other.StandardCode)
+                && string.Equals(Standard, other.Standard)
                 && string.Equals(FamilyName, other.FamilyName)
                 && string.Equals(CertificateReference, other.CertificateReference);
         }

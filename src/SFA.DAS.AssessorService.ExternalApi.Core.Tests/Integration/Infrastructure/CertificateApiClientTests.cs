@@ -214,13 +214,49 @@
         }
 
         [Test]
-        public async Task SubmitCertificate()
+        public async Task SubmitCertificate_Using_StandardCode()
         {
             // arrange 
             var submitCertificate = new SubmitCertificate { Uln = 9876543210, FamilyName = "Blogs", StandardCode = 1 };
 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.CertificateReference = "DRAFT CERTIFICATE")
-                                                                        .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardCode = 1).Build())
+                                                                        .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardCode = 1).With(s => s.StandardReference = null).Build())
+                                                                        .With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
+                                                                        .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
+                                                                        .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
+                                                                        .Build();
+
+            var status = new Status { CurrentStatus = "Submitted" };
+            var created = new Created { CreatedAt = DateTime.UtcNow.AddHours(-1), CreatedBy = "Test" };
+            var submitted = new Submitted { SubmittedAt = DateTime.UtcNow, SubmittedBy = "Test" };
+
+            var certificate = new Certificate { CertificateData = certificateData, Status = status, Created = created, Submitted = submitted };
+
+            var expectedResponse = new List<SubmitBatchCertificateResponse>
+            {
+                new SubmitBatchCertificateResponse { Certificate = certificate }
+            };
+
+            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate/submit")
+                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // act
+            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificate> { submitCertificate });
+
+            // assert
+            Assert.That(actual, Has.Count.EqualTo(1));
+            Assert.That(actual.First().ValidationErrors, Has.Count.EqualTo(0));
+            Assert.That(actual.First().Certificate, Is.EqualTo(expectedResponse.First().Certificate));
+        }
+
+        [Test]
+        public async Task SubmitCertificate_Using_StandardReference()
+        {
+            // arrange 
+            var submitCertificate = new SubmitCertificate { Uln = 9876543210, FamilyName = "Blogs", StandardReference = "1" };
+            
+            var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.CertificateReference = "DRAFT CERTIFICATE")
+                                                                        .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardCode = null).With(s => s.StandardReference = "1").Build())
                                                                         .With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
                                                                         .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
@@ -305,7 +341,7 @@
             // arrange 
             var submitCertificate = new SubmitCertificate { Uln = 1234567890, FamilyName = "INVALID", StandardCode = 1 };
 
-            var expectedValidationErrors = new List<string> { "Cannot find apprentice with the specified Uln, FamilyName & StandardCode" };
+            var expectedValidationErrors = new List<string> { "Cannot find apprentice with the specified Uln, FamilyName & Standard" };
 
             var expectedResponse = new List<SubmitBatchCertificateResponse>
             {
@@ -330,14 +366,14 @@
             // arrange 
             long uln = 1234567890;
             string lastname = "Bloggs";
-            int standardcode = 1;
+            string standard = "1";
             string certificateReference = "123456790";
 
-            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
+            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standard}/{certificateReference}")
                 .Respond(HttpStatusCode.OK, "application/json", string.Empty);
 
             // act
-            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode, CertificateReference = certificateReference };
+            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
             var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
@@ -350,7 +386,7 @@
             // arrange 
             long uln = 1234567890;
             string lastname = "Bloggs";
-            int standardcode = 4321;
+            string standard = "4321";
             string certificateReference = "1234567890";
 
             var expectedResponse = new ApiResponse
@@ -359,11 +395,11 @@
                 Message = "Certificate not found"
             };
 
-            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
+            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standard}/{certificateReference}")
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode, CertificateReference = certificateReference };
+            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
             var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
@@ -378,7 +414,7 @@
             // arrange 
             long uln = 1234567890;
             string lastname = "Bloggs";
-            int standardcode = 1;
+            string standard = "1";
             string certificateReference = "1234567890";
 
             var expectedResponse = new ApiResponse
@@ -387,11 +423,11 @@
                 Message = "Cannot delete a submitted Certificate"
             };
 
-            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
+            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standard}/{certificateReference}")
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode, CertificateReference = certificateReference };
+            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
             var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
@@ -406,20 +442,20 @@
             // arrange 
             long uln = 1234567890;
             string lastname = "INVALID";
-            int standardcode = 1;
+            string standard = "1";
             string certificateReference = "1234567890";
 
             var expectedResponse = new ApiResponse
             {
                 StatusCode = (int)HttpStatusCode.BadRequest,
-                Message = "Cannot find apprentice with the specified Uln, FamilyName & StandardCode"
+                Message = "Cannot find apprentice with the specified Uln, FamilyName & Standard"
             };
 
-            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standardcode}/{certificateReference}")
+            _MockHttp.When(HttpMethod.Delete, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standard}/{certificateReference}")
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode, CertificateReference = certificateReference };
+            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
             var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
@@ -434,7 +470,7 @@
             // arrange 
             long uln = 1234567890;
             string lastname = "Bloggs";
-            int standardcode = 1;
+            string standard = "1";
             string certificateReference = "123456790";
 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.CertificateReference = certificateReference)
@@ -450,11 +486,11 @@
 
             var expectedResponse = new Certificate { CertificateData = certificateData, Status = status, Created = created, Submitted = submitted };
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standardcode}")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standard}")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var request = new GetCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode };
+            var request = new GetCertificate { Uln = uln, FamilyName = lastname, Standard = standard };
             var actual = await _ApiClient.GetCertificate(request);
 
             // assert
@@ -468,13 +504,13 @@
             // arrange 
             long uln = 1234567890;
             string lastname = "Bloggs";
-            int standardcode = 4321;
+            string standard = "4321";
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standardcode}")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standard}")
                 .Respond(HttpStatusCode.NoContent, "application/json", string.Empty);
 
             // act
-            var request = new GetCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode };
+            var request = new GetCertificate { Uln = uln, FamilyName = lastname, Standard = standard };
             var actual = await _ApiClient.GetCertificate(request);
 
             // assert
@@ -488,19 +524,19 @@
             // arrange 
             long uln = 1234567890;
             string lastname = "INVALID";
-            int standardcode = 4321;
+            string standard = "4321";
 
             var expectedResponse = new ApiResponse
             {
                 StatusCode = (int)HttpStatusCode.BadRequest,
-                Message = "Cannot find apprentice with the specified Uln, FamilyName & StandardCode"
+                Message = "Cannot find apprentice with the specified Uln, FamilyName & Standard"
             };
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standardcode}")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standard}")
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var request = new GetCertificate { Uln = uln, FamilyName = lastname, StandardCode = standardcode };
+            var request = new GetCertificate { Uln = uln, FamilyName = lastname, Standard = standard };
             var actual = await _ApiClient.GetCertificate(request);
 
             // assert

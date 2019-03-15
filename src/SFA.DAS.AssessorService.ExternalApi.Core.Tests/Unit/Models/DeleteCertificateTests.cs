@@ -12,7 +12,7 @@
         public void UlnInvalid()
         {
             // arrange
-            var certificate = Builder<DeleteCertificate>.CreateNew().With(sc => sc.Uln = 12435).With(sc => sc.StandardCode = 1).Build();
+            var certificate = Builder<DeleteCertificate>.CreateNew().With(sc => sc.Uln = 12435).Build();
 
             // act
             bool isValid = certificate.IsValid(out var validationResults);
@@ -24,10 +24,10 @@
         }
 
         [Test]
-        public void InvalidStandardCode()
+        public void NoStandardSpecified()
         {
             // arrange
-            var certificate = Builder<DeleteCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(sc => sc.StandardCode = -1).Build();
+            var certificate = Builder<DeleteCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(sc => sc.Standard = null).Build();
 
             // act
             bool isValid = certificate.IsValid(out var validationResults);
@@ -42,7 +42,7 @@
         public void FamilyNameMissing()
         {
             // arrange
-            var certificate = Builder<DeleteCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(sc => sc.StandardCode = 1).With(l => l.FamilyName = null).Build();
+            var certificate = Builder<DeleteCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(l => l.FamilyName = null).Build();
 
             // act
             bool isValid = certificate.IsValid(out var validationResults);
@@ -57,7 +57,7 @@
         public void CertificateReferenceMissing()
         {
             // arrange
-            var certificate = Builder<DeleteCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(sc => sc.StandardCode = 1).With(sc => sc.CertificateReference = null).Build();
+            var certificate = Builder<DeleteCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(sc => sc.CertificateReference = null).Build();
 
             // act
             bool isValid = certificate.IsValid(out var validationResults);
@@ -72,7 +72,7 @@
         public void WhenValid()
         {
             // arrange
-            var certificate = Builder<DeleteCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(sc => sc.StandardCode = 1).Build();
+            var certificate = Builder<DeleteCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).Build();
 
             // act
             bool isValid = certificate.IsValid(out var validationResults);
@@ -87,8 +87,8 @@
         public void WhenEqual()
         {
             // arrange
-            var certificate1 = Builder<DeleteCertificate>.CreateNew().With(sc => sc.StandardCode = 1).Build();
-            var certificate2 = Builder<DeleteCertificate>.CreateNew().With(sc => sc.StandardCode = 1).Build();
+            var certificate1 = Builder<DeleteCertificate>.CreateNew().With(sc => sc.Standard = "1").Build();
+            var certificate2 = Builder<DeleteCertificate>.CreateNew().With(sc => sc.Standard = "1").Build();
 
             // act
             bool areEqual = certificate1 == certificate2;
@@ -102,8 +102,8 @@
         public void WhenNotEqual()
         {
             // arrange
-            var certificate1 = Builder<DeleteCertificate>.CreateNew().With(sc => sc.StandardCode = 1).Build();
-            var certificate2 = Builder<DeleteCertificate>.CreateNew().With(sc => sc.StandardCode = 9).Build();
+            var certificate1 = Builder<DeleteCertificate>.CreateNew().With(sc => sc.Standard = "1").Build();
+            var certificate2 = Builder<DeleteCertificate>.CreateNew().With(sc => sc.Standard = "9").Build();
 
             // act
             bool areNotEqual = certificate1 != certificate2;

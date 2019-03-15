@@ -12,7 +12,7 @@
         public void UlnInvalid()
         {
             // arrange
-            var certificate = Builder<SubmitCertificate>.CreateNew().With(sc => sc.Uln = 12435).With(sc => sc.StandardCode = 1).Build();
+            var certificate = Builder<SubmitCertificate>.CreateNew().With(sc => sc.Uln = 12435).Build();
 
             // act
             bool isValid = certificate.IsValid(out var validationResults);
@@ -39,10 +39,25 @@
         }
 
         [Test]
+        public void NoStandardSpecified()
+        {
+            // arrange
+            var certificate = Builder<SubmitCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(sc => sc.StandardCode = null).With(sc => sc.StandardReference = null).Build();
+
+            // act
+            bool isValid = certificate.IsValid(out var validationResults);
+
+            // assert
+            Assert.IsFalse(isValid);
+            Assert.That(validationResults, Has.Count.EqualTo(1));
+            StringAssert.AreEqualIgnoringCase("A standard should be selected", validationResults.First().ErrorMessage);
+        }
+
+        [Test]
         public void FamilyNameMissing()
         {
             // arrange
-            var certificate = Builder<SubmitCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(sc => sc.StandardCode = 1).With(l => l.FamilyName = null).Build();
+            var certificate = Builder<SubmitCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(l => l.FamilyName = null).Build();
 
             // act
             bool isValid = certificate.IsValid(out var validationResults);
@@ -57,7 +72,7 @@
         public void CertificateReferenceMissing()
         {
             // arrange
-            var certificate = Builder<SubmitCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(sc => sc.StandardCode = 1).With(l => l.CertificateReference = null).Build();
+            var certificate = Builder<SubmitCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(l => l.CertificateReference = null).Build();
 
             // act
             bool isValid = certificate.IsValid(out var validationResults);
@@ -72,7 +87,7 @@
         public void WhenValid()
         {
             // arrange
-            var certificate = Builder<SubmitCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(sc => sc.StandardCode = 1).Build();
+            var certificate = Builder<SubmitCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).Build();
 
             // act
             bool isValid = certificate.IsValid(out var validationResults);

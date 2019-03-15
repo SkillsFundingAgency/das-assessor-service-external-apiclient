@@ -17,10 +17,10 @@
             {
                 Uln = request.Uln,
                 FamilyName = request.FamilyName,
-                StandardCode = request.StandardCode
+                Standard = request.Standard
             };
 
-            using (var apiResponse = await _httpClient.GetAsync($"api/v1/certificate/{request.Uln}/{request.FamilyName}/{request.StandardCode}"))
+            using (var apiResponse = await _httpClient.GetAsync($"api/v1/certificate/{request.Uln}/{request.FamilyName}/{request.Standard}"))
             {
                 if (apiResponse.IsSuccessStatusCode)
                 {
@@ -52,13 +52,13 @@
 
         public async Task<DeleteBatchCertificateResponse> DeleteCertificate(DeleteCertificate request)
         {
-            var error = await Delete<ApiResponse>($"api/v1/certificate/{request.Uln}/{request.FamilyName}/{request.StandardCode}/{request.CertificateReference}");
+            var error = await Delete<ApiResponse>($"api/v1/certificate/{request.Uln}/{request.FamilyName}/{request.Standard}/{request.CertificateReference}");
 
             return new DeleteBatchCertificateResponse
             {
                 Uln = request.Uln,
                 FamilyName = request.FamilyName,
-                StandardCode = request.StandardCode,
+                Standard = request.Standard,
                 CertificateReference = request.CertificateReference,
                 Error = error
             };

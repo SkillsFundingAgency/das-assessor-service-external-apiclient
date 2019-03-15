@@ -6,7 +6,7 @@
     public class GetBatchCertificateResponse
     {
         public long Uln { get; set; }
-        public int StandardCode { get; set; }
+        public string Standard { get; set; }
         public string FamilyName { get; set; }
 
         public Certificate Certificate { get; set; }

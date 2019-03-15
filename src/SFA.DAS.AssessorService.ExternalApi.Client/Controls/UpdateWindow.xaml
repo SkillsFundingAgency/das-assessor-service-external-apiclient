@@ -5,11 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:viewmodel="clr-namespace:SFA.DAS.AssessorService.ExternalApi.Client.ViewModels"
+        xmlns:helpers="clr-namespace:SFA.DAS.AssessorService.ExternalApi.Client.Helpers"
         mc:Ignorable="d"
         Title="Update Certificates" Height="560" Width="800" WindowStyle="ToolWindow" ResizeMode="NoResize">
     <Window.DataContext>
         <viewmodel:UpdateViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <helpers:CoalesceConverter x:Key="CoalesceConverter" />
+    </Window.Resources>
     <toolkit:BusyIndicator x:Name="BusyIndicator">
         <Grid>
             <Label Content="File to import" HorizontalAlignment="Left" Margin="31,4,0,0" VerticalAlignment="Top"/>
@@ -33,7 +37,14 @@
                             </MultiBinding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Standard" Binding="{Binding Path=Standard.StandardCode}" />
+                    <DataGridTextColumn Header="Standard">
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource CoalesceConverter}">
+                                <Binding Path="Standard.StandardCode" />
+                                <Binding Path="Standard.StandardReference" />
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
                     <DataGridTextColumn Header="Overall Grade" Binding="{Binding Path=LearningDetails.OverallGrade}" />
                     <DataGridTextColumn Header="Course Option" Binding="{Binding Path=LearningDetails.CourseOption}" />
                     <DataGridTextColumn Header="Achievement Date" Binding="{Binding Path=LearningDetails.AchievementDate, StringFormat='dd/MM/yy HH:mm'}" />
@@ -65,7 +76,14 @@
                             </MultiBinding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Standard" Binding="{Binding Path=Standard.StandardCode}" />
+                    <DataGridTextColumn Header="Standard">
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource CoalesceConverter}">
+                                <Binding Path="Standard.StandardCode" />
+                                <Binding Path="Standard.StandardReference" />
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
                     <DataGridTextColumn Header="Overall Grade" Binding="{Binding Path=LearningDetails.OverallGrade}" />
                     <DataGridTextColumn Header="Course Option" Binding="{Binding Path=LearningDetails.CourseOption}" />
                     <DataGridTextColumn Header="Achievement Date" Binding="{Binding Path=LearningDetails.AchievementDate, StringFormat='dd/MM/yy HH:mm'}" />

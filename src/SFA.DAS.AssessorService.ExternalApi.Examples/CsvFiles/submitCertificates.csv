@@ -1,3 +1,3 @@
-RequestId,CertificateReference,Uln,GivenNames,FamilyName,StandardCode
-1,00013002,1234567890,Fred,Blogs,1
-2,00013003,9876543210,John,Smith,98
+RequestId,CertificateReference,Uln,GivenNames,FamilyName,StandardCode,StandardReference
+1,00013002,1234567890,Fred,Blogs,1,
+2,00013003,9876543210,John,Smith,,98

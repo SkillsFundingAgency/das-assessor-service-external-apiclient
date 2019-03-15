@@ -24,7 +24,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Uln" Binding="{Binding Path=Uln}" />
                     <DataGridTextColumn Header="Family Name" Binding="{Binding Path=FamilyName}" />
-                    <DataGridTextColumn Header="Standard" Binding="{Binding Path=StandardCode}" />
+                    <DataGridTextColumn Header="Standard" Binding="{Binding Path=Standard}" />
                 </DataGrid.Columns>
             </DataGrid>
 
@@ -33,7 +33,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Uln" Binding="{Binding Path=Uln}" />
                     <DataGridTextColumn Header="Family Name" Binding="{Binding Path=FamilyName}" />
-                    <DataGridTextColumn Header="Standard" Binding="{Binding Path=StandardCode}" />
+                    <DataGridTextColumn Header="Standard" Binding="{Binding Path=Standard}" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

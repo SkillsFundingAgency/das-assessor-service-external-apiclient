@@ -136,14 +136,14 @@
         {
             long uln = 1234567890;
             string lastName = "Blogs";
-            int standardCode = 1;
+            string standard = "1";
             string certificateReference = "00012001";
 
             DeleteCertificate certificateToDelete = new DeleteCertificate
             {
                 Uln = uln,
                 FamilyName = lastName,
-                StandardCode = standardCode,
+                Standard = standard,
                 CertificateReference = certificateReference
             };
 
@@ -158,13 +158,13 @@
         {
             long uln = 1234567890;
             string lastName = "Blogs";
-            int standardCode = 1;
+            string standard = "1";
 
             GetCertificate certificateToGet = new GetCertificate
             {
                 Uln = uln,
                 FamilyName = lastName,
-                StandardCode = standardCode,
+                Standard = standard,
             };
 
             if (certificateToGet.IsValid(out ICollection<ValidationResult> validationResults))

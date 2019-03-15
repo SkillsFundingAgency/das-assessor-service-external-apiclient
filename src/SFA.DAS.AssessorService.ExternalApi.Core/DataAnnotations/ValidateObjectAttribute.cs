@@ -8,6 +8,14 @@
 
     public sealed class ValidateObjectAttribute : ValidationAttribute
     {
+        public override bool RequiresValidationContext
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             if (value != null)

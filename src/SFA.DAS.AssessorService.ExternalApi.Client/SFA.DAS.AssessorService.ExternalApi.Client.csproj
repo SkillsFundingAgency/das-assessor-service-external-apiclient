@@ -108,6 +108,7 @@
     <Compile Include="Controls\UpdateWindow.xaml.cs">
       <DependentUpon>UpdateWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CoalesceConverter.cs" />
     <Compile Include="Helpers\CsvFileHelper.cs" />
     <Compile Include="ViewModels\GetViewModel.cs" />
     <Compile Include="ViewModels\UpdateViewModel.cs" />

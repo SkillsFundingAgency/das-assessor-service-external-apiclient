@@ -1,5 +1,6 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates
 {
+    using SFA.DAS.AssessorService.ExternalApi.Core.DataAnnotations;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -11,8 +12,9 @@
         [Range(1000000000, 9999999999, ErrorMessage = "The apprentice's ULN should contain exactly 10 numbers")]
         public long Uln { get; set; }
 
-        [Range(0, short.MaxValue, ErrorMessage = "A standard should be selected")]
-        public int StandardCode { get; set; }
+        [StandardCodeValidation(nameof(StandardReference), ErrorMessage = "A standard should be selected")]
+        public int? StandardCode { get; set; }
+        public string StandardReference { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Enter the apprentice's last name")]
         public string FamilyName { get; set; }
@@ -31,6 +33,7 @@
                 int hash = hashBase;
                 hash = (hash * multiplier) ^ Uln.GetHashCode();
                 hash = (hash * multiplier) ^ StandardCode.GetHashCode();
+                hash = (hash * multiplier) ^ (StandardReference is null ? 0 : StandardReference.GetHashCode());
                 hash = (hash * multiplier) ^ (FamilyName is null ? 0 : FamilyName.GetHashCode());
                 hash = (hash * multiplier) ^ (CertificateReference is null ? 0 : CertificateReference.GetHashCode());
 
@@ -57,6 +60,7 @@
         {
             return Equals(Uln, other.Uln)
                 && Equals(StandardCode, other.StandardCode)
+                && string.Equals(StandardReference, other.StandardReference)
                 && string.Equals(FamilyName, other.FamilyName)
                 && string.Equals(CertificateReference, other.CertificateReference);
         }
