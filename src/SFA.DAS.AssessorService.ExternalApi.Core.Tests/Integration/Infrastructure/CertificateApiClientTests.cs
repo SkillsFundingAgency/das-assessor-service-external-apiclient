@@ -113,6 +113,64 @@
         }
 
         [Test]
+        public async Task CreateCertificate_Using_StandardCode_NotFound()
+        {
+            // arrange 
+            var certificateRequest = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
+                                                                        .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardCode = 5555).Build())
+                                                                        .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
+                                                                        .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
+                                                                        .Build();
+
+            var expectedValidationErrors = new List<string> { "Unable to find specified Standard" };
+
+            var expectedResponse = new List<BatchCertificateResponse>
+            {
+                new BatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
+            };
+
+            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate")
+                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // act
+            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificate> { certificateRequest });
+
+            // assert
+            Assert.That(actual, Has.Count.EqualTo(1));
+            Assert.That(actual.First().ValidationErrors, Is.EqualTo(expectedResponse.First().ValidationErrors));
+            Assert.That(actual.First().Certificate, Is.Null);
+        }
+
+        [Test]
+        public async Task CreateCertificate_Using_StandardReference_NotFound()
+        {
+            // arrange 
+            var certificateRequest = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
+                                                                        .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardReference = "INVALID").Build())
+                                                                        .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
+                                                                        .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
+                                                                        .Build();
+
+            var expectedValidationErrors = new List<string> { "Unable to find specified Standard" };
+
+            var expectedResponse = new List<BatchCertificateResponse>
+            {
+                new BatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
+            };
+
+            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate")
+                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // act
+            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificate> { certificateRequest });
+
+            // assert
+            Assert.That(actual, Has.Count.EqualTo(1));
+            Assert.That(actual.First().ValidationErrors, Is.EqualTo(expectedResponse.First().ValidationErrors));
+            Assert.That(actual.First().Certificate, Is.Null);
+        }
+
+        [Test]
         public async Task UpdateCertificate()
         {
             // arrange 
