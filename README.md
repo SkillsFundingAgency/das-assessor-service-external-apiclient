@@ -11,6 +11,7 @@
 - Install [Visual Studio 2017](https://www.visualstudio.com/downloads/) with these workloads:
     - ASP.NET and web development
     - .NET desktop development
+	- .NET Core 2.1 SDK
 - Create an account on the [Developer Portal](https://developers.apprenticeships.sfa.bis.gov.uk/)
 	- Obtain External API Subscription Key and Base Address
 	- Can also be used to access the current Swagger Documentation
@@ -51,12 +52,12 @@ https://www.smartsurvey.co.uk/s/certification-API/
 ## Sample Scenarios
 For details see the online Swagger documentation in the [Developer Portal](https://developers.apprenticeships.sfa.bis.gov.uk/).
 
-### Request a single Certificate for a Learner with a Standard Code
+### Request a single Certificate for a Learner with a Standard
 
 #### 1.   (Optional) Check if certificate exists
 
 ```http
-GET /ap1/v1/certificate/{uln}/{familyName}/{standardCode}
+GET /ap1/v1/certificate/{uln}/{familyName}/{standard}
 ```
 
 returns status code
@@ -79,7 +80,8 @@ application/json body posted should contain an array for the requested certifica
 [{
 	"requestId" : "string",
 	"standard": {
-		"standardCode": 0
+		"standardCode": 0,
+		"standardReference": "string"
 	},
 	"learner": {
 		"uln": 0,
@@ -123,6 +125,7 @@ application/json body posted should contain an array of submitted certificates, 
 	"requestId" : "string",
 	"uln": 0,
 	"standardCode": 0,
+	"standardReference": "string",
 	"familyName": "string",
 	"certificateReference": "string"
 }]
@@ -177,7 +180,7 @@ returns status code
    It is possible to delete a certificate that has been created by the EPAO using the API when the status is not 'submitted'. 
 
 ```http
-DELETE /api/v1/certificate/{uln}/{familyName}/{standardCode}/{certificateReference}
+DELETE /api/v1/certificate/{uln}/{familyName}/{standard}/{certificateReference}
 ```
 
 returns status code
