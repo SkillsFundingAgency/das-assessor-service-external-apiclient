@@ -116,7 +116,7 @@
         {
             public static ValidationResult ValidateOverallGrade(string overallGrade, ValidationContext validationContext)
             {
-                var grades = new string[] { "Pass", "Merit", "Distinction", "Pass with excellence", "No grade awarded" };
+                var grades = new string[] { "Pass", "Credit", "Merit", "Distinction", "Pass with excellence", "No grade awarded" };
 
                 if (string.IsNullOrWhiteSpace(overallGrade))
                 {
