@@ -89,16 +89,16 @@ application/json body posted should contain an array for the requested certifica
 	},
 	"learningDetails": {
 		"courseOption": "string",
-		"overallGrade": "string",
+		"overallGrade": "Pass | Credit | Merit | Distinction | Pass with excellence | No grade awarded",
 		"achievementDate": "2018-11-16T14:26:57.009Z"
 	},
 	"postalContact": {
 		"contactName": "string",
-		"department": "string",
+		"department": "string" (optional),
 		"organisation": "string",
 		"addressLine1": "string",
-		"addressLine2": "string",
-		"addressLine3": "string",
+		"addressLine2": "string" (optional),
+		"addressLine3": "string" (optional),
 		"city": "string",
 		"postCode": "string"
 	}
