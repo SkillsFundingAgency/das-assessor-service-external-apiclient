@@ -65,8 +65,9 @@ returns status code
 - 204 if certificate can be created
 - 200 plus certificate details, if certificate already created.
   * if EPAO was not the originator of the certificate request then limited data will be provided
-  * certificate may be in 'draft', 'ready' or 'submitted' status
-  * if in 'draft' status then response will include validation of data fields that are missing or incorrect
+  * certificate may be in 'Draft', 'Ready' or 'Submitted' status
+  * if in 'Draft' status then response will include validation of data fields that are missing or incorrect
+- 403 validation error occurred
 
 #### 2.   To request a certificate when no certificate found at step 1, or skipped step 1
 
@@ -80,8 +81,8 @@ application/json body posted should contain an array for the requested certifica
 [{
 	"requestId" : "string",
 	"standard": {
-		"standardCode": 0,
-		"standardReference": "string"
+		"standardCode": 0 (optional if standardReference specified),
+		"standardReference": "string" (optional if standardCode specified)
 	},
 	"learner": {
 		"uln": 0,
@@ -107,25 +108,25 @@ application/json body posted should contain an array for the requested certifica
 
 returns status code
 - 200 plus application/json containing response for the requested certificate, by your provided "requestId"
-   * if EPAO has the correct profile to assess the requested Standard and all required data has been provided and is valid, certificate details will be returned with a status of 'ready',
-   * otherwise validation error(s) will be returned 
+   * if EPAO has the correct profile to assess the requested Standard and all required data has been provided and is valid, certificate details will be returned with a status of 'Ready',
+   * otherwise validation error(s) will be returned
 
 
 #### 3.   To submit a certificate created at step 2
-Certificate can only be submitted after all validation checks have been performed, and the certificate is 'ready'
+Certificate can only be submitted after all validation checks have been performed, and the certificate is 'Ready'
   
 ```http
 POST /api/v1/certificate/submit
 ```
   
-application/json body posted should contain an array of submitted certificates, each with your own unique "requestId" which will be used in the response body
+application/json body posted should contain an array for the submitted certificate
 
 ```json  
 [{
 	"requestId" : "string",
 	"uln": 0,
-	"standardCode": 0,
-	"standardReference": "string",
+	"standardCode": 0 (optional if standardReference specified),
+	"standardReference": "string" (optional if standardCode specified),
 	"familyName": "string",
 	"certificateReference": "string"
 }]
@@ -133,7 +134,7 @@ application/json body posted should contain an array of submitted certificates, 
 
 returns status code
 - 200 plus application/json containing response for the submitted certificate, by your provided "requestId"
-   * if EPAO created the certificate and status is 'ready', certificate details will be returned and the certificate will have a status of 'submitted',
+   * if EPAO created the certificate and status is 'Ready', certificate details will be returned and the certificate will have a status of 'Submitted',
    * otherwise validation error(s) will be returned 
    
 
@@ -152,11 +153,13 @@ application/json body posted should contain an array of certificate requests, ea
 ```
 returns status code
 - 200 plus application/json response for each requested certificate, by your provided "requestId"
-   * if EPAO has the correct profile to assess the requested Standard and all required data has been provided and is valid, certificate details will be returned each certificate will have a status of 'ready',
+   * if EPAO has the correct profile to assess the requested Standard and all required data has been provided and is valid, certificate details will be returned each certificate will have a status of 'Ready',
    * otherwise validation error(s) will be returned for each certificate failing validation
+- 403 Too many certificates specified within the request.
+   * current limit is 25
 
 #### 2.   To submit a certificates created at step 1
-Certificates can only be submitted after all validation checks have been performed, and the certificate is 'ready'.
+Certificates can only be submitted after all validation checks have been performed, and the certificate is 'Ready'.
   
 ```http
 POST /api/v1/certificate/submit
@@ -170,14 +173,16 @@ application/json body posted should contain an array of submitted certificates, 
 
 returns status code
 - 200 plus application/json response for each requested certificate, by your provided "requestId"
-   * if EPAO created the certificate and status is 'ready', certificate details will be returned and the certificate will have a status of 'submitted',
-   * otherwise validation error(s) will be returned 
+   * if EPAO created the certificate and status is 'Ready', certificate details will be returned and the certificate will have a status of 'Submitted',
+   * otherwise validation error(s) will be returned
+- 403 Too many certificates specified within the request.
+   * current limit is 25   
    
 ### Delete a Certificate
 
 #### To delete a certificate before it is submitted
 
-   It is possible to delete a certificate that has been created by the EPAO using the API when the status is not 'submitted'. 
+   It is possible to delete a certificate that has been created by the EPAO using the API when the status is not 'Submitted'. 
 
 ```http
 DELETE /api/v1/certificate/{uln}/{familyName}/{standard}/{certificateReference}
