@@ -201,6 +201,19 @@ GET /ap1/v1/certificate/grades
 returns status code
 - 200 plus the list of valid certificate grades.
 
+### Request the list of Options for a Standard
+
+#### 1.   To request options
+
+```http
+GET /ap1/v1/standards/options/{standard}
+```
+
+returns status code
+- 200 plus the list of valid options for the standard.
+- 204 standard found, however it has no options
+- 404 the standard was not found
+
 
 ## License
 Licensed under the [MIT license](https://github.com/SkillsFundingAgency/das-assessor-service-external-apiclient/blob/master/LICENSE)

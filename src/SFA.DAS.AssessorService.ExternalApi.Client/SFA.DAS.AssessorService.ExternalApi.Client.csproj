@@ -96,6 +96,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\StandardOptionsWindow.xaml.cs">
+      <DependentUpon>StandardOptionsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\GetWindow.xaml.cs">
       <DependentUpon>GetWindow.xaml</DependentUpon>
     </Compile>
@@ -111,6 +114,7 @@
     <Compile Include="Helpers\CoalesceConverter.cs" />
     <Compile Include="Helpers\CsvFileHelper.cs" />
     <Compile Include="ViewModels\GetViewModel.cs" />
+    <Compile Include="ViewModels\StandardOptionsViewModel.cs" />
     <Compile Include="ViewModels\UpdateViewModel.cs" />
     <Compile Include="ViewModels\SubmitViewModel.cs" />
     <Compile Include="ViewModels\DeleteViewModel.cs" />
@@ -118,6 +122,10 @@
     <Page Include="Controls\CreateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StandardOptionsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\GetWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

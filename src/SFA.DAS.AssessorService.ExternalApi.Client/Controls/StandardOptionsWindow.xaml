@@ -1,0 +1,22 @@
+﻿<Window x:Class="SFA.DAS.AssessorService.ExternalApi.Client.Controls.StandardOptionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:viewmodel="clr-namespace:SFA.DAS.AssessorService.ExternalApi.Client.ViewModels"
+        mc:Ignorable="d"
+        Title="Get Options for Standard" Height="125" Width="400" WindowStyle="ToolWindow" ResizeMode="NoResize">
+    <Window.DataContext>
+        <viewmodel:StandardOptionsViewModel />
+    </Window.DataContext>
+    <toolkit:BusyIndicator x:Name="BusyIndicator">
+        <Grid>
+            <Label Content="Standard" HorizontalAlignment="Left" Margin="31,4,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtStandard" HorizontalAlignment="Left" Height="23" Margin="31,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="156" Text="{Binding Standard, Mode=TwoWay}" />
+            <Button x:Name="btnGet" Content="Get Options" HorizontalAlignment="Left" Margin="216,38,0,0" VerticalAlignment="Top" Width="158" Click="btnGet_Click" />
+            <Button x:Name="btnClear" Content="Clear" HorizontalAlignment="Left" Margin="216,63,0,0" VerticalAlignment="Top" Width="75" Click="btnClear_Click"/>
+            
+        </Grid>
+    </toolkit:BusyIndicator>
+</Window>

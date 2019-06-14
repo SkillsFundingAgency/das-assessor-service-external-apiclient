@@ -23,22 +23,27 @@
             httpClient.BaseAddress = new Uri(apiBaseAddress);
 
             CertificateApiClient certificateApiClient = new CertificateApiClient(httpClient);
+            StandardsApiClient standardsApiClient = new StandardsApiClient(httpClient);
 
-            Program p = new Program(certificateApiClient);
+            Program p = new Program(certificateApiClient, standardsApiClient);
             p.CreateCertificatesExample().GetAwaiter().GetResult();
             p.UpdateCertificatesExample().GetAwaiter().GetResult();
             p.SubmitCertificatesExample().GetAwaiter().GetResult();
             p.DeleteCertificateExample().GetAwaiter().GetResult();
             p.GetCertificateExample().GetAwaiter().GetResult();
             p.GetGradesExample().GetAwaiter().GetResult();
+            p.GetOptionsForAllStandardsExample().GetAwaiter().GetResult();
+            p.GetOptionsForStandardExample().GetAwaiter().GetResult();
         }
 
 
         private readonly CertificateApiClient _CertificateApiClient;
+        private readonly StandardsApiClient _StandardsApiClient;
 
-        public Program(CertificateApiClient certificateApiClient)
+        public Program(CertificateApiClient certificateApiClient, StandardsApiClient standardsApiClient)
         {
             _CertificateApiClient = certificateApiClient;
+            _StandardsApiClient = standardsApiClient;
         }
 
         public async Task CreateCertificatesExample()
@@ -179,6 +184,20 @@
         public async Task GetGradesExample()
         {
             await _CertificateApiClient.GetGrades();
+        }
+
+        public async Task GetOptionsForAllStandardsExample()
+        {
+            await _StandardsApiClient.GetOptionsForAllStandards();
+        }
+
+        public async Task GetOptionsForStandardExample()
+        {
+            string standardCode = 1.ToString();
+            string standardReference = "ST0127";
+
+            await _StandardsApiClient.GetOptionsForStandard(standardCode);
+            await _StandardsApiClient.GetOptionsForStandard(standardReference);
         }
     }
 }

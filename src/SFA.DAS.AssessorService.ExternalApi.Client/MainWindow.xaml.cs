@@ -67,6 +67,15 @@ namespace SFA.DAS.AssessorService.ExternalApi.Client
             window.ShowDialog();
         }
 
+        private void btnOptions_Click(object sender, RoutedEventArgs e)
+        {
+            StandardOptionsWindow window = new StandardOptionsWindow
+            {
+                Owner = this
+            };
+            window.ShowDialog();
+        }
+
         private async void btnGrades_Click(object sender, RoutedEventArgs e)
         {
             await GetGrades();
