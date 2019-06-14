@@ -29,6 +29,7 @@
             p.SubmitCertificatesExample().GetAwaiter().GetResult();
             p.DeleteCertificateExample().GetAwaiter().GetResult();
             p.GetCertificateExample().GetAwaiter().GetResult();
+            p.GetGradesExample().GetAwaiter().GetResult();
         }
 
 
@@ -172,6 +173,11 @@
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
                 await _CertificateApiClient.GetCertificate(certificateToGet);
             }
+        }
+
+        public async Task GetGradesExample()
+        {
+            await _CertificateApiClient.GetGrades();
         }
     }
 }

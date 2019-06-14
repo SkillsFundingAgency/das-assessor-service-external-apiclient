@@ -662,5 +662,25 @@
             Assert.That(actual.Certificate, Is.Null);
         }
 
+        [Test]
+        public async Task GetGrades()
+        {
+            // arrange 
+            var expectedResponse = new List<string>
+            {
+                "Pass", "Credit", "Merit", "Distinction", "Pass with excellence", "No grade awarded"
+            };
+
+            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate/grades")
+                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // act
+            var actual = await _ApiClient.GetGrades();
+
+            // assert
+            Assert.That(actual, Has.Count.EqualTo(6));
+            Assert.That(actual, Contains.Item("Distinction"));
+        }
+
     }
 }

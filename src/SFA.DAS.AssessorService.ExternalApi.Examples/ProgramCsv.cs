@@ -32,6 +32,7 @@
             p.SubmitCertificatesExample().GetAwaiter().GetResult();
             p.DeleteCertificateExample().GetAwaiter().GetResult();
             p.GetCertificateExample().GetAwaiter().GetResult();
+            p.GetGradesExample().GetAwaiter().GetResult();
         }
 
 
@@ -216,6 +217,11 @@
                     }
                 }
             }
+        }
+
+        public async Task GetGradesExample()
+        {
+            await _CertificateApiClient.GetGrades();
         }
     }
 }

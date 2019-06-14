@@ -61,7 +61,6 @@ GET /ap1/v1/certificate/{uln}/{familyName}/{standard}
 ```
 
 returns status code
-
 - 204 if certificate can be created
 - 200 plus certificate details, if certificate already created.
   * if EPAO was not the originator of the certificate request then limited data will be provided
@@ -191,6 +190,16 @@ DELETE /api/v1/certificate/{uln}/{familyName}/{standard}/{certificateReference}
 returns status code
 - 204 to confirm certificate has been deleted.
  
+### Request the list of valid Certificate Grades
+
+#### 1.   To request grades
+
+```http
+GET /ap1/v1/certificate/grades
+```
+
+returns status code
+- 200 plus the list of valid certificate grades.
 
 
 ## License

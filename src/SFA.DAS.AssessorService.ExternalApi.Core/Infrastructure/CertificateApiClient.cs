@@ -63,5 +63,10 @@
                 Error = error
             };
         }
+
+        public async Task<IEnumerable<string>> GetGrades()
+        {
+            return await Get<IEnumerable<string>>("api/v1/certificate/grades");
+        }
     }
 }
