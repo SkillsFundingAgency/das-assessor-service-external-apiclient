@@ -1,11 +1,12 @@
-﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates
+﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Models.Request
 {
     using SFA.DAS.AssessorService.ExternalApi.Core.DataAnnotations;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public sealed class CreateCertificate : IEquatable<CreateCertificate>
+    public sealed class CreateCertificateRequest : IEquatable<CreateCertificateRequest>
     {
         public string RequestId { get; set; }
 
@@ -43,17 +44,17 @@
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return IsEqual((CreateCertificate)obj);
+            return IsEqual((CreateCertificateRequest)obj);
         }
 
-        public bool Equals(CreateCertificate other)
+        public bool Equals(CreateCertificateRequest other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
             return IsEqual(other);
         }
 
-        private bool IsEqual(CreateCertificate other)
+        private bool IsEqual(CreateCertificateRequest other)
         {
             return Equals(Standard, other.Standard)
                 && Equals(Learner, other.Learner)
@@ -61,13 +62,13 @@
                 && Equals(PostalContact, other.PostalContact);
         }
 
-        public static bool operator ==(CreateCertificate left, CreateCertificate right)
+        public static bool operator ==(CreateCertificateRequest left, CreateCertificateRequest right)
         {
             if (left is null) return right is null;
             return left.Equals(right);
         }
 
-        public static bool operator !=(CreateCertificate left, CreateCertificate right)
+        public static bool operator !=(CreateCertificateRequest left, CreateCertificateRequest right)
         {
             return !(left == right);
         }

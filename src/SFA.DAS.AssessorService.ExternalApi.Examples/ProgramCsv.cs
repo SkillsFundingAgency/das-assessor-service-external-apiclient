@@ -3,6 +3,7 @@
     using CsvHelper;
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -47,14 +48,14 @@
         {
             const string filePath = @"CsvFiles\createCertificates.csv";
 
-            IEnumerable<CreateCertificate> certificatesToCreate;
+            IEnumerable<CreateCertificateRequest> certificatesToCreate;
 
             using (TextReader textReader = File.OpenText(filePath))
             {
                 CsvReader csv = new CsvReader(textReader);
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-                certificatesToCreate = csv.GetRecords<CreateCertificate>().ToList();
+                certificatesToCreate = csv.GetRecords<CreateCertificateRequest>().ToList();
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
@@ -80,14 +81,14 @@
         {
             const string filePath = @"CsvFiles\updateCertificates.csv";
 
-            IEnumerable<UpdateCertificate> certificates;
+            IEnumerable<UpdateCertificateRequest> certificates;
 
             using (TextReader textReader = File.OpenText(filePath))
             {
                 CsvReader csv = new CsvReader(textReader);
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<UpdateCertificate>().ToList();
+                certificates = csv.GetRecords<UpdateCertificateRequest>().ToList();
             }
 
             // Let's pretend the first and last apprentices got better grades
@@ -118,14 +119,14 @@
         {
             const string filePath = @"CsvFiles\submitCertificates.csv";
 
-            IEnumerable<SubmitCertificate> certificates;
+            IEnumerable<SubmitCertificateRequest> certificates;
 
             using (TextReader textReader = File.OpenText(filePath))
             {
                 CsvReader csv = new CsvReader(textReader);
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<SubmitCertificate>().ToList();
+                certificates = csv.GetRecords<SubmitCertificateRequest>().ToList();
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
@@ -151,14 +152,14 @@
         {
             const string filePath = @"CsvFiles\deleteCertificates.csv";
 
-            IEnumerable<DeleteCertificate> certificates;
+            IEnumerable<DeleteCertificateRequest> certificates;
 
             using (TextReader textReader = File.OpenText(filePath))
             {
                 CsvReader csv = new CsvReader(textReader);
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<DeleteCertificate>().ToList();
+                certificates = csv.GetRecords<DeleteCertificateRequest>().ToList();
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
@@ -187,14 +188,14 @@
         {
             const string filePath = @"CsvFiles\getCertificates.csv";
 
-            IEnumerable<GetCertificate> certificates;
+            IEnumerable<GetCertificateRequest> certificates;
 
             using (TextReader textReader = File.OpenText(filePath))
             {
                 CsvReader csv = new CsvReader(textReader);
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<GetCertificate>().ToList();
+                certificates = csv.GetRecords<GetCertificateRequest>().ToList();
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.

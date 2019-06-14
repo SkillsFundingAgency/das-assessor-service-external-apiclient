@@ -1,9 +1,9 @@
-﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Messages.Response
+﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Models.Response
 {
     using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Error;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
 
-    public class GetBatchCertificateResponse
+    public class GetCertificateResponse
     {
         public long Uln { get; set; }
         public string Standard { get; set; }

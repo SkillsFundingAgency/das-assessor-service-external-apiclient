@@ -6,8 +6,9 @@
     using RichardSzalay.MockHttp;
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
     using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Error;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Response;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Response;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -58,7 +59,7 @@
             var created = new Created { CreatedAt = DateTime.UtcNow, CreatedBy = "Test" };
 
             var certificate = new Certificate { CertificateData = certificateData, Status = status, Created = created };
-            var certificateRequest = new CreateCertificate
+            var certificateRequest = new CreateCertificateRequest
             {
                 Learner = certificate.CertificateData.Learner,
                 Standard = certificate.CertificateData.Standard,
@@ -66,16 +67,16 @@
                 PostalContact = certificate.CertificateData.PostalContact
             };
 
-            var expectedResponse = new List<BatchCertificateResponse>
+            var expectedResponse = new List<CreateCertificateResponse>
             {
-                new BatchCertificateResponse { Certificate = certificate }
+                new CreateCertificateResponse { Certificate = certificate }
             };
 
             _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificate> { certificateRequest });
+            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -87,7 +88,7 @@
         public async Task CreateCertificate_CertificateExists()
         {
             // arrange 
-            var certificateRequest = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
+            var certificateRequest = Builder<CreateCertificateRequest>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.Standard = Builder<Standard>.CreateNew().Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
                                                                         .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
@@ -95,16 +96,16 @@
 
             var expectedValidationErrors = new List<string> { "Certificate already exists: 123456789" };
 
-            var expectedResponse = new List<BatchCertificateResponse>
+            var expectedResponse = new List<CreateCertificateResponse>
             {
-                new BatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
+                new CreateCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
             _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificate> { certificateRequest });
+            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -116,7 +117,7 @@
         public async Task CreateCertificate_InvalidCourseOption()
         {
             // arrange 
-            var certificateRequest = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
+            var certificateRequest = Builder<CreateCertificateRequest>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardCode = 1).Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().With(ld => ld.CourseOption = "INVALID").Build())
                                                                         .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
@@ -124,16 +125,16 @@
 
             var expectedValidationErrors = new List<string> { "Invalid course option for this Standard. Must be one of the following: English, French, German" };
 
-            var expectedResponse = new List<BatchCertificateResponse>
+            var expectedResponse = new List<CreateCertificateResponse>
             {
-                new BatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
+                new CreateCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
             _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificate> { certificateRequest });
+            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -145,7 +146,7 @@
         public async Task CreateCertificate_InvalidGrade()
         {
             // arrange 
-            var certificateRequest = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
+            var certificateRequest = Builder<CreateCertificateRequest>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.Standard = Builder<Standard>.CreateNew().Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().With(ld => ld.OverallGrade = "INVALID").Build())
                                                                         .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
@@ -153,16 +154,16 @@
 
             var expectedValidationErrors = new List<string> { "Invalid grade. Must be one of the following: Pass, Credit, Merit, Distinction, Pass with excellence, No grade awarded" };
 
-            var expectedResponse = new List<BatchCertificateResponse>
+            var expectedResponse = new List<CreateCertificateResponse>
             {
-                new BatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
+                new CreateCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
             _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificate> { certificateRequest });
+            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -174,7 +175,7 @@
         public async Task CreateCertificate_Using_StandardCode_NotFound()
         {
             // arrange 
-            var certificateRequest = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
+            var certificateRequest = Builder<CreateCertificateRequest>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardCode = 5555).Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
                                                                         .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
@@ -182,16 +183,16 @@
 
             var expectedValidationErrors = new List<string> { "Unable to find specified Standard" };
 
-            var expectedResponse = new List<BatchCertificateResponse>
+            var expectedResponse = new List<CreateCertificateResponse>
             {
-                new BatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
+                new CreateCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
             _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificate> { certificateRequest });
+            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -203,7 +204,7 @@
         public async Task CreateCertificate_Using_StandardReference_NotFound()
         {
             // arrange 
-            var certificateRequest = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
+            var certificateRequest = Builder<CreateCertificateRequest>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardReference = "INVALID").Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
                                                                         .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
@@ -211,16 +212,16 @@
 
             var expectedValidationErrors = new List<string> { "Unable to find specified Standard" };
 
-            var expectedResponse = new List<BatchCertificateResponse>
+            var expectedResponse = new List<CreateCertificateResponse>
             {
-                new BatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
+                new CreateCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
             _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificate> { certificateRequest });
+            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -243,7 +244,7 @@
             var created = new Created { CreatedAt = DateTime.UtcNow.AddHours(-1), CreatedBy = "Test" };
 
             var certificate = new Certificate { CertificateData = certificateData, Status = status, Created = created };
-            var certificateRequest = new UpdateCertificate
+            var certificateRequest = new UpdateCertificateRequest
             {
                 CertificateReference = certificate.CertificateData.CertificateReference,
                 Learner = certificate.CertificateData.Learner,
@@ -252,16 +253,16 @@
                 PostalContact = certificate.CertificateData.PostalContact
             };
 
-            var expectedResponse = new List<BatchCertificateResponse>
+            var expectedResponse = new List<UpdateCertificateResponse>
             {
-                new BatchCertificateResponse { Certificate = certificate }
+                new UpdateCertificateResponse { Certificate = certificate }
             };
 
             _MockHttp.When(HttpMethod.Put, $"{apiBaseAddress}/api/v1/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.UpdateCertificates(new List<UpdateCertificate> { certificateRequest });
+            var actual = await _ApiClient.UpdateCertificates(new List<UpdateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -273,7 +274,7 @@
         public async Task UpdateCertificate_CertificateNotFound()
         {
             // arrange 
-            var certificateRequest = Builder<UpdateCertificate>.CreateNew().With(cd => cd.CertificateReference = "NOT FOUND")
+            var certificateRequest = Builder<UpdateCertificateRequest>.CreateNew().With(cd => cd.CertificateReference = "NOT FOUND")
                                                                         .With(cd => cd.Standard = Builder<Standard>.CreateNew().Build())
                                                                         .With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
@@ -282,16 +283,16 @@
 
             var expectedValidationErrors = new List<string> { "Certificate not found" };
 
-            var expectedResponse = new List<BatchCertificateResponse>
+            var expectedResponse = new List<UpdateCertificateResponse>
             {
-                new BatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
+                new UpdateCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
             _MockHttp.When(HttpMethod.Put, $"{apiBaseAddress}/api/v1/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.UpdateCertificates(new List<UpdateCertificate> { certificateRequest });
+            var actual = await _ApiClient.UpdateCertificates(new List<UpdateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -303,7 +304,7 @@
         public async Task UpdateCertificate_CertificateStatusInvalid()
         {
             // arrange 
-            var certificateRequest = Builder<UpdateCertificate>.CreateNew().With(cd => cd.CertificateReference = "SUBMITTED CERTIFICATE")
+            var certificateRequest = Builder<UpdateCertificateRequest>.CreateNew().With(cd => cd.CertificateReference = "SUBMITTED CERTIFICATE")
                                                                         .With(cd => cd.Standard = Builder<Standard>.CreateNew().Build())
                                                                         .With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
@@ -312,16 +313,16 @@
 
             var expectedValidationErrors = new List<string> { "Certificate is not in 'Draft' status" };
 
-            var expectedResponse = new List<BatchCertificateResponse>
+            var expectedResponse = new List<UpdateCertificateResponse>
             {
-                new BatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
+                new UpdateCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
             _MockHttp.When(HttpMethod.Put, $"{apiBaseAddress}/api/v1/certificate")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.UpdateCertificates(new List<UpdateCertificate> { certificateRequest });
+            var actual = await _ApiClient.UpdateCertificates(new List<UpdateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -333,7 +334,7 @@
         public async Task SubmitCertificate_Using_StandardCode()
         {
             // arrange 
-            var submitCertificate = new SubmitCertificate { Uln = 9876543210, FamilyName = "Blogs", StandardCode = 1 };
+            var submitCertificate = new SubmitCertificateRequest { Uln = 9876543210, FamilyName = "Blogs", StandardCode = 1 };
 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.CertificateReference = "DRAFT CERTIFICATE")
                                                                         .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardCode = 1).With(s => s.StandardReference = null).Build())
@@ -348,16 +349,16 @@
 
             var certificate = new Certificate { CertificateData = certificateData, Status = status, Created = created, Submitted = submitted };
 
-            var expectedResponse = new List<SubmitBatchCertificateResponse>
+            var expectedResponse = new List<SubmitCertificateResponse>
             {
-                new SubmitBatchCertificateResponse { Certificate = certificate }
+                new SubmitCertificateResponse { Certificate = certificate }
             };
 
             _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate/submit")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificate> { submitCertificate });
+            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificateRequest> { submitCertificate });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -369,7 +370,7 @@
         public async Task SubmitCertificate_Using_StandardReference()
         {
             // arrange 
-            var submitCertificate = new SubmitCertificate { Uln = 9876543210, FamilyName = "Blogs", StandardReference = "1" };
+            var submitCertificate = new SubmitCertificateRequest { Uln = 9876543210, FamilyName = "Blogs", StandardReference = "1" };
             
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.CertificateReference = "DRAFT CERTIFICATE")
                                                                         .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardCode = null).With(s => s.StandardReference = "1").Build())
@@ -384,16 +385,16 @@
 
             var certificate = new Certificate { CertificateData = certificateData, Status = status, Created = created, Submitted = submitted };
 
-            var expectedResponse = new List<SubmitBatchCertificateResponse>
+            var expectedResponse = new List<SubmitCertificateResponse>
             {
-                new SubmitBatchCertificateResponse { Certificate = certificate }
+                new SubmitCertificateResponse { Certificate = certificate }
             };
 
             _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate/submit")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificate> { submitCertificate });
+            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificateRequest> { submitCertificate });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -405,20 +406,20 @@
         public async Task SubmitCertificate_CertificateNotFound()
         {
             // arrange 
-            var submitCertificate = new SubmitCertificate { Uln = 9876543210, FamilyName = "Blogs", StandardCode = 1 };
+            var submitCertificate = new SubmitCertificateRequest { Uln = 9876543210, FamilyName = "Blogs", StandardCode = 1 };
 
             var expectedValidationErrors = new List<string> { "Certificate not found" };
 
-            var expectedResponse = new List<SubmitBatchCertificateResponse>
+            var expectedResponse = new List<SubmitCertificateResponse>
             {
-                new SubmitBatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
+                new SubmitCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
             _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate/submit")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificate> { submitCertificate });
+            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificateRequest> { submitCertificate });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -430,20 +431,20 @@
         public async Task SubmitCertificate_CertificateStatusInvalid()
         {
             // arrange 
-            var submitCertificate = new SubmitCertificate { Uln = 1234567890, FamilyName = "Blogs", StandardCode = 1 };
+            var submitCertificate = new SubmitCertificateRequest { Uln = 1234567890, FamilyName = "Blogs", StandardCode = 1 };
 
             var expectedValidationErrors = new List<string> { "Certificate is not in 'Ready' status" };
 
-            var expectedResponse = new List<SubmitBatchCertificateResponse>
+            var expectedResponse = new List<SubmitCertificateResponse>
             {
-                new SubmitBatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
+                new SubmitCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
             _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate/submit")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificate> { submitCertificate });
+            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificateRequest> { submitCertificate });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -455,20 +456,20 @@
         public async Task SubmitCertificate_InvalidFamilyName()
         {
             // arrange 
-            var submitCertificate = new SubmitCertificate { Uln = 1234567890, FamilyName = "INVALID", StandardCode = 1 };
+            var submitCertificate = new SubmitCertificateRequest { Uln = 1234567890, FamilyName = "INVALID", StandardCode = 1 };
 
             var expectedValidationErrors = new List<string> { "Cannot find apprentice with the specified Uln, FamilyName & Standard" };
 
-            var expectedResponse = new List<SubmitBatchCertificateResponse>
+            var expectedResponse = new List<SubmitCertificateResponse>
             {
-                new SubmitBatchCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
+                new SubmitCertificateResponse { Certificate = null, ValidationErrors = expectedValidationErrors }
             };
 
             _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate/submit")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificate> { submitCertificate });
+            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificateRequest> { submitCertificate });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -489,7 +490,7 @@
                 .Respond(HttpStatusCode.OK, "application/json", string.Empty);
 
             // act
-            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
+            var request = new DeleteCertificateRequest { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
             var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
@@ -515,7 +516,7 @@
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
+            var request = new DeleteCertificateRequest { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
             var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
@@ -543,7 +544,7 @@
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
+            var request = new DeleteCertificateRequest { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
             var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
@@ -571,7 +572,7 @@
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var request = new DeleteCertificate { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
+            var request = new DeleteCertificateRequest { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
             var actual = await _ApiClient.DeleteCertificate(request);
 
             // assert
@@ -606,7 +607,7 @@
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var request = new GetCertificate { Uln = uln, FamilyName = lastname, Standard = standard };
+            var request = new GetCertificateRequest { Uln = uln, FamilyName = lastname, Standard = standard };
             var actual = await _ApiClient.GetCertificate(request);
 
             // assert
@@ -626,7 +627,7 @@
                 .Respond(HttpStatusCode.NoContent, "application/json", string.Empty);
 
             // act
-            var request = new GetCertificate { Uln = uln, FamilyName = lastname, Standard = standard };
+            var request = new GetCertificateRequest { Uln = uln, FamilyName = lastname, Standard = standard };
             var actual = await _ApiClient.GetCertificate(request);
 
             // assert
@@ -652,7 +653,7 @@
                 .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var request = new GetCertificate { Uln = uln, FamilyName = lastname, Standard = standard };
+            var request = new GetCertificateRequest { Uln = uln, FamilyName = lastname, Standard = standard };
             var actual = await _ApiClient.GetCertificate(request);
 
             // assert
@@ -671,7 +672,7 @@
                 "Pass", "Credit", "Merit", "Distinction", "Pass with excellence", "No grade awarded"
             };
 
-            _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate/grades")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/certificate/grades")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act

@@ -1,8 +1,9 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure
 {
     using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Error;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Response;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Response;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -11,9 +12,9 @@
     {
         public CertificateApiClient(HttpClient httpClient) : base(httpClient) { }
 
-        public async Task<GetBatchCertificateResponse> GetCertificate(GetCertificate request)
+        public async Task<GetCertificateResponse> GetCertificate(GetCertificateRequest request)
         {
-            var response = new GetBatchCertificateResponse
+            var response = new GetCertificateResponse
             {
                 Uln = request.Uln,
                 FamilyName = request.FamilyName,
@@ -35,26 +36,26 @@
             return response;
         }
 
-        public async Task<IEnumerable<BatchCertificateResponse>> CreateCertificates(IEnumerable<CreateCertificate> request)
+        public async Task<IEnumerable<CreateCertificateResponse>> CreateCertificates(IEnumerable<CreateCertificateRequest> request)
         {
-            return await Post<IEnumerable<CreateCertificate>, IEnumerable<BatchCertificateResponse>>("api/v1/certificate", request);
+            return await Post<IEnumerable<CreateCertificateRequest>, IEnumerable<CreateCertificateResponse>>("api/v1/certificate", request);
         }
 
-        public async Task<IEnumerable<BatchCertificateResponse>> UpdateCertificates(IEnumerable<UpdateCertificate> request)
+        public async Task<IEnumerable<UpdateCertificateResponse>> UpdateCertificates(IEnumerable<UpdateCertificateRequest> request)
         {
-            return await Put<IEnumerable<UpdateCertificate>, IEnumerable<BatchCertificateResponse>>("api/v1/certificate", request);
+            return await Put<IEnumerable<UpdateCertificateRequest>, IEnumerable<UpdateCertificateResponse>>("api/v1/certificate", request);
         }
 
-        public async Task<IEnumerable<SubmitBatchCertificateResponse>> SubmitCertificates(IEnumerable<SubmitCertificate> request)
+        public async Task<IEnumerable<SubmitCertificateResponse>> SubmitCertificates(IEnumerable<SubmitCertificateRequest> request)
         {
-            return await Post<IEnumerable<SubmitCertificate>, IEnumerable<SubmitBatchCertificateResponse>>("api/v1/certificate/submit", request);
+            return await Post<IEnumerable<SubmitCertificateRequest>, IEnumerable<SubmitCertificateResponse>>("api/v1/certificate/submit", request);
         }
 
-        public async Task<DeleteBatchCertificateResponse> DeleteCertificate(DeleteCertificate request)
+        public async Task<DeleteCertificateResponse> DeleteCertificate(DeleteCertificateRequest request)
         {
             var error = await Delete<ApiResponse>($"api/v1/certificate/{request.Uln}/{request.FamilyName}/{request.Standard}/{request.CertificateReference}");
 
-            return new DeleteBatchCertificateResponse
+            return new DeleteCertificateResponse
             {
                 Uln = request.Uln,
                 FamilyName = request.FamilyName,

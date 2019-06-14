@@ -1,11 +1,12 @@
-﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates
+﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Models.Request
 {
     using SFA.DAS.AssessorService.ExternalApi.Core.DataAnnotations;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public sealed class UpdateCertificate : IEquatable<UpdateCertificate>
+    public sealed class UpdateCertificateRequest : IEquatable<UpdateCertificateRequest>
     {
         public string RequestId { get; set; }
 
@@ -47,17 +48,17 @@
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return IsEqual((UpdateCertificate)obj);
+            return IsEqual((UpdateCertificateRequest)obj);
         }
 
-        public bool Equals(UpdateCertificate other)
+        public bool Equals(UpdateCertificateRequest other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
             return IsEqual(other);
         }
 
-        private bool IsEqual(UpdateCertificate other)
+        private bool IsEqual(UpdateCertificateRequest other)
         {
             return string.Equals(CertificateReference, other.CertificateReference)
                 && Equals(Standard, other.Standard)
@@ -66,13 +67,13 @@
                 && Equals(PostalContact, other.PostalContact);
         }
 
-        public static bool operator ==(UpdateCertificate left, UpdateCertificate right)
+        public static bool operator ==(UpdateCertificateRequest left, UpdateCertificateRequest right)
         {
             if (left is null) return right is null;
             return left.Equals(right);
         }
 
-        public static bool operator !=(UpdateCertificate left, UpdateCertificate right)
+        public static bool operator !=(UpdateCertificateRequest left, UpdateCertificateRequest right)
         {
             return !(left == right);
         }

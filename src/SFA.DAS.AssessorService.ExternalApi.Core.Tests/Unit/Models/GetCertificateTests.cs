@@ -3,6 +3,7 @@
     using FizzWare.NBuilder;
     using NUnit.Framework;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
     using System.Linq;
 
     [TestFixture(Category = "Model")]
@@ -12,7 +13,7 @@
         public void UlnInvalid()
         {
             // arrange
-            var certificate = Builder<GetCertificate>.CreateNew().With(sc => sc.Uln = 12435).Build();
+            var certificate = Builder<GetCertificateRequest>.CreateNew().With(sc => sc.Uln = 12435).Build();
 
             // act
             bool isValid = certificate.IsValid(out var validationResults);
@@ -27,7 +28,7 @@
         public void NoStandardSpecified()
         {
             // arrange
-            var certificate = Builder<GetCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(sc => sc.Standard = null).Build();
+            var certificate = Builder<GetCertificateRequest>.CreateNew().With(sc => sc.Uln = 1243567890).With(sc => sc.Standard = null).Build();
 
             // act
             bool isValid = certificate.IsValid(out var validationResults);
@@ -42,7 +43,7 @@
         public void FamilyNameMissing()
         {
             // arrange
-            var certificate = Builder<GetCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).With(l => l.FamilyName = null).Build();
+            var certificate = Builder<GetCertificateRequest>.CreateNew().With(sc => sc.Uln = 1243567890).With(l => l.FamilyName = null).Build();
 
             // act
             bool isValid = certificate.IsValid(out var validationResults);
@@ -57,7 +58,7 @@
         public void WhenValid()
         {
             // arrange
-            var certificate = Builder<GetCertificate>.CreateNew().With(sc => sc.Uln = 1243567890).Build();
+            var certificate = Builder<GetCertificateRequest>.CreateNew().With(sc => sc.Uln = 1243567890).Build();
 
             // act
             bool isValid = certificate.IsValid(out var validationResults);
@@ -72,8 +73,8 @@
         public void WhenEqual()
         {
             // arrange
-            var certificate1 = Builder<GetCertificate>.CreateNew().With(sc => sc.Standard = "1").Build();
-            var certificate2 = Builder<GetCertificate>.CreateNew().With(sc => sc.Standard = "1").Build();
+            var certificate1 = Builder<GetCertificateRequest>.CreateNew().With(sc => sc.Standard = "1").Build();
+            var certificate2 = Builder<GetCertificateRequest>.CreateNew().With(sc => sc.Standard = "1").Build();
 
             // act
             bool areEqual = certificate1 == certificate2;
@@ -87,8 +88,8 @@
         public void WhenNotEqual()
         {
             // arrange
-            var certificate1 = Builder<GetCertificate>.CreateNew().With(sc => sc.Standard = "1").Build();
-            var certificate2 = Builder<GetCertificate>.CreateNew().With(sc => sc.Standard = "9").Build();
+            var certificate1 = Builder<GetCertificateRequest>.CreateNew().With(sc => sc.Standard = "1").Build();
+            var certificate2 = Builder<GetCertificateRequest>.CreateNew().With(sc => sc.Standard = "9").Build();
 
             // act
             bool areNotEqual = certificate1 != certificate2;

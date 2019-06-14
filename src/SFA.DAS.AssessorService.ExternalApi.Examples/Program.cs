@@ -2,6 +2,7 @@
 {
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -53,7 +54,7 @@
             string city = "Townsville";
             string postcode = "ZY9 9ZY";
 
-            CreateCertificate newCertificate = new CreateCertificate
+            CreateCertificateRequest newCertificate = new CreateCertificateRequest
             {
                 Learner = new Learner { Uln = uln, GivenNames = firstName, FamilyName = lastName },
                 Standard = new Standard { StandardCode = standardCode },
@@ -64,7 +65,7 @@
             if (newCertificate.IsValid(out ICollection<ValidationResult> validationResults))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
-                await _CertificateApiClient.CreateCertificates(new List<CreateCertificate> { newCertificate });
+                await _CertificateApiClient.CreateCertificates(new List<CreateCertificateRequest> { newCertificate });
             }
         }
 
@@ -93,7 +94,7 @@
             };
 
             // Let's pretend the apprentice got a better grade
-            UpdateCertificate updatedCertificate = new UpdateCertificate
+            UpdateCertificateRequest updatedCertificate = new UpdateCertificateRequest
             {
                 CertificateReference = currentCertificate.CertificateData.CertificateReference,
                 Learner = currentCertificate.CertificateData.Learner,
@@ -107,7 +108,7 @@
             if (updatedCertificate.IsValid(out ICollection<ValidationResult> validationResults))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
-                await _CertificateApiClient.UpdateCertificates(new List<UpdateCertificate> { updatedCertificate });
+                await _CertificateApiClient.UpdateCertificates(new List<UpdateCertificateRequest> { updatedCertificate });
             }
         }
 
@@ -118,7 +119,7 @@
             int standardCode = 1;
             string certificateReference = "00012001";
 
-            SubmitCertificate certificateToSubmit = new SubmitCertificate
+            SubmitCertificateRequest certificateToSubmit = new SubmitCertificateRequest
             {
                 Uln = uln,
                 FamilyName = lastName,
@@ -129,7 +130,7 @@
             if (certificateToSubmit.IsValid(out ICollection<ValidationResult> validationResults))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
-                await _CertificateApiClient.SubmitCertificates(new List<SubmitCertificate> { certificateToSubmit });
+                await _CertificateApiClient.SubmitCertificates(new List<SubmitCertificateRequest> { certificateToSubmit });
             }
         }
 
@@ -140,7 +141,7 @@
             string standard = "1";
             string certificateReference = "00012001";
 
-            DeleteCertificate certificateToDelete = new DeleteCertificate
+            DeleteCertificateRequest certificateToDelete = new DeleteCertificateRequest
             {
                 Uln = uln,
                 FamilyName = lastName,
@@ -161,7 +162,7 @@
             string lastName = "Blogs";
             string standard = "1";
 
-            GetCertificate certificateToGet = new GetCertificate
+            GetCertificateRequest certificateToGet = new GetCertificateRequest
             {
                 Uln = uln,
                 FamilyName = lastName,

@@ -4,8 +4,9 @@
     using SFA.DAS.AssessorService.ExternalApi.Client.Helpers;
     using SFA.DAS.AssessorService.ExternalApi.Client.Properties;
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Response;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Response;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -39,7 +40,7 @@
                 _ViewModel.FilePath = openFileDialog.FileName;
                 _ViewModel.Certificates.Clear();
 
-                var items = CsvFileHelper<GetCertificate>.GetFromFile(_ViewModel.FilePath);
+                var items = CsvFileHelper<GetCertificateRequest>.GetFromFile(_ViewModel.FilePath);
 
                 if (items is null || !items.Any())
                 {
@@ -96,9 +97,9 @@
 
                 CertificateApiClient certificateApiClient = new CertificateApiClient(httpClient);
 
-                var notYetCreatedCertificates = new List<GetBatchCertificateResponse>();
-                var validCertificates = new List<GetBatchCertificateResponse>();
-                var invalidCertificates = new List<GetBatchCertificateResponse>();
+                var notYetCreatedCertificates = new List<GetCertificateResponse>();
+                var validCertificates = new List<GetCertificateResponse>();
+                var invalidCertificates = new List<GetCertificateResponse>();
 
                 try
                 {
@@ -144,7 +145,7 @@
             }
         }
 
-        private void SaveNotYetCertificates(IEnumerable<GetBatchCertificateResponse> invalidCertificates)
+        private void SaveNotYetCertificates(IEnumerable<GetCertificateResponse> invalidCertificates)
         {
             string sMessageBoxText = "There are certificates that are not yet created. Do you want to save these for later use?";
             string sCaption = "Not Yet Created Certificates";
@@ -171,7 +172,7 @@
             }
         }
 
-        private void SaveInvalidCertificates(IEnumerable<GetBatchCertificateResponse> invalidCertificates)
+        private void SaveInvalidCertificates(IEnumerable<GetCertificateResponse> invalidCertificates)
         {
             string sMessageBoxText = "There were invalid requests. Do you want to save these to a new file to amend?";
             string sCaption = "Invalid Requests";

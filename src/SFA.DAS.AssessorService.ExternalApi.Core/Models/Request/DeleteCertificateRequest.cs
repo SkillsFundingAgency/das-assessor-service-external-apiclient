@@ -1,10 +1,10 @@
-﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates
+﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Models.Request
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public sealed class DeleteCertificate : IEquatable<DeleteCertificate>
+    public sealed class DeleteCertificateRequest : IEquatable<DeleteCertificateRequest>
     {
         [Range(1000000000, 9999999999, ErrorMessage = "The apprentice's ULN should contain exactly 10 numbers")]
         public long Uln { get; set; }
@@ -41,17 +41,17 @@
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return IsEqual((DeleteCertificate)obj);
+            return IsEqual((DeleteCertificateRequest)obj);
         }
 
-        public bool Equals(DeleteCertificate other)
+        public bool Equals(DeleteCertificateRequest other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
             return IsEqual(other);
         }
 
-        private bool IsEqual(DeleteCertificate other)
+        private bool IsEqual(DeleteCertificateRequest other)
         {
             return Equals(Uln, other.Uln)
                 && string.Equals(Standard, other.Standard)
@@ -59,13 +59,13 @@
                 && string.Equals(CertificateReference, other.CertificateReference);
         }
 
-        public static bool operator ==(DeleteCertificate left, DeleteCertificate right)
+        public static bool operator ==(DeleteCertificateRequest left, DeleteCertificateRequest right)
         {
             if (left is null) return right is null;
             return left.Equals(right);
         }
 
-        public static bool operator !=(DeleteCertificate left, DeleteCertificate right)
+        public static bool operator !=(DeleteCertificateRequest left, DeleteCertificateRequest right)
         {
             return !(left == right);
         }
