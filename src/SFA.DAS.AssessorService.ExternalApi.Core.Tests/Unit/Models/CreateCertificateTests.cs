@@ -3,6 +3,7 @@
     using FizzWare.NBuilder;
     using NUnit.Framework;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
     using System.Linq;
 
     [TestFixture(Category = "Model")]
@@ -13,10 +14,10 @@
         {
             // arrange
             var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.OverallGrade = "Pass").Build();
-            var standard = Builder<Standard>.CreateNew().With(l => l.StandardCode = 1).Build();
+            var standard = Builder<Standard>.CreateNew().Build();
             var postalContact = Builder<PostalContact>.CreateNew().With(l => l.PostCode = "ZY9 9ZY").Build();
 
-            var certificate = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = null)
+            var certificate = Builder<CreateCertificateRequest>.CreateNew().With(cd => cd.Learner = null)
                                                                         .With(cd => cd.Standard = standard)
                                                                         .With(cd => cd.LearningDetails = learningDetails)
                                                                         .With(cd => cd.PostalContact = postalContact).Build();
@@ -38,7 +39,7 @@
             var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.OverallGrade = "Pass").Build();
             var postalContact = Builder<PostalContact>.CreateNew().With(l => l.PostCode = "ZY9 9ZY").Build();
 
-            var certificate = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = learner)
+            var certificate = Builder<CreateCertificateRequest>.CreateNew().With(cd => cd.Learner = learner)
                                                                         .With(cd => cd.Standard = null)
                                                                         .With(cd => cd.LearningDetails = learningDetails)
                                                                         .With(cd => cd.PostalContact = postalContact).Build();
@@ -57,10 +58,10 @@
         {
             // arrange
             var learner = Builder<Learner>.CreateNew().With(l => l.Uln = 1243567890).Build();
-            var standard = Builder<Standard>.CreateNew().With(l => l.StandardCode = 1).Build();
+            var standard = Builder<Standard>.CreateNew().Build();
             var postalContact = Builder<PostalContact>.CreateNew().With(l => l.PostCode = "ZY9 9ZY").Build();
 
-            var certificate = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = learner)
+            var certificate = Builder<CreateCertificateRequest>.CreateNew().With(cd => cd.Learner = learner)
                                                                         .With(cd => cd.Standard = standard)
                                                                         .With(cd => cd.LearningDetails = null)
                                                                         .With(cd => cd.PostalContact = postalContact).Build();
@@ -79,10 +80,10 @@
         {
             // arrange
             var learner = Builder<Learner>.CreateNew().With(l => l.Uln = 1243567890).Build();
-            var standard = Builder<Standard>.CreateNew().With(l => l.StandardCode = 1).Build();
+            var standard = Builder<Standard>.CreateNew().Build();
             var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.OverallGrade = "Pass").Build();
 
-            var certificate = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = learner)
+            var certificate = Builder<CreateCertificateRequest>.CreateNew().With(cd => cd.Learner = learner)
                                                                         .With(cd => cd.Standard = standard)
                                                                         .With(cd => cd.LearningDetails = learningDetails)
                                                                         .With(cd => cd.PostalContact = null).Build();
@@ -101,11 +102,11 @@
         {
             // arrange
             var learner = Builder<Learner>.CreateNew().With(l => l.Uln = 1243567890).Build();
-            var standard = Builder<Standard>.CreateNew().With(l => l.StandardCode = 1).Build();
+            var standard = Builder<Standard>.CreateNew().Build();
             var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.OverallGrade = "Pass").Build();
             var postalContact = Builder<PostalContact>.CreateNew().With(l => l.PostCode = "ZY9 9ZY").Build();
 
-            var certificate = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = learner)
+            var certificate = Builder<CreateCertificateRequest>.CreateNew().With(cd => cd.Learner = learner)
                                                                         .With(cd => cd.Standard = standard)
                                                                         .With(cd => cd.LearningDetails = learningDetails)
                                                                         .With(cd => cd.PostalContact = postalContact).Build();
@@ -128,12 +129,12 @@
             var learningDetails = Builder<LearningDetails>.CreateNew().Build();
             var postalContact = Builder<PostalContact>.CreateNew().Build();
 
-            var certificate1 = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = learner)
+            var certificate1 = Builder<CreateCertificateRequest>.CreateNew().With(cd => cd.Learner = learner)
                                                                         .With(cd => cd.Standard = standard)
                                                                         .With(cd => cd.LearningDetails = learningDetails)
                                                                         .With(cd => cd.PostalContact = postalContact).Build();
 
-            var certificate2 = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = learner)
+            var certificate2 = Builder<CreateCertificateRequest>.CreateNew().With(cd => cd.Learner = learner)
                                                                         .With(cd => cd.Standard = standard)
                                                                         .With(cd => cd.LearningDetails = learningDetails)
                                                                         .With(cd => cd.PostalContact = postalContact).Build();
@@ -154,13 +155,13 @@
             var standard = Builder<Standard>.CreateNew().Build();
             var postalContact = Builder<PostalContact>.CreateNew().Build();
 
-            var certificate1 = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
+            var certificate1 = Builder<CreateCertificateRequest>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.Learner.FamilyName = "1")
                                                                         .With(cd => cd.Standard = standard)
                                                                         .With(cd => cd.LearningDetails = learningDetails)
                                                                         .With(cd => cd.PostalContact = postalContact).Build();
 
-            var certificate2 = Builder<CreateCertificate>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
+            var certificate2 = Builder<CreateCertificateRequest>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.Learner.FamilyName = "2")
                                                                         .With(cd => cd.Standard = standard)
                                                                         .With(cd => cd.LearningDetails = learningDetails)

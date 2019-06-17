@@ -4,8 +4,9 @@
     using SFA.DAS.AssessorService.ExternalApi.Client.Helpers;
     using SFA.DAS.AssessorService.ExternalApi.Client.Properties;
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Response;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Response;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -39,7 +40,7 @@
                 _ViewModel.FilePath = openFileDialog.FileName;
                 _ViewModel.Certificates.Clear();
 
-                var items = CsvFileHelper<CreateCertificate>.GetFromFile(_ViewModel.FilePath);
+                var items = CsvFileHelper<CreateCertificateRequest>.GetFromFile(_ViewModel.FilePath);
 
                 if (items is null || !items.Any())
                 {
@@ -96,7 +97,7 @@
                 httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
 
                 CertificateApiClient certificateApiClient = new CertificateApiClient(httpClient);
-                IEnumerable<BatchCertificateResponse> results;
+                IEnumerable<CreateCertificateResponse> results;
 
                 try
                 {
@@ -123,7 +124,7 @@
             }
         }
 
-        private void SaveInvalidCertificates(IEnumerable<BatchCertificateResponse> invalidCertificates)
+        private void SaveInvalidCertificates(IEnumerable<CreateCertificateResponse> invalidCertificates)
         {
             string sMessageBoxText = "There were invalid certificates. Do you want to save these to a new file to amend?";
             string sCaption = "Invalid Certificates";

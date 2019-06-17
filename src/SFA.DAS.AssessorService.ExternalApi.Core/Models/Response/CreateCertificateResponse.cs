@@ -1,9 +1,9 @@
-﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Messages.Response
+﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Models.Response
 {
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
     using System.Collections.Generic;
 
-    public class SubmitBatchCertificateResponse
+    public class CreateCertificateResponse
     {
         public string RequestId { get; set; }
 

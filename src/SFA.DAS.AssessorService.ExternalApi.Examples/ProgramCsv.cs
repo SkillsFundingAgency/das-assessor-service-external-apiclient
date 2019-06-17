@@ -3,6 +3,7 @@
     using CsvHelper;
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -25,35 +26,41 @@
             httpClient.BaseAddress = new Uri(apiBaseAddress);
 
             CertificateApiClient certificateApiClient = new CertificateApiClient(httpClient);
+            StandardsApiClient standardsApiClient = new StandardsApiClient(httpClient);
 
-            ProgramCsv p = new ProgramCsv(certificateApiClient);
+            ProgramCsv p = new ProgramCsv(certificateApiClient, standardsApiClient);
             p.CreateCertificatesExample().GetAwaiter().GetResult();
             p.UpdateCertificatesExample().GetAwaiter().GetResult();
             p.SubmitCertificatesExample().GetAwaiter().GetResult();
             p.DeleteCertificateExample().GetAwaiter().GetResult();
             p.GetCertificateExample().GetAwaiter().GetResult();
+            p.GetGradesExample().GetAwaiter().GetResult();
+            p.GetOptionsForAllStandardsExample().GetAwaiter().GetResult();
+            p.GetOptionsForStandardExample().GetAwaiter().GetResult();
         }
 
 
         private readonly CertificateApiClient _CertificateApiClient;
+        private readonly StandardsApiClient _StandardsApiClient;
 
-        public ProgramCsv(CertificateApiClient certificateApiClient)
+        public ProgramCsv(CertificateApiClient certificateApiClient, StandardsApiClient standardsApiClient)
         {
             _CertificateApiClient = certificateApiClient;
+            _StandardsApiClient = standardsApiClient;
         }
 
         public async Task CreateCertificatesExample()
         {
             const string filePath = @"CsvFiles\createCertificates.csv";
 
-            IEnumerable<CreateCertificate> certificatesToCreate;
+            IEnumerable<CreateCertificateRequest> certificatesToCreate;
 
             using (TextReader textReader = File.OpenText(filePath))
             {
                 CsvReader csv = new CsvReader(textReader);
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-                certificatesToCreate = csv.GetRecords<CreateCertificate>().ToList();
+                certificatesToCreate = csv.GetRecords<CreateCertificateRequest>().ToList();
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
@@ -79,14 +86,14 @@
         {
             const string filePath = @"CsvFiles\updateCertificates.csv";
 
-            IEnumerable<UpdateCertificate> certificates;
+            IEnumerable<UpdateCertificateRequest> certificates;
 
             using (TextReader textReader = File.OpenText(filePath))
             {
                 CsvReader csv = new CsvReader(textReader);
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<UpdateCertificate>().ToList();
+                certificates = csv.GetRecords<UpdateCertificateRequest>().ToList();
             }
 
             // Let's pretend the first and last apprentices got better grades
@@ -117,14 +124,14 @@
         {
             const string filePath = @"CsvFiles\submitCertificates.csv";
 
-            IEnumerable<SubmitCertificate> certificates;
+            IEnumerable<SubmitCertificateRequest> certificates;
 
             using (TextReader textReader = File.OpenText(filePath))
             {
                 CsvReader csv = new CsvReader(textReader);
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<SubmitCertificate>().ToList();
+                certificates = csv.GetRecords<SubmitCertificateRequest>().ToList();
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
@@ -150,14 +157,14 @@
         {
             const string filePath = @"CsvFiles\deleteCertificates.csv";
 
-            IEnumerable<DeleteCertificate> certificates;
+            IEnumerable<DeleteCertificateRequest> certificates;
 
             using (TextReader textReader = File.OpenText(filePath))
             {
                 CsvReader csv = new CsvReader(textReader);
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<DeleteCertificate>().ToList();
+                certificates = csv.GetRecords<DeleteCertificateRequest>().ToList();
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
@@ -186,14 +193,14 @@
         {
             const string filePath = @"CsvFiles\getCertificates.csv";
 
-            IEnumerable<GetCertificate> certificates;
+            IEnumerable<GetCertificateRequest> certificates;
 
             using (TextReader textReader = File.OpenText(filePath))
             {
                 CsvReader csv = new CsvReader(textReader);
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<GetCertificate>().ToList();
+                certificates = csv.GetRecords<GetCertificateRequest>().ToList();
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
@@ -216,6 +223,25 @@
                     }
                 }
             }
+        }
+
+        public async Task GetGradesExample()
+        {
+            await _CertificateApiClient.GetGrades();
+        }
+
+        public async Task GetOptionsForAllStandardsExample()
+        {
+            await _StandardsApiClient.GetOptionsForAllStandards();
+        }
+
+        public async Task GetOptionsForStandardExample()
+        {
+            string standardCode = 1.ToString();
+            string standardReference = "ST0127";
+
+            await _StandardsApiClient.GetOptionsForStandard(standardCode);
+            await _StandardsApiClient.GetOptionsForStandard(standardReference);
         }
     }
 }

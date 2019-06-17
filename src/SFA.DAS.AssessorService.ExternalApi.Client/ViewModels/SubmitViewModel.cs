@@ -1,6 +1,7 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Client.ViewModels
 {
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
@@ -19,7 +20,7 @@
             }
         }
 
-        public ObservableCollection<SubmitCertificate> Certificates { get; private set; }
+        public ObservableCollection<SubmitCertificateRequest> Certificates { get; private set; }
 
         public CollectionViewSource ValidCertificates { get; private set; }
 
@@ -27,7 +28,7 @@
 
         public SubmitViewModel()
         {
-            Certificates = new ObservableCollection<SubmitCertificate>();
+            Certificates = new ObservableCollection<SubmitCertificateRequest>();
 
             ValidCertificates = new CollectionViewSource();
             ValidCertificates.Filter += ValidCertificates_Filter;
@@ -40,13 +41,13 @@
 
         private static void ValidCertificates_Filter(object sender, FilterEventArgs e)
         {
-            SubmitCertificate certificate = e.Item as SubmitCertificate;
+            SubmitCertificateRequest certificate = e.Item as SubmitCertificateRequest;
             e.Accepted = (certificate != null && certificate.IsValid(out var validationResults));
         }
 
         private static void InvalidCertificates_Filter(object sender, FilterEventArgs e)
         {
-            SubmitCertificate certificate = e.Item as SubmitCertificate;
+            SubmitCertificateRequest certificate = e.Item as SubmitCertificateRequest;
             e.Accepted = (certificate != null && !certificate.IsValid(out var validationResults));
         }
 

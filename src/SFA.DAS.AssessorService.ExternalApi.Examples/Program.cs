@@ -2,6 +2,7 @@
 {
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -22,21 +23,27 @@
             httpClient.BaseAddress = new Uri(apiBaseAddress);
 
             CertificateApiClient certificateApiClient = new CertificateApiClient(httpClient);
+            StandardsApiClient standardsApiClient = new StandardsApiClient(httpClient);
 
-            Program p = new Program(certificateApiClient);
+            Program p = new Program(certificateApiClient, standardsApiClient);
             p.CreateCertificatesExample().GetAwaiter().GetResult();
             p.UpdateCertificatesExample().GetAwaiter().GetResult();
             p.SubmitCertificatesExample().GetAwaiter().GetResult();
             p.DeleteCertificateExample().GetAwaiter().GetResult();
             p.GetCertificateExample().GetAwaiter().GetResult();
+            p.GetGradesExample().GetAwaiter().GetResult();
+            p.GetOptionsForAllStandardsExample().GetAwaiter().GetResult();
+            p.GetOptionsForStandardExample().GetAwaiter().GetResult();
         }
 
 
         private readonly CertificateApiClient _CertificateApiClient;
+        private readonly StandardsApiClient _StandardsApiClient;
 
-        public Program(CertificateApiClient certificateApiClient)
+        public Program(CertificateApiClient certificateApiClient, StandardsApiClient standardsApiClient)
         {
             _CertificateApiClient = certificateApiClient;
+            _StandardsApiClient = standardsApiClient;
         }
 
         public async Task CreateCertificatesExample()
@@ -52,7 +59,7 @@
             string city = "Townsville";
             string postcode = "ZY9 9ZY";
 
-            CreateCertificate newCertificate = new CreateCertificate
+            CreateCertificateRequest newCertificate = new CreateCertificateRequest
             {
                 Learner = new Learner { Uln = uln, GivenNames = firstName, FamilyName = lastName },
                 Standard = new Standard { StandardCode = standardCode },
@@ -63,7 +70,7 @@
             if (newCertificate.IsValid(out ICollection<ValidationResult> validationResults))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
-                await _CertificateApiClient.CreateCertificates(new List<CreateCertificate> { newCertificate });
+                await _CertificateApiClient.CreateCertificates(new List<CreateCertificateRequest> { newCertificate });
             }
         }
 
@@ -92,7 +99,7 @@
             };
 
             // Let's pretend the apprentice got a better grade
-            UpdateCertificate updatedCertificate = new UpdateCertificate
+            UpdateCertificateRequest updatedCertificate = new UpdateCertificateRequest
             {
                 CertificateReference = currentCertificate.CertificateData.CertificateReference,
                 Learner = currentCertificate.CertificateData.Learner,
@@ -106,7 +113,7 @@
             if (updatedCertificate.IsValid(out ICollection<ValidationResult> validationResults))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
-                await _CertificateApiClient.UpdateCertificates(new List<UpdateCertificate> { updatedCertificate });
+                await _CertificateApiClient.UpdateCertificates(new List<UpdateCertificateRequest> { updatedCertificate });
             }
         }
 
@@ -117,7 +124,7 @@
             int standardCode = 1;
             string certificateReference = "00012001";
 
-            SubmitCertificate certificateToSubmit = new SubmitCertificate
+            SubmitCertificateRequest certificateToSubmit = new SubmitCertificateRequest
             {
                 Uln = uln,
                 FamilyName = lastName,
@@ -128,7 +135,7 @@
             if (certificateToSubmit.IsValid(out ICollection<ValidationResult> validationResults))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
-                await _CertificateApiClient.SubmitCertificates(new List<SubmitCertificate> { certificateToSubmit });
+                await _CertificateApiClient.SubmitCertificates(new List<SubmitCertificateRequest> { certificateToSubmit });
             }
         }
 
@@ -136,14 +143,14 @@
         {
             long uln = 1234567890;
             string lastName = "Blogs";
-            int standardCode = 1;
+            string standard = "1";
             string certificateReference = "00012001";
 
-            DeleteCertificate certificateToDelete = new DeleteCertificate
+            DeleteCertificateRequest certificateToDelete = new DeleteCertificateRequest
             {
                 Uln = uln,
                 FamilyName = lastName,
-                StandardCode = standardCode,
+                Standard = standard,
                 CertificateReference = certificateReference
             };
 
@@ -158,13 +165,13 @@
         {
             long uln = 1234567890;
             string lastName = "Blogs";
-            int standardCode = 1;
+            string standard = "1";
 
-            GetCertificate certificateToGet = new GetCertificate
+            GetCertificateRequest certificateToGet = new GetCertificateRequest
             {
                 Uln = uln,
                 FamilyName = lastName,
-                StandardCode = standardCode,
+                Standard = standard,
             };
 
             if (certificateToGet.IsValid(out ICollection<ValidationResult> validationResults))
@@ -172,6 +179,25 @@
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
                 await _CertificateApiClient.GetCertificate(certificateToGet);
             }
+        }
+
+        public async Task GetGradesExample()
+        {
+            await _CertificateApiClient.GetGrades();
+        }
+
+        public async Task GetOptionsForAllStandardsExample()
+        {
+            await _StandardsApiClient.GetOptionsForAllStandards();
+        }
+
+        public async Task GetOptionsForStandardExample()
+        {
+            string standardCode = 1.ToString();
+            string standardReference = "ST0127";
+
+            await _StandardsApiClient.GetOptionsForStandard(standardCode);
+            await _StandardsApiClient.GetOptionsForStandard(standardReference);
         }
     }
 }
