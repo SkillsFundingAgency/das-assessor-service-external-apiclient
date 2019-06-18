@@ -94,8 +94,8 @@ Response 200 plus certificate details, if certificate already created.
       "certificateData": {
          "certificateReference": "string" (lookup),
          "standard": {
-            "standardCode": 0 (as provided),
-            "standardReference": "string" (as provided),
+            "standardCode": 0 (lookup),
+            "standardReference": "string" (lookup),
             "standardName": "string" (lookup),
             "level": 0 (lookup)
          },
@@ -162,7 +162,7 @@ application/json body posted should contain an array with the requested certific
    "requestId" : "string",
    "standard": {
      "standardCode": 0 (optional)
-     "standardReference" : "string" (optional)
+     "standardReference": "string" (optional)
    },
    "learner": {
       "uln": 0,
@@ -204,8 +204,8 @@ Response 200, plus application/json containing response for the requested certif
       "certificateData": {
          "certificateReference": "string" (generated),
          "standard": {
-            "standardCode": 0 (as provided),
-            "standardReference": "string" (as provided),
+            "standardCode": 0 (lookup),
+            "standardReference": "string" (lookup),
             "standardName": "string" (lookup),
             "level": 0 (lookup)
          },
@@ -316,7 +316,7 @@ application/json body posted should contain an array for previously requested ce
    "certificateReference": "string" (as returned in  **Create Certficate POST** or using **Check Certificate GET**)
    "standard": {
      "standardCode": 0 (optional)
-     "standardReference" : "string" (optional)
+     "standardReference": "string" (optional)
    },
    "learner": {
       "uln": 0,
@@ -382,7 +382,7 @@ At least one standard identifier must be provided, and if both are provided then
     "requestId" : "string",
     "uln": 0,
     "standardCode": 0 (optional),
-    "standardReference" : "string" (optional)
+    "standardReference": "string" (optional)
     "familyName": "string",
     "certificateReference": "string"
 }]
@@ -411,7 +411,7 @@ Response 200, plus application/json containing response for the submitted certif
             "level": 0
          },
          "learner": {
-            "uln": 0 (as provided),
+            "uln": 0,
             "givenNames": "string",
             "familyName": "string"
          },
