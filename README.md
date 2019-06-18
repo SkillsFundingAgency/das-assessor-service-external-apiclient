@@ -66,7 +66,7 @@ For details see the online Swagger documentation in the [Developer Portal](https
 **Request**
 
 ```http
-GET /ap1/v1/certificate/{uln}/{familyName}/(standard}
+GET /ap1/v1/certificate/{uln}/{familyName}/{standard}
 ```
 
 Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) for {standard}.
@@ -473,7 +473,7 @@ Response body is as for **Create Certificate POST**, except alternative "message
 **Request**
    
 ```http
-DELETE /api/v1/certificate/{uln}/{familyName}/(standard}/{certificateReference}
+DELETE /api/v1/certificate/{uln}/{familyName}/{standard}/{certificateReference}
 ```
 
 **Response** depends on the certificate status, as it can only be deleted if not yet submitted.
@@ -516,7 +516,7 @@ The full list of options can be provided, or the list can be filtered by a stand
 
 ```http
 GET /api/v1/certificate/options
-GET /api/v1/certificate/options/(standard}
+GET /api/v1/certificate/options/{standard}
 ```
 
 Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) for {standard}..
