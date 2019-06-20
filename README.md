@@ -253,42 +253,42 @@ where "message text" is:
 - Certificate 
     * "Certificate already exists: ```certificateReference```"
 - Uln 
-    * "The apprentice's ULN should contain exactly 10 numbers"
-    * "Cannot find apprentice with the specified Uln, FamilyName & Standard" 
+    * "ULN should contain exactly 10 numbers"
+    * "ULN, FamilyName and Standard not found" 
 - Standard 
-	* "A Standard should be selected"
-    * "EPAO is not registered for this Standard"
-	* "StandardReference and StandardCode relate to different standards*
+	* "Provide a Standard"
+    * "Your organisation is not approved to assess this Standard"
+	* "StandardReference and StandardCode must be for the same Standard*
 - CourseOption
-    * "Invalid course option for this Standard. Must be empty"
+    * "No course option available for this Standard. Must be empty"
     * "Invalid course option for this Standard. Must be one of the following: 'list of course options'"
     where 'list of course options' depends on the standard code, and can be obtained with 
     ```http 
     GET api/v1/certificate/options/(standard}
     ```
 - OverallGrade
-    * "Provide the grade the apprentice achieved"
-    * "Invalid grade. Must be one of the following: ```list of valid grades```", where 'list of valid grades' is: 'Pass', 'Credit', 'Merit', 'Distinction', 'Pass with excellence', 'No grade awarded' and can be obtained with
+    * "Select the grade the apprentice achieved"
+    * "You must enter a valid grade. Must be one of the following: ```list of valid grades```", where 'list of valid grades' is: 'Pass', 'Credit', 'Merit', 'Distinction', 'Pass with excellence', 'No grade awarded' and can be obtained with
     ```http
     GET api/v1/certificate/grades
     ```
 - FamilyName 
-    * "Enter the apprentice's family name" 
+    * "Provide apprentice family name" 
 - AchievementDate
     * "Provide the achievement date"
-    * "An achievement date cannot be before 01 01 2017"
-    * "An achievement date cannot be in the future"
+    * "Achievement date cannot be before 01 01 2017"
+    * "Achievement date cannot be in the future"
 - ContactName
-    * "Enter a contact name"
+    * "Provide a contact name"
 - Organisation
-    * "Enter an organisation"
+    * "Provide an organisation"
 - AddressLine1
-    * "Enter an address"
+    * "Provide an address"
 - City
-    * "Enter a city or town"
+    * "Provide a city or town"
 - Postcode
-    * "Enter a postcode"
-	* "Enter a valid UK postcode"
+    * "Provide a postcode"
+	* "Provide a valid UK postcode"
 
 
 ### 3.   Update Certificate (Optional)
@@ -353,10 +353,10 @@ Response 200, plus application/json containing response for the requested certif
 
 Response body is as for **Create Certificate POST**, except alternative "message text" is:
 - Certificate 
-    * "Enter the certificate reference"
+    * "Provide the certificate reference"
 	* "Certificate not found"
-    * "EPAO is not the creator of this Certificate"
-    * "Certificate is not in 'Draft' status"
+    * "Your organisation is not the creator of this Certificate"
+    * "Certificate does not exist in Draft status"
 
 
 ### 4.   Submit Certificate
@@ -456,11 +456,11 @@ Response 200, plus application/json containing response for the submitted certif
 
 Response body is as for **Create Certificate POST**, except alternative "message text" is:
 - Certificate 
-    * "Enter the certificate reference"
+    * "Provide the certificate reference"
 	* "Certificate not found"
-    * "EPAO is not the creator of this Certificate"
-    * "Certificate has already been submitted"
-    * "Certificate is not in 'Ready' status"
+    * "Your organisation is not the creator of this Certificate"
+    * "Certificate has already been Submitted"
+    * "Certificate is not in Ready status"
     * "Certificate is missing mandatory data"
    
   
@@ -490,19 +490,19 @@ Response 403
 
 where "message text" is:
 - Certificate 
-    * "Enter the certificate reference"
+    * "Provide the certificate reference"
 	* "Certificate not found"
-    * "EPAO is not the creator of this Certificate"
-    * "Cannot delete a submitted Certificate"
+    * "Your organisation is not the creator of this Certificate"
+    * "Cannot delete a Submitted Certificate"
 - Uln 
-    * "The apprentice's ULN should contain exactly 10 numbers"
-	* "Cannot find apprentice with the specified Uln, FamilyName & Standard" 
+    * "ULN should contain exactly 10 numbers"
+	* "ULN, FamilyName and Standard not found" 
 - Standard 
-    * "A Standard should be selected"
-    * "EPAO is not registered for this Standard"
-	* "StandardReference and StandardCode relate to different standards*
+    * "Provide a Standard"
+    * "Your organisation is not approved to assess this Standard"
+	* "StandardReference and StandardCode must be for the same Standard*
 - FamilyName 
-    * "Enter the apprentice's family name"
+    * "Provide apprentice family name"
 
 
 ## Get Options
