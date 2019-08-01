@@ -12,7 +12,7 @@
 
     public class ProgramCsv
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             const string subscriptionKey = ""; // insert your key here
             const string apiBaseAddress = ""; // insert the API address here
