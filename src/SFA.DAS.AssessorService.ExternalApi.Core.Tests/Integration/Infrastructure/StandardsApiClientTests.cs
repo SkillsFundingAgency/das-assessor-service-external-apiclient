@@ -1,25 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SFA.DAS.AssessorService.ExternalApi.Core.Tests.Integration.Infrastructure
+﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Tests.Integration.Infrastructure
 {
     using FizzWare.NBuilder;
     using Newtonsoft.Json;
     using NUnit.Framework;
     using RichardSzalay.MockHttp;
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Error;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Response;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Standards;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Standards;
 
     [TestFixture(Category = "Infrastructure")]
     public sealed class StandardsApiClientTests : IDisposable

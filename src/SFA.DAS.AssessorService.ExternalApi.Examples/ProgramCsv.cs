@@ -2,11 +2,9 @@
 {
     using CsvHelper;
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Request.Certificates;
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.IO;
     using System.Linq;
     using System.Net.Http;
@@ -57,14 +55,16 @@
 
             using (TextReader textReader = File.OpenText(filePath))
             {
-                CsvReader csv = new CsvReader(textReader);
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
-                certificatesToCreate = csv.GetRecords<CreateCertificateRequest>().ToList();
+                using (CsvReader csv = new CsvReader(textReader))
+                {
+                    csv.Configuration.HeaderValidated = null;
+                    csv.Configuration.MissingFieldFound = null;
+                    certificatesToCreate = csv.GetRecords<CreateCertificateRequest>().ToList();
+                }
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
-            bool invalidDataSupplied = certificatesToCreate.Any(c => !c.IsValid(out ICollection<ValidationResult> validationResults));
+            bool invalidDataSupplied = certificatesToCreate.Any(c => !c.IsValid(out _));
 
             if (invalidDataSupplied)
             {
@@ -90,10 +90,12 @@
 
             using (TextReader textReader = File.OpenText(filePath))
             {
-                CsvReader csv = new CsvReader(textReader);
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<UpdateCertificateRequest>().ToList();
+                using (CsvReader csv = new CsvReader(textReader))
+                {
+                    csv.Configuration.HeaderValidated = null;
+                    csv.Configuration.MissingFieldFound = null;
+                    certificates = csv.GetRecords<UpdateCertificateRequest>().ToList();
+                }
             }
 
             // Let's pretend the first and last apprentices got better grades
@@ -101,7 +103,7 @@
             certificates.Last().LearningDetails.AchievementOutcome = "PASS";
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
-            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out ICollection<ValidationResult> validationResults));
+            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out _));
 
             if (invalidDataSupplied)
             {
@@ -128,14 +130,16 @@
 
             using (TextReader textReader = File.OpenText(filePath))
             {
-                CsvReader csv = new CsvReader(textReader);
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<SubmitCertificateRequest>().ToList();
+                using (CsvReader csv = new CsvReader(textReader))
+                {
+                    csv.Configuration.HeaderValidated = null;
+                    csv.Configuration.MissingFieldFound = null;
+                    certificates = csv.GetRecords<SubmitCertificateRequest>().ToList();
+                }
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
-            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out ICollection<ValidationResult> validationResults));
+            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out _));
 
             if (invalidDataSupplied)
             {
@@ -161,14 +165,16 @@
 
             using (TextReader textReader = File.OpenText(filePath))
             {
-                CsvReader csv = new CsvReader(textReader);
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<DeleteCertificateRequest>().ToList();
+                using (CsvReader csv = new CsvReader(textReader))
+                {
+                    csv.Configuration.HeaderValidated = null;
+                    csv.Configuration.MissingFieldFound = null;
+                    certificates = csv.GetRecords<DeleteCertificateRequest>().ToList();
+                }
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
-            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out ICollection<ValidationResult> validationResults));
+            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out _));
 
             if (invalidDataSupplied)
             {
@@ -197,14 +203,16 @@
 
             using (TextReader textReader = File.OpenText(filePath))
             {
-                CsvReader csv = new CsvReader(textReader);
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<GetCertificateRequest>().ToList();
+                using (CsvReader csv = new CsvReader(textReader))
+                {
+                    csv.Configuration.HeaderValidated = null;
+                    csv.Configuration.MissingFieldFound = null;
+                    certificates = csv.GetRecords<GetCertificateRequest>().ToList();
+                }
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
-            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out ICollection<ValidationResult> validationResults));
+            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out _));
 
             if (invalidDataSupplied)
             {

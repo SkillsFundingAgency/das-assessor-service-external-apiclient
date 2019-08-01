@@ -1,11 +1,10 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Examples
 {
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Request.Certificates;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.Net.Http;
     using System.Threading.Tasks;
 
@@ -67,7 +66,7 @@
                 PostalContact = new PostalContact { ContactName = contactName, Organisation = organisation, AddressLine1 = address, City = city, PostCode = postcode }
             };
 
-            if (newCertificate.IsValid(out ICollection<ValidationResult> validationResults))
+            if (newCertificate.IsValid(out _))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
                 await _CertificateApiClient.CreateCertificates(new List<CreateCertificateRequest> { newCertificate });
@@ -110,7 +109,7 @@
 
             updatedCertificate.LearningDetails.OverallGrade = "Merit";
 
-            if (updatedCertificate.IsValid(out ICollection<ValidationResult> validationResults))
+            if (updatedCertificate.IsValid(out _))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
                 await _CertificateApiClient.UpdateCertificates(new List<UpdateCertificateRequest> { updatedCertificate });
@@ -132,7 +131,7 @@
                 CertificateReference = certificateReference
             };
 
-            if (certificateToSubmit.IsValid(out ICollection<ValidationResult> validationResults))
+            if (certificateToSubmit.IsValid(out _))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
                 await _CertificateApiClient.SubmitCertificates(new List<SubmitCertificateRequest> { certificateToSubmit });
@@ -154,7 +153,7 @@
                 CertificateReference = certificateReference
             };
 
-            if (certificateToDelete.IsValid(out ICollection<ValidationResult> validationResults))
+            if (certificateToDelete.IsValid(out _))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
                 await _CertificateApiClient.DeleteCertificate(certificateToDelete);
@@ -174,7 +173,7 @@
                 Standard = standard,
             };
 
-            if (certificateToGet.IsValid(out ICollection<ValidationResult> validationResults))
+            if (certificateToGet.IsValid(out _))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
                 await _CertificateApiClient.GetCertificate(certificateToGet);

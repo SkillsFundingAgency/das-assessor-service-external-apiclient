@@ -6,9 +6,9 @@
     using RichardSzalay.MockHttp;
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
     using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Error;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Response;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Request.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Response.Certificates;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -371,7 +371,7 @@
         {
             // arrange 
             var submitCertificate = new SubmitCertificateRequest { Uln = 9876543210, FamilyName = "Blogs", StandardReference = "1" };
-            
+
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.CertificateReference = "DRAFT CERTIFICATE")
                                                                         .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardCode = null).With(s => s.StandardReference = "1").Build())
                                                                         .With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())

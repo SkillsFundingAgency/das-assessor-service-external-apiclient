@@ -8,7 +8,7 @@
     {
         public string StandardReferenceProperty { get; private set; }
 
-        public StandardCodeValidationAttribute(string standardReferenceProperty) : base ()
+        public StandardCodeValidationAttribute(string standardReferenceProperty) : base()
         {
             if (standardReferenceProperty is null)
             {
@@ -36,7 +36,7 @@
             }
 
             var standardReference = standardReferencePropertyInfo.GetValue(validationContext.ObjectInstance, null);
-            
+
             if (value is null && standardReference is null)
             {
                 return new ValidationResult(ErrorMessage);
@@ -45,7 +45,7 @@
             {
                 var standardCode = value as int?;
 
-                if(standardCode.HasValue && standardCode < 1)
+                if (standardCode.HasValue && standardCode < 1)
                 {
                     return new ValidationResult(ErrorMessage);
                 }

@@ -4,9 +4,9 @@
     using SFA.DAS.AssessorService.ExternalApi.Client.Helpers;
     using SFA.DAS.AssessorService.ExternalApi.Client.Properties;
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Response;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Request.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Response.Certificates;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.Linq;

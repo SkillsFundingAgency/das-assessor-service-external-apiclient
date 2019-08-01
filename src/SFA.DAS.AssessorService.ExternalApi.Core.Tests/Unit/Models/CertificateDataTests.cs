@@ -3,7 +3,6 @@
     using FizzWare.NBuilder;
     using NUnit.Framework;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
-    using System;
     using System.Linq;
 
     [TestFixture(Category = "Model")]

@@ -56,7 +56,7 @@
                     if (string.IsNullOrWhiteSpace(_ViewModel.Standard))
                     {
                         var response = await standardsApiClient.GetOptionsForAllStandards();
-                        if(response != null)
+                        if (response != null)
                         {
                             options.AddRange(response);
                         }

@@ -1,7 +1,6 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Client.Helpers
 {
     using CsvHelper;
-    using CsvHelper.TypeConversion;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -18,13 +17,15 @@
 
                 using (TextReader textReader = new StreamReader(stream))
                 {
-                    CsvReader csv = new CsvReader(textReader);
-                    csv.Configuration.HeaderValidated = null;
-                    csv.Configuration.MissingFieldFound = null;
-                    csv.Configuration.BadDataFound = null;
-                    csv.Configuration.ReadingExceptionOccurred = null;
+                    using (CsvReader csv = new CsvReader(textReader))
+                    {
+                        csv.Configuration.HeaderValidated = null;
+                        csv.Configuration.MissingFieldFound = null;
+                        csv.Configuration.BadDataFound = null;
+                        csv.Configuration.ReadingExceptionOccurred = null;
 
-                    return csv.GetRecords<T>().ToList();
+                        return csv.GetRecords<T>().ToList();
+                    }
                 }
             }
             catch (SystemException)
@@ -46,12 +47,13 @@
             {
                 using (TextWriter textReader = File.CreateText(filePath))
                 {
-                    CsvWriter csv = new CsvWriter(textReader);
-
-                    csv.WriteHeader<T>();
-                    csv.NextRecord();
-                    csv.WriteRecords(records);
-                    csv.NextRecord();
+                    using (CsvWriter csv = new CsvWriter(textReader))
+                    {
+                        csv.WriteHeader<T>();
+                        csv.NextRecord();
+                        csv.WriteRecords(records);
+                        csv.NextRecord();
+                    }
                 }
             }
             catch (SystemException)

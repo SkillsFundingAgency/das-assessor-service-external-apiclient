@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Models.Response
+﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Messages.Response.Certificates
 {
     using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Error;
 

@@ -1,7 +1,6 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Client.ViewModels
 {
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Request.Certificates;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
@@ -42,13 +41,13 @@
         private static void ValidCertificates_Filter(object sender, FilterEventArgs e)
         {
             SubmitCertificateRequest certificate = e.Item as SubmitCertificateRequest;
-            e.Accepted = (certificate != null && certificate.IsValid(out var validationResults));
+            e.Accepted = (certificate != null && certificate.IsValid(out _));
         }
 
         private static void InvalidCertificates_Filter(object sender, FilterEventArgs e)
         {
             SubmitCertificateRequest certificate = e.Item as SubmitCertificateRequest;
-            e.Accepted = (certificate != null && !certificate.IsValid(out var validationResults));
+            e.Accepted = (certificate != null && !certificate.IsValid(out _));
         }
 
         #region INotifyPropertyChanged

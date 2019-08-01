@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Models.Request
+﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Messages.Request.Certificates
 {
     using System;
     using System.Collections.Generic;
