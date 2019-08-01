@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Tests.Unit.Models
+﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Tests.Unit.Models.Certificates
 {
     using FizzWare.NBuilder;
     using NUnit.Framework;
@@ -6,7 +6,7 @@
     using System;
     using System.Linq;
 
-    [TestFixture(Category = "Model")]
+    [TestFixture(Category = "Models")]
     public class LearningDetailsTests
     {
         [Test]

@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Tests.Unit.Models
+﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Tests.Unit.Models.Certificates
 {
 
     using FizzWare.NBuilder;
@@ -6,8 +6,8 @@
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
     using System.Linq;
 
-    [TestFixture(Category = "Model")]
-    public class CertificateStatusTests
+    [TestFixture(Category = "Models")]
+    public class StatusTests
     {
         [Test]
         public void CurrentStatusMissing()

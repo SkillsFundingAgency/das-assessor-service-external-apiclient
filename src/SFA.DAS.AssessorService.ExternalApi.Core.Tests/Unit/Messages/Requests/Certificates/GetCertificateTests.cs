@@ -1,11 +1,11 @@
-﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Tests.Unit.Models
+﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Tests.Unit.Messages.Requests.Certificates
 {
     using FizzWare.NBuilder;
     using NUnit.Framework;
     using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Request.Certificates;
     using System.Linq;
 
-    [TestFixture(Category = "Model")]
+    [TestFixture(Category = "Requests")]
     public class GetCertificateTests
     {
         [Test]
