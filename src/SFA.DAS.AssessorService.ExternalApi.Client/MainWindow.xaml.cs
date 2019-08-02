@@ -1,5 +1,4 @@
 ﻿using Microsoft.Win32;
-using SFA.DAS.AssessorService.ExternalApi.Client.Controls;
 using SFA.DAS.AssessorService.ExternalApi.Client.Helpers;
 using SFA.DAS.AssessorService.ExternalApi.Client.Properties;
 using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
