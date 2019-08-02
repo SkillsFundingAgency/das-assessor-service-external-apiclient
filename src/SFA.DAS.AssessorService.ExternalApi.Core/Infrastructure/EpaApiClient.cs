@@ -16,7 +16,7 @@
             return await Post<IEnumerable<CreateEpaRequest>, IEnumerable<CreateEpaResponse>>("api/v1/epa", request);
         }
 
-        public async Task<IEnumerable<UpdateEpaResponse>> UpdateEpaRecordss(IEnumerable<UpdateEpaRequest> request)
+        public async Task<IEnumerable<UpdateEpaResponse>> UpdateEpaRecords(IEnumerable<UpdateEpaRequest> request)
         {
             return await Put<IEnumerable<UpdateEpaRequest>, IEnumerable<UpdateEpaResponse>>("api/v1/epa", request);
         }
