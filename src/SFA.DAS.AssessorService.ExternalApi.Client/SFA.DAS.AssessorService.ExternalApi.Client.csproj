@@ -111,42 +111,46 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\StandardOptionsWindow.xaml.cs">
+    <Compile Include="Controls\Standards\StandardOptionsWindow.xaml.cs">
       <DependentUpon>StandardOptionsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\GetWindow.xaml.cs">
+    <Compile Include="Controls\Certificates\GetWindow.xaml.cs">
       <DependentUpon>GetWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DeleteWindow.xaml.cs">
+    <Compile Include="Controls\Certificates\DeleteWindow.xaml.cs">
       <DependentUpon>DeleteWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SubmitWindow.xaml.cs">
+    <Compile Include="Controls\Certificates\SubmitWindow.xaml.cs">
       <DependentUpon>SubmitWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\UpdateWindow.xaml.cs">
+    <Compile Include="Controls\Certificates\UpdateWindow.xaml.cs">
       <DependentUpon>UpdateWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CoalesceConverter.cs" />
     <Compile Include="Helpers\CsvFileHelper.cs" />
-    <Compile Include="ViewModels\GetViewModel.cs" />
-    <Compile Include="ViewModels\StandardOptionsViewModel.cs" />
-    <Compile Include="ViewModels\UpdateViewModel.cs" />
-    <Compile Include="ViewModels\SubmitViewModel.cs" />
-    <Compile Include="ViewModels\DeleteViewModel.cs" />
-    <Compile Include="ViewModels\CreateViewModel.cs" />
-    <Page Include="Controls\CreateWindow.xaml">
+    <Compile Include="ViewModels\Certificates\GetViewModel.cs" />
+    <Compile Include="ViewModels\Epa\CreateViewModel.cs" />
+    <Compile Include="ViewModels\Epa\DeleteViewModel.cs" />
+    <Compile Include="ViewModels\Epa\UpdateViewModel.cs" />
+    <Compile Include="ViewModels\Learners\GetViewModel.cs" />
+    <Compile Include="ViewModels\Standards\StandardOptionsViewModel.cs" />
+    <Compile Include="ViewModels\Certificates\UpdateViewModel.cs" />
+    <Compile Include="ViewModels\Certificates\SubmitViewModel.cs" />
+    <Compile Include="ViewModels\Certificates\DeleteViewModel.cs" />
+    <Compile Include="ViewModels\Certificates\CreateViewModel.cs" />
+    <Page Include="Controls\Certificates\CreateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\StandardOptionsWindow.xaml">
+    <Page Include="Controls\Standards\StandardOptionsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\GetWindow.xaml">
+    <Page Include="Controls\Certificates\GetWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\DeleteWindow.xaml">
+    <Page Include="Controls\Certificates\DeleteWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -158,18 +162,18 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\CreateWindow.xaml.cs">
+    <Compile Include="Controls\Certificates\CreateWindow.xaml.cs">
       <DependentUpon>CreateWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Controls\SubmitWindow.xaml">
+    <Page Include="Controls\Certificates\SubmitWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\UpdateWindow.xaml">
+    <Page Include="Controls\Certificates\UpdateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -213,6 +217,10 @@
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.15.0.8572\analyzers\Google.Protobuf.dll" />
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.15.0.8572\analyzers\SonarAnalyzer.CSharp.dll" />
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.15.0.8572\analyzers\SonarAnalyzer.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controls\Epa\" />
+    <Folder Include="Controls\Learners\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

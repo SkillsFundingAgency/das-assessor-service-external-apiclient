@@ -22,45 +22,45 @@ namespace SFA.DAS.AssessorService.ExternalApi.Client
             InitializeComponent();
         }
 
-        private void btnCreate_Click(object sender, RoutedEventArgs e)
+        private void btnCreateCertificates_Click(object sender, RoutedEventArgs e)
         {
-            CreateWindow window = new CreateWindow
+            Controls.Certificates.CreateWindow window = new Controls.Certificates.CreateWindow
             {
                 Owner = this
             };
             window.ShowDialog();
         }
 
-        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        private void btnUpdateCertificates_Click(object sender, RoutedEventArgs e)
         {
-            UpdateWindow window = new UpdateWindow
+            Controls.Certificates.UpdateWindow window = new Controls.Certificates.UpdateWindow
             {
                 Owner = this
             };
             window.ShowDialog();
         }
 
-        private void btnSubmit_Click(object sender, RoutedEventArgs e)
+        private void btnSubmitCertificates_Click(object sender, RoutedEventArgs e)
         {
-            SubmitWindow window = new SubmitWindow
+            Controls.Certificates.SubmitWindow window = new Controls.Certificates.SubmitWindow
             {
                 Owner = this
             };
             window.ShowDialog();
         }
 
-        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        private void btnDeleteCertificates_Click(object sender, RoutedEventArgs e)
         {
-            DeleteWindow window = new DeleteWindow
+            Controls.Certificates.DeleteWindow window = new Controls.Certificates.DeleteWindow
             {
                 Owner = this
             };
             window.ShowDialog();
         }
 
-        private void btnGet_Click(object sender, RoutedEventArgs e)
+        private void btnGetCertificates_Click(object sender, RoutedEventArgs e)
         {
-            GetWindow window = new GetWindow
+            Controls.Certificates.GetWindow window = new Controls.Certificates.GetWindow
             {
                 Owner = this
             };
@@ -69,7 +69,7 @@ namespace SFA.DAS.AssessorService.ExternalApi.Client
 
         private void btnOptions_Click(object sender, RoutedEventArgs e)
         {
-            StandardOptionsWindow window = new StandardOptionsWindow
+            Controls.Standards.StandardOptionsWindow window = new Controls.Standards.StandardOptionsWindow
             {
                 Owner = this
             };

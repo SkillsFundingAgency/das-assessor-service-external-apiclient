@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.AssessorService.ExternalApi.Client.Controls
+﻿namespace SFA.DAS.AssessorService.ExternalApi.Client.Controls.Standards
 {
     using Microsoft.Win32;
     using SFA.DAS.AssessorService.ExternalApi.Client.Helpers;
@@ -17,7 +17,7 @@
     /// </summary>
     public partial class StandardOptionsWindow : Window
     {
-        private ViewModels.StandardOptionsViewModel _ViewModel => DataContext as ViewModels.StandardOptionsViewModel;
+        private ViewModels.Standards.StandardOptionsViewModel _ViewModel => DataContext as ViewModels.Standards.StandardOptionsViewModel;
 
         public StandardOptionsWindow()
         {

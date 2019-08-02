@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.AssessorService.ExternalApi.Client.ViewModels
+﻿namespace SFA.DAS.AssessorService.ExternalApi.Client.ViewModels.Standards
 {
     using System.ComponentModel;
     using System.Runtime.CompilerServices;

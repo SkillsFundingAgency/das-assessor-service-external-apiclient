@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.AssessorService.ExternalApi.Client.Controls
+﻿namespace SFA.DAS.AssessorService.ExternalApi.Client.Controls.Certificates
 {
     using Microsoft.Win32;
     using SFA.DAS.AssessorService.ExternalApi.Client.Helpers;
@@ -15,13 +15,13 @@
     using System.Windows;
 
     /// <summary>
-    /// Interaction logic for CreateWindow.xaml
+    /// Interaction logic for SubmitWindow.xaml
     /// </summary>
-    public partial class CreateWindow : Window
+    public partial class SubmitWindow : Window
     {
-        private ViewModels.CreateViewModel _ViewModel => DataContext as ViewModels.CreateViewModel;
+        private ViewModels.Certificates.SubmitViewModel _ViewModel => DataContext as ViewModels.Certificates.SubmitViewModel;
 
-        public CreateWindow()
+        public SubmitWindow()
         {
             InitializeComponent();
         }
@@ -38,9 +38,9 @@
             if (openFileDialog.ShowDialog() == true)
             {
                 _ViewModel.FilePath = openFileDialog.FileName;
-                _ViewModel.Certificates.Clear();
+                _ViewModel.Requests.Clear();
 
-                var items = CsvFileHelper<CreateCertificateRequest>.GetFromFile(_ViewModel.FilePath);
+                var items = CsvFileHelper<SubmitCertificateRequest>.GetFromFile(_ViewModel.FilePath);
 
                 if (items is null || !items.Any())
                 {
@@ -53,7 +53,7 @@
                 {
                     foreach (var item in items)
                     {
-                        _ViewModel.Certificates.Add(item);
+                        _ViewModel.Requests.Add(item);
                     }
                 }
             }
@@ -61,13 +61,13 @@
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
-            _ViewModel.Certificates.Clear();
+            _ViewModel.Requests.Clear();
             _ViewModel.FilePath = string.Empty;
         }
 
-        private async void btnCreate_Click(object sender, RoutedEventArgs e)
+        private async void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            if (!_ViewModel.InvalidCertificates.View.IsEmpty)
+            if (!_ViewModel.InvalidRequests.View.IsEmpty)
             {
                 string sMessageBoxText = "Do you want to continue?";
                 string sCaption = "Invalid Certificates";
@@ -80,11 +80,11 @@
                 }
             }
 
-            await CreateCertificates();
+            await SubmitCertificates();
 
         }
 
-        private async Task CreateCertificates()
+        private async Task SubmitCertificates()
         {
             string subscriptionKey = Settings.Default["SubscriptionKey"].ToString();
             string apiBaseAddress = Settings.Default["ApiBaseAddress"].ToString();
@@ -97,12 +97,12 @@
                 httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
 
                 CertificateApiClient certificateApiClient = new CertificateApiClient(httpClient);
-                IEnumerable<CreateCertificateResponse> results;
+                IEnumerable<SubmitCertificateResponse> results;
 
                 try
                 {
                     BusyIndicator.IsBusy = true;
-                    results = await certificateApiClient.CreateCertificates(_ViewModel.Certificates);
+                    results = await certificateApiClient.SubmitCertificates(_ViewModel.Requests);
                 }
                 finally
                 {
@@ -124,7 +124,7 @@
             }
         }
 
-        private void SaveInvalidCertificates(IEnumerable<CreateCertificateResponse> invalidCertificates)
+        private void SaveInvalidCertificates(IEnumerable<SubmitCertificateResponse> invalidCertificates)
         {
             string sMessageBoxText = "There were invalid certificates. Do you want to save these to a new file to amend?";
             string sCaption = "Invalid Certificates";
@@ -153,7 +153,7 @@
 
         private void SaveCertificates(IEnumerable<CertificateData> certificates)
         {
-            string sMessageBoxText = "Do you want to save the newly created certificates?";
+            string sMessageBoxText = "Do you want to save the newly submitted certificates?";
             string sCaption = "Save Certificates";
 
             MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Question);

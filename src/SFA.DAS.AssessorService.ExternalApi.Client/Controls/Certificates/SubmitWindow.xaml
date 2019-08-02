@@ -1,10 +1,10 @@
-﻿<Window x:Class="SFA.DAS.AssessorService.ExternalApi.Client.Controls.SubmitWindow"
+﻿<Window x:Class="SFA.DAS.AssessorService.ExternalApi.Client.Controls.Certificates.SubmitWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:viewmodel="clr-namespace:SFA.DAS.AssessorService.ExternalApi.Client.ViewModels"
+        xmlns:viewmodel="clr-namespace:SFA.DAS.AssessorService.ExternalApi.Client.ViewModels.Certificates"
         xmlns:helpers="clr-namespace:SFA.DAS.AssessorService.ExternalApi.Client.Helpers"
         mc:Ignorable="d"
         Title="Submit Certificates" Height="560" Width="800" WindowStyle="ToolWindow" ResizeMode="NoResize">
@@ -23,8 +23,8 @@
 
             <Button x:Name="btnSubmit" Content="Submit Certificates" HorizontalAlignment="Left" Margin="608,38,0,0" VerticalAlignment="Top" Width="158" Click="btnSubmit_Click" IsEnabled="{Binding Certificates.Count}"/>
 
-            <Label Content="Valid Certificates" HorizontalAlignment="Left" Margin="31,74,0,0" VerticalAlignment="Top"/>
-            <DataGrid x:Name="dgValidCertificates" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding ValidCertificates.View}"  HorizontalAlignment="Left" Height="243" Margin="31,105,0,0" VerticalAlignment="Top" Width="735">
+            <Label Content="Valid Requests" HorizontalAlignment="Left" Margin="31,74,0,0" VerticalAlignment="Top"/>
+            <DataGrid x:Name="dgValidRequests" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding ValidRequests.View}"  HorizontalAlignment="Left" Height="243" Margin="31,105,0,0" VerticalAlignment="Top" Width="735">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Reference" Binding="{Binding Path=CertificateReference}" />
                     <DataGridTextColumn Header="Uln" Binding="{Binding Path=Uln}" />
@@ -40,8 +40,8 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <Label Content="Invalid Certificates" HorizontalAlignment="Left" Margin="31,366,0,0" VerticalAlignment="Top"/>
-            <DataGrid x:Name="dgInvalidCertificates" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding InvalidCertificates.View}"  HorizontalAlignment="Left" Height="113" Margin="31,397,0,0" VerticalAlignment="Top" Width="735">
+            <Label Content="Invalid Requests" HorizontalAlignment="Left" Margin="31,366,0,0" VerticalAlignment="Top"/>
+            <DataGrid x:Name="dgInvalidRequests" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding InvalidRequests.View}"  HorizontalAlignment="Left" Height="113" Margin="31,397,0,0" VerticalAlignment="Top" Width="735">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Reference" Binding="{Binding Path=CertificateReference}" />
                     <DataGridTextColumn Header="Uln" Binding="{Binding Path=Uln}" />

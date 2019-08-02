@@ -9,12 +9,12 @@
     <toolkit:BusyIndicator x:Name="BusyIndicator">
         <Grid>
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button x:Name="btnCreate"  Content="_Create" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnCreate_Click"/>
-                <Button x:Name="btnUpdate"  Content="_Update" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnUpdate_Click"/>
-                <Button x:Name="btnSubmit"  Content="_Submit" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnSubmit_Click"/>
-                <Button x:Name="btnDelete"  Content="_Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnDelete_Click" />
-                <Button x:Name="btnGet"     Content="_Get"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnGet_Click"/>
-                <Button x:Name="btnGrades"  Content="G_rades" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnGrades_Click"/>
+                <Button x:Name="btnCreate"  Content="Create Certificates" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnCreateCertificates_Click"/>
+                <Button x:Name="btnUpdate"  Content="Update Certificates" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnUpdateCertificates_Click"/>
+                <Button x:Name="btnSubmit"  Content="Submit Certificates" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnSubmitCertificates_Click"/>
+                <Button x:Name="btnDelete"  Content="Delete Certificates" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnDeleteCertificates_Click" />
+                <Button x:Name="btnGet"     Content="Get  Certificates"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnGetCertificates_Click"/>
+                <Button x:Name="btnGrades"  Content="Grades" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnGrades_Click"/>
                 <Button x:Name="btnOptions" Content="Options" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnOptions_Click"/>
             </StackPanel>
         </Grid>
