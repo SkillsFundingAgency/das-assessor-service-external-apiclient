@@ -14,20 +14,36 @@
 
   <ItemGroup>
     <None Remove="CsvFiles\createCertificates.csv" />
+    <None Remove="CsvFiles\createEpaRecords.csv" />
     <None Remove="CsvFiles\deleteCertificates.csv" />
+    <None Remove="CsvFiles\deleteEpaRecords.csv" />
     <None Remove="CsvFiles\getCertificates.csv" />
+    <None Remove="CsvFiles\getLearners.csv" />
     <None Remove="CsvFiles\submitCertificates.csv" />
     <None Remove="CsvFiles\updateCertificates.csv" />
+    <None Remove="CsvFiles\updateEpaRecords.csv" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="CsvFiles\createEpaRecords.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="CsvFiles\createCertificates.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CsvFiles\deleteEpaRecords.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CsvFiles\getLearners.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="CsvFiles\getCertificates.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="CsvFiles\submitCertificates.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CsvFiles\updateEpaRecords.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="CsvFiles\updateCertificates.csv">
