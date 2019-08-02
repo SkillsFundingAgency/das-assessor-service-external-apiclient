@@ -22,6 +22,42 @@ namespace SFA.DAS.AssessorService.ExternalApi.Client
             InitializeComponent();
         }
 
+        private void btnGetLearners_Click(object sender, RoutedEventArgs e)
+        {
+            Controls.Learners.GetWindow window = new Controls.Learners.GetWindow
+            {
+                Owner = this
+            };
+            window.ShowDialog();
+        }
+
+        private void btnCreateEpaRecords_Click(object sender, RoutedEventArgs e)
+        {
+            Controls.Epa.CreateWindow window = new Controls.Epa.CreateWindow
+            {
+                Owner = this
+            };
+            window.ShowDialog();
+        }
+
+        private void btnUpdateEpaRecords_Click(object sender, RoutedEventArgs e)
+        {
+            Controls.Epa.UpdateWindow window = new Controls.Epa.UpdateWindow
+            {
+                Owner = this
+            };
+            window.ShowDialog();
+        }
+
+        private void btnDeleteEpaRecords_Click(object sender, RoutedEventArgs e)
+        {
+            Controls.Epa.DeleteWindow window = new Controls.Epa.DeleteWindow
+            {
+                Owner = this
+            };
+            window.ShowDialog();
+        }
+
         private void btnCreateCertificates_Click(object sender, RoutedEventArgs e)
         {
             Controls.Certificates.CreateWindow window = new Controls.Certificates.CreateWindow

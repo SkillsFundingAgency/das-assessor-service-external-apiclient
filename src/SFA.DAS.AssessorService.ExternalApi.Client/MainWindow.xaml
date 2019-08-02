@@ -5,16 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="External Api Client" Height="475" Width="200">
+        Title="External Api Client" Height="750" Width="200">
     <toolkit:BusyIndicator x:Name="BusyIndicator">
         <Grid>
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button x:Name="btnCreate"  Content="Create Certificates" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnCreateCertificates_Click"/>
-                <Button x:Name="btnUpdate"  Content="Update Certificates" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnUpdateCertificates_Click"/>
-                <Button x:Name="btnSubmit"  Content="Submit Certificates" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnSubmitCertificates_Click"/>
-                <Button x:Name="btnDelete"  Content="Delete Certificates" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnDeleteCertificates_Click" />
-                <Button x:Name="btnGet"     Content="Get  Certificates"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnGetCertificates_Click"/>
-                <Button x:Name="btnGrades"  Content="Grades" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnGrades_Click"/>
+                <Button x:Name="btnGetLearners"         Content="Get Learners"        HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnGetLearners_Click"/>
+
+                <Button x:Name="btnCreateEpaRecords"    Content="Create Epa Records"  HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,10,0,10" Click="btnCreateEpaRecords_Click"/>
+                <Button x:Name="btnUpdateEpaRecords"    Content="Update Epa Records"  HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnUpdateEpaRecords_Click"/>
+                <Button x:Name="btnDeleteEpaRecords"    Content="Delete Epa Records"  HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnDeleteEpaRecords_Click"/>
+                
+                <Button x:Name="btnCreateCertificates"  Content="Create Certificates" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,10,0,10" Click="btnCreateCertificates_Click"/>
+                <Button x:Name="btnUpdateCertificates"  Content="Update Certificates" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnUpdateCertificates_Click"/>
+                <Button x:Name="btnSubmitCertificates"  Content="Submit Certificates" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnSubmitCertificates_Click"/>
+                <Button x:Name="btnDeleteCertificates"  Content="Delete Certificates" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnDeleteCertificates_Click" />
+                <Button x:Name="btnGetCertificates"     Content="Get Certificates"    HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnGetCertificates_Click"/>
+                
+                <Button x:Name="btnGrades"  Content="Grades" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,15,0,10" Click="btnGrades_Click"/>
                 <Button x:Name="btnOptions" Content="Options" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="150" Margin="0,0,0,10" Click="btnOptions_Click"/>
             </StackPanel>
         </Grid>
