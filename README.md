@@ -12,7 +12,7 @@ Licensed under the [MIT license](https://github.com/SkillsFundingAgency/das-asse
 
 ### Requirements
 
-- Install [Visual Studio 2017](https://www.visualstudio.com/downloads/) with these workloads:
+- Install [Visual Studio 2017 or 2019](https://www.visualstudio.com/downloads/) with these workloads:
     - ASP.NET and web development
     - .NET desktop development
 	- .NET Core 2.1 SDK
@@ -22,7 +22,6 @@ Licensed under the [MIT license](https://github.com/SkillsFundingAgency/das-asse
 
 ### Open the solution
 
-- Open the solution
 - Set SFA.DAS.AssessorService.ExternalApi.Client as the start-up project
 - Update the API Subscription Key and Base Address
 - Running the solution will launch the desktop application
@@ -57,6 +56,213 @@ https://www.smartsurvey.co.uk/s/certification-API/
 For details see the online Swagger documentation in the [Developer Portal](https://developers.apprenticeships.sfa.bis.gov.uk/).
 
 
+## Record Assessment Outcomes
+
+### 1.   Create EPA Record
+
+#### To create one or more EPA records, including all historical EPA attempts and outcomes
+
+Request application/json body posted should contain an array of EPA records, each with your own unique "requestId", which will be used in the response body.
+
+Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) to identify the standard.
+At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared.
+
+**Request**
+
+```http
+POST /api/v1/epa
+```
+
+application/json body posted should contain an array with the requested EPA records
+
+```json
+[{
+   "requestId" : "string",
+   "standard": {
+     "standardCode": 0 (optional)
+     "standardReference": "string" (optional)
+   },
+   "learner": {
+      "uln": 0,
+      "familyName": "string"
+   },
+   "epaDetails": {
+        "epas": [{
+                "epaDate": "2019-02-02T00:00:00Z",
+                "epaOutcome": "pass | fail | withdrawn"
+            }]
+   }
+}]
+```
+
+To request multiple EPA records in a single POST there can be multiple requests in the array, each with a distinct "requestId". 
+```json  
+[{"requestId": .. },{"requestId": .. },{"requestId": .. }]
+```
+
+**Response** application/json body will provide success and error responses.
+
+Response 200, plus application/json containing response for the requested EPA record, by your provided "requestId"
+   * EPAO has the correct profile to assess the requested Standard and all required data has been provided and is valid, EPA reference will be returned
+   * otherwise validation error(s) will be returned 
+
+```json
+[{
+   "requestId": "string" (as provided),
+   "epaReference": "string" (generated),
+   "validationErrors": []
+},
+{
+    "requestId": "string" (as provided),
+    "validationErrors": ["message text", "message text"]
+}]
+```
+
+Where "message text" is:
+- EPA data 
+    * "Certificate already exists, cannot create EPA record"
+    * "EPA already provided for the learner"
+    * "Invalid outcome: must be pass, fail or withdrawn"
+    * "EPA Date cannot be in the future"
+- Uln 
+    * "ULN should contain exactly 10 numbers"
+    * "ULN, FamilyName and Standard not found" 
+- Standard 
+	* "Provide a Standard"
+    * "Your organisation is not approved to assess this Standard"
+	* "StandardReference and StandardCode must be for the same Standard"
+- FamilyName 
+    * "Provide apprentice family name" 
+
+
+
+### 2.   Update EPA Record (Optional)
+
+#### To update a previously recorded assessment outcome.
+
+Use this to update one or more EPA records, for all outcomes to date.
+
+Request application/json body posted should contain an array of Epa records, each with your own unique "requestId" which will be used in the response body. The latest and all previous EPA outcomes for the learner and standard combination should be included for the update.
+If the first EPA outcome is a fail and there is subsequently a pass the EPA details can include an optional "resit" or "retake" boolean.
+If "resit" or "retake" are not included the value will be false by default.
+
+Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) to identify the standard.
+At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared.
+
+The request should use the previously returned EPA Reference (which can also be obtained using GET Learner Details)
+
+**Request**
+
+```http
+PUT /api/v1/epa
+```
+
+application/json body posted should contain an array for previously requested certificates to be amended.
+
+```json
+[{
+   "requestId" : "string",
+   "epaReference" : "string",
+   "standard": {
+     "standardCode": 0 (optional)
+     "standardReference": "string" (optional)
+   },
+   "learner": {
+      "uln": 0,
+      "familyName": "string"
+   },
+   "epaDetails": {
+        "epas": [{
+                "epaDate": "2019-02-02T00:00:00Z",
+                "epaOutcome": "pass | fail | withdrawn"
+            }, {
+                "epaDate": "2019-02-12T00:00:00Z",
+                "epaOutcome": "pass | fail | withdrawn",
+                "resit": true | false (optional),
+                "retake": true | false (optional)
+            }
+        ]
+    }
+}]
+```
+
+To update multiple EPA records in a single POST there can be multiple requests in the array, each with a distinct "requestId". 
+```json  
+[{"requestId": .. },{"requestId": .. },{"requestId": .. }]
+```
+
+**Response** application/json body will provide success and error responses.
+
+Response 200, plus application/json containing response for the requested EPA record, by your provided "requestId"
+   * EPAO has the correct profile to assess the requested Standard and all required data has been provided and is valid, EPA Reference will be returned
+   * otherwise validation error(s) will be returned 
+
+```json
+[{
+    "requestId": "string" (as provided),
+    "epaReference": "string" (as provided),
+    "validationErrors": ["message text", "message text"]
+}]
+```
+
+Where "message text" is:
+- EPA data 
+    * "Certificate already exists, cannot create EPA record"
+    * "EPA not found"
+    * "Your organisation is not the creator of this EPA"
+    * "Provide the EPA reference"
+    * "Invalid outcome: must be pass, fail or withdrawn"
+    * "EPA Date cannot be in the future"
+- Uln 
+    * "ULN should contain exactly 10 numbers"
+    * "ULN, FamilyName and Standard not found" 
+- Standard 
+	* "Provide a Standard"
+    * "Your organisation is not approved to assess this Standard"
+	* "StandardReference and StandardCode must be for the same Standard"
+- FamilyName 
+    * "Provide apprentice family name" 
+
+
+## Delete EPA Record
+
+### To delete a previously recorded assessment outcome
+   It is possible to delete the EPA Record that has been created by the EPAO using the API when a certificate has not been requested for the learner. 
+
+**Request**
+   
+```http
+DELETE /api/v1/certificate/{uln}/{familyName}/{standard}/{epaReference}
+```
+
+**Response** code indicates success or failure of the request.
+
+Response 204 to confirm EPA record has been deleted.
+
+Response 403
+```json
+{
+  "statusCode": 403,
+  "message": "message text"
+}
+```
+
+Where "message text" is:
+- EPA data 
+    * "Provide the EPA reference"
+	* "EPA not found"
+    * "Your organisation is not the creator of this EPA"
+    * "Certificate already exists, cannot delete EPA record"
+- Uln 
+    * "ULN should contain exactly 10 numbers"
+	* "ULN, FamilyName and Standard not found" 
+- Standard 
+    * "Provide a Standard"
+    * "Your organisation is not approved to assess this Standard"
+- FamilyName 
+    * "Provide apprentice family name"
+
+
 ## Request Certificate for Apprenticeships 
 
 ### 1.   Check Certificate (Optional) 
@@ -69,9 +275,9 @@ For details see the online Swagger documentation in the [Developer Portal](https
 GET /ap1/v1/certificate/{uln}/{familyName}/{standard}
 ```
 
-Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) for {standard}.
+Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) for \{standard}.
 
-**Response** code indicates sucess or failure of the request.
+**Response** code indicates success or failure of the request.
 
 Response 403, with message text 
 ```json
@@ -147,6 +353,7 @@ Request application/json body posted should contain an array of certificate reco
 
 Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) to identify the standard.
 At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared.
+
 Where the Standard has a Course Option then a valid choice must be provided.
 
 **Request**
@@ -194,7 +401,7 @@ To request multiple certificate records in a single POST there can be multiple r
 **Response** application/json body will provide success and error responses.
 
 Response 200, plus application/json containing response for the requested certificate, by your provided "requestId"
-   * if EPAO has the correct profile to assess the requested Standard and all required data has been provided and is valid, certificate details will be returned with a status of 'Ready',
+   * EPAO has the correct profile to assess the requested Standard and all required data has been provided and is valid, certificate details will be returned with a status of 'Ready'
    * otherwise validation error(s) will be returned 
 
 ```json
@@ -245,11 +452,11 @@ Response 200, plus application/json containing response for the requested certif
 },
 {
     "requestId": "string",
-    "validationErrors": ["message text","message text"]
+    "validationErrors": ["message text", "message text"]
 }]
 ```
 
-where "message text" is:
+Where "message text" is:
 - Certificate 
     * "Certificate already exists: ```certificateReference```"
 - Uln 
@@ -300,6 +507,7 @@ The certificate records to be updated have to be identified using uln, familyNam
 
 Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) to identify the standard.
 At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared.
+
 Where the Standard has a Course Option then a valid choice must be provided.
 
 **Request**
@@ -313,7 +521,7 @@ application/json body posted should contain an array for previously requested ce
 ```json
 [{
    "requestId" : "string",
-   "certificateReference": "string" (as returned in  **Create Certficate POST** or using **Check Certificate GET**)
+   "certificateReference": "string" (as returned in  **Create Certificate POST** or using **Check Certificate GET**)
    "standard": {
      "standardCode": 0 (optional)
      "standardReference": "string" (optional)
@@ -348,7 +556,7 @@ To update multiple certificate records in a single PUT there can be multiple req
 **Response** application/json body will provide success and error responses, depending on the status of certificates.
 
 Response 200, plus application/json containing response for the requested certificate, by your provided "requestId"
-   * if EPAO has the correct profile to assess the requested Standard and all required data has been provided and is valid, certificate details will be returned with a status of 'Ready',
+   * EPAO has the correct profile to assess the requested Standard and all required data has been provided and is valid, certificate details will be returned with a status of 'Ready'
    * otherwise validation error(s) will be returned 
 
 Response body is as for **Create Certificate POST**, except alternative "message text" is:
@@ -396,7 +604,7 @@ To submit multiple certificate records in a single POST there can be multiple re
 **Response** application/json body will provide success and error responses, depending on the status of certificates.
 
 Response 200, plus application/json containing response for the submitted certificates, by your provided "requestId"
-   * if EPAO created the certificate and status is 'Ready', certificate details will be returned and the certificate will have a status of 'Submitted',
+   * EPAO created the certificate and status is 'Ready', certificate details will be returned and the certificate will have a status of 'Submitted',
    * otherwise validation error(s) will be returned 
    
 ```json
@@ -450,7 +658,7 @@ Response 200, plus application/json containing response for the submitted certif
 },
 {
     "requestId": "string",
-    "validationErrors": ["message text","message text"]
+    "validationErrors": ["message text", "message text"]
 }]
 ```
 
@@ -488,7 +696,7 @@ Response 403
 }
 ```
 
-where "message text" is:
+Where "message text" is:
 - Certificate 
     * "Provide the certificate reference"
 	* "Certificate not found"
@@ -500,7 +708,6 @@ where "message text" is:
 - Standard 
     * "Provide a Standard"
     * "Your organisation is not approved to assess this Standard"
-	* "StandardReference and StandardCode must be for the same Standard*
 - FamilyName 
     * "Provide apprentice family name"
 
@@ -519,7 +726,7 @@ GET /api/v1/certificate/options
 GET /api/v1/certificate/options/{standard}
 ```
 
-Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) for {standard}..
+Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) for \{standard}..
 
 **Response** application/json list of standard codes and related options.
 
@@ -597,7 +804,7 @@ GET /api/v1/certificate/grades
 GET /ap1/v1/learner/{uln}/{familyName}/{standard}
 ```
 
-Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) for {standard}.
+Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) for \{standard}.
 
 **Response** depends on whether the learner can be verified against current ILR records in the Assessor Service,
 there is an existing EPA record or a certificate has already been requested.
@@ -612,7 +819,10 @@ Response 403, with message text
 
 Response 200, with application/json body dependent on records held.
 
-**Examples*****1. No EPA Record yet created, learner is known to the Assessor Service***
+**Examples**
+
+***1. No EPA Record yet created, learner is known to the Assessor Service***
+
 ```json
 {
     "learnerData": {
@@ -668,16 +878,16 @@ Response 200, with application/json body dependent on records held.
         "epaReference": "string" (lookup),
         "epas": [{
                     "epaDate": "2019-02-02T00:00:00Z",
-                    "epaOutcome": "pass | fail"
+                    "epaOutcome": "pass | fail | withdrawn"
                 },
                 {
                     "epaDate": "2019-02-12T00:00:00Z",
-                    "epaOutcome": "pass | fail",
+                    "epaOutcome": "pass | fail | withdrawn",
                     "resit": true | false,
                     "retake": true | false
                 }],
         "latestEPADate": "2019-02-12T00:00:00Z" (lookup),
-        "latestEPAOutcome": "pass | fail" (lookup)
+        "latestEPAOutcome": "pass | fail | withdrawn" (lookup)
     }
 }
 ```
@@ -711,16 +921,16 @@ Response 200, with application/json body dependent on records held.
         "epaReference": "string" (lookup),
         "epas": [{
                     "epaDate": "2019-02-02T00:00:00Z",
-                    "epaOutcome": "pass | fail"
+                    "epaOutcome": "pass | fail | withdrawn"
                 },
                 {
                     "epaDate": "2019-02-12T00:00:00Z",
-                    "epaOutcome": "pass | fail",
+                    "epaOutcome": "pass | fail | withdrawn",
                     "resit": true | false,
                     "retake": true | false
                 }],
         "latestEPADate": "2019-02-12T00:00:00Z" (lookup),
-        "latestEPAOutcome": "pass | fail" (lookup)
+        "latestEPAOutcome": "pass | fail | withdrawn" (lookup)
     },
    "certificate": {
       "certificateData": {
