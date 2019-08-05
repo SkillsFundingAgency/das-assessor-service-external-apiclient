@@ -158,7 +158,7 @@ namespace SFA.DAS.AssessorService.ExternalApi.Client
             string sMessageBoxText = " Do you want to save the grades for later use?";
             string sCaption = "Save Grades";
 
-            MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Error);
+            MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (rsltMessageBox == MessageBoxResult.No)
             {
