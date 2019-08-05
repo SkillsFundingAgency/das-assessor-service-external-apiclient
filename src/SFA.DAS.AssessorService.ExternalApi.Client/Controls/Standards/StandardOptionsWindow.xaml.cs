@@ -109,7 +109,9 @@
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                CsvFileHelper<StandardOptions>.SaveToFile(saveFileDialog.FileName, options);
+                var optionsToSave = options.Select(o => new { o.StandardCode, o.StandardReference, CourseOptions = string.Join(",", o.CourseOption)});
+
+                CsvFileHelper<dynamic>.SaveToFile(saveFileDialog.FileName, optionsToSave);
                 System.Diagnostics.Process.Start(saveFileDialog.FileName);
             }
         }
