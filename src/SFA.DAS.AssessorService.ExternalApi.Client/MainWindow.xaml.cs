@@ -173,7 +173,7 @@ namespace SFA.DAS.AssessorService.ExternalApi.Client
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                CsvFileHelper<dynamic>.SaveToFile(saveFileDialog.FileName, grades);
+                CsvFileHelper<dynamic>.SaveToFile(saveFileDialog.FileName, grades.Select(g => new { Grade = g }));
                 System.Diagnostics.Process.Start(saveFileDialog.FileName);
             }
         }
