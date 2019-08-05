@@ -1,6 +1,7 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Client.Helpers
 {
     using CsvHelper;
+    using CsvHelper.Configuration;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -8,7 +9,7 @@
 
     public static class CsvFileHelper<T>
     {
-        public static IEnumerable<T> GetFromFile(string filePath)
+        public static IEnumerable<T> GetFromFile(string filePath, ClassMap<T> map = null)
         {
             FileStream stream = null;
             try
@@ -23,6 +24,11 @@
                         csv.Configuration.MissingFieldFound = null;
                         csv.Configuration.BadDataFound = null;
                         csv.Configuration.ReadingExceptionOccurred = null;
+
+                        if (map != null)
+                        {
+                            csv.Configuration.RegisterClassMap(map);
+                        }
 
                         return csv.GetRecords<T>().ToList();
                     }

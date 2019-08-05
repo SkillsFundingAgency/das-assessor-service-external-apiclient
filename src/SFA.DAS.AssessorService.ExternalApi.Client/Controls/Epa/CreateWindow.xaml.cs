@@ -39,7 +39,7 @@
                 _ViewModel.FilePath = openFileDialog.FileName;
                 _ViewModel.Requests.Clear();
 
-                var items = CsvFileHelper<CreateEpaRequest>.GetFromFile(_ViewModel.FilePath);
+                var items = CsvFileHelper<CreateEpaRequest>.GetFromFile(_ViewModel.FilePath, new Helpers.CsvClassMaps.CreateEpaRequestMap());
 
                 if (items is null || !items.Any())
                 {

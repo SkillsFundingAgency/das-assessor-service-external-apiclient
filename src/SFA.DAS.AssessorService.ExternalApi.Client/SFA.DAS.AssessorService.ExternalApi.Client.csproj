@@ -138,6 +138,8 @@
     <Compile Include="Controls\Certificates\UpdateWindow.xaml.cs">
       <DependentUpon>UpdateWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CsvClassMaps\UpdateEpaRequestMap.cs" />
+    <Compile Include="Helpers\CsvClassMaps\CreateEpaRequestMap.cs" />
     <Compile Include="Helpers\CoalesceConverter.cs" />
     <Compile Include="Helpers\CsvFileHelper.cs" />
     <Compile Include="ViewModels\Certificates\GetViewModel.cs" />

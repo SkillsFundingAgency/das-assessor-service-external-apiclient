@@ -108,6 +108,7 @@
                 {
                     csv.Configuration.HeaderValidated = null;
                     csv.Configuration.MissingFieldFound = null;
+                    csv.Configuration.RegisterClassMap(new CsvClassMaps.CreateEpaRequestMap());
                     epaRecordsToCreate = csv.GetRecords<CreateEpaRequest>().ToList();
                 }
             }
@@ -144,6 +145,7 @@
                 {
                     csv.Configuration.HeaderValidated = null;
                     csv.Configuration.MissingFieldFound = null;
+                    csv.Configuration.RegisterClassMap(new CsvClassMaps.UpdateEpaRequestMap());
                     epaRecordsToUpdate = csv.GetRecords<UpdateEpaRequest>().ToList();
                 }
             }
