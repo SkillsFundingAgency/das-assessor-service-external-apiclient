@@ -583,3 +583,189 @@ GET /api/v1/certificate/grades
 	"No grade awarded"
 ]
 ```
+
+
+## Learner Details
+
+### GET Learner Details
+
+#### To get details held by the Assessor Service for a Learner
+
+**Request**
+
+```http
+GET /ap1/v1/learner/{uln}/{familyName}/{standard}
+```
+
+Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) for {standard}.
+
+**Response** depends on whether the learner can be verified against current ILR records in the Assessor Service,
+there is an existing EPA record or a certificate has already been requested.
+
+Response 403, with message text 
+```json
+{
+  "statusCode": 403,
+  "message": "Cannot find apprentice with the specified Uln, FamilyName & Standard"
+}
+```
+
+Response 200, with application/json body dependent on records held.
+
+**Examples*****1. No EPA Record yet created, learner is known to the Assessor Service***
+```json
+{
+    "learnerData": {
+        "standard": {
+            "standardCode": 0 (lookup),
+            "standardReference": "string" (lookup),
+            "standardName": "string" (lookup),
+            "level": 0 (lookup)
+        },
+        "learner": {
+            "uln": 0 (as provided),
+            "givenNames": "string" (lookup),
+            "familyName": "string" (as provided)
+        },
+        "learningDetails": {
+            "learningStartDate": "2018-02-22T00:00:00" (lookup),
+            "providerName": "string" (lookup),
+            "providerUkPrn": 0 (lookup)
+        },
+    },
+    "status": {
+        "completionStatus": "string" (lookup)
+    }
+}
+```
+
+***2. EPA Record found for learner, there is no associated certificate***
+
+```json
+{
+    "learnerData": {
+        "standard": {
+            "standardCode": 0 (lookup),
+            "standardReference": "string" (lookup),
+            "standardName": "string" (lookup),
+            "level": 0 (lookup)
+        },
+        "learner": {
+            "uln": 0 (as provided),
+            "givenNames": "string" (lookup),
+            "familyName": "string" (as provided)
+        },
+        "learningDetails": {
+            "learningStartDate": "2018-02-22T00:00:00" (lookup),
+            "providerName": "string" (lookup),
+            "providerUkPrn": 0 (lookup)
+        },
+    },
+    "status": {
+        "completionStatus": "string" (lookup)
+    },
+    "epaDetails": {
+        "epaReference": "string" (lookup),
+        "epas": [{
+                    "epaDate": "2019-02-02T00:00:00Z",
+                    "epaOutcome": "pass | fail"
+                },
+                {
+                    "epaDate": "2019-02-12T00:00:00Z",
+                    "epaOutcome": "pass | fail",
+                    "resit": true | false,
+                    "retake": true | false
+                }],
+        "latestEPADate": "2019-02-12T00:00:00Z" (lookup),
+        "latestEPAOutcome": "pass | fail" (lookup)
+    }
+}
+```
+
+***3. Certificate found for learner, with/without EPA Record***
+
+```json
+{
+    "learnerData": {
+        "standard": {
+            "standardCode": 0 (lookup),
+            "standardReference": "string" (lookup),
+            "standardName": "string" (lookup),
+            "level": 0 (lookup)
+        },
+        "learner": {
+            "uln": 0 (as provided),
+            "givenNames": "string" (lookup),
+            "familyName": "string" (as provided)
+        },
+        "learningDetails": {
+            "learningStartDate": "2018-02-22T00:00:00" (lookup),
+            "providerName": "string" (lookup),
+            "providerUkPrn": 0 (lookup)
+        },
+    },
+    "status": {
+        "completionStatus": "string" (lookup)
+    },
+    "epaDetails": {
+        "epaReference": "string" (lookup),
+        "epas": [{
+                    "epaDate": "2019-02-02T00:00:00Z",
+                    "epaOutcome": "pass | fail"
+                },
+                {
+                    "epaDate": "2019-02-12T00:00:00Z",
+                    "epaOutcome": "pass | fail",
+                    "resit": true | false,
+                    "retake": true | false
+                }],
+        "latestEPADate": "2019-02-12T00:00:00Z" (lookup),
+        "latestEPAOutcome": "pass | fail" (lookup)
+    },
+   "certificate": {
+      "certificateData": {
+         "certificateReference": "string" (lookup),
+         "standard": {
+            "standardCode": 0 (lookup),
+            "standardReference": "string" (lookup),
+            "standardName": "string" (lookup),
+            "level": 0 (lookup)
+         },
+         "learner": {
+            "uln": 0 (as provided),
+            "givenNames": "string" (lookup),
+            "familyName": "string" (as provided)
+         },
+         "learningDetails": {
+            "courseOption": "string" (lookup),
+            "overallGrade": "string" (lookup),
+            "achievementDate": "2019-02-22T00:00:00" (lookup),
+            "learningStartDate": "2018-02-22T00:00:00" (lookup),
+            "providerName": "string" (lookup),
+            "providerUkPrn": 0 (lookup)
+         },
+         "postalContact": {
+            "contactName": "string" (lookup),
+            "department": "string" (lookup),
+            "organisation": "string" (lookup),
+            "addressLine1": "string" (lookup),
+            "addressLine2": "string" (lookup),
+            "addressLine3": "string" (lookup),
+            "city": "string" (lookup),
+            "postCode": "string" (lookup)
+         }
+      },
+      "status": {
+         "currentStatus": "Draft | Ready | Submitted"
+      },
+      "created": {
+         "createdAt": "2019-02-22T11:43:20",
+         "createdBy": "string"
+      },
+      "submitted" (if available): {
+         "submittedAt": "2019-02-22T11:43:20",
+         "submittedBy": "string"
+      }
+   }
+}
+```
