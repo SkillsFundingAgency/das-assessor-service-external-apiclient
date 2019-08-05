@@ -170,7 +170,7 @@
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                var epasToSave = epaRecords.Select(ic => new { ic.RequestId, Errors = string.Join(", ", ic.ValidationErrors) });
+                var epasToSave = epaRecords.Select(er => new { er.RequestId, er.EpaReference });
 
                 CsvFileHelper<dynamic>.SaveToFile(saveFileDialog.FileName, epasToSave);
                 System.Diagnostics.Process.Start(saveFileDialog.FileName);

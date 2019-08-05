@@ -151,7 +151,7 @@
 
         private void SaveEpaRecords(IEnumerable<CreateEpaResponse> epaRecords)
         {
-            string sMessageBoxText = "Do you want to save the newly created EPA Records?";
+            string sMessageBoxText = "Do you want to save the newly created Epa Records?";
             string sCaption = "Save Epa Records";
 
             MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Question);
