@@ -7,7 +7,7 @@
     public sealed class LearnerData : IEquatable<LearnerData>
     {
         public Certificates.Standard Standard { get; set; }
-        public Learner Learner { get; set; }
+        public Certificates.Learner Learner { get; set; }
         public LearningDetails LearningDetails { get; set; }
 
         #region GetHashCode, Equals and IEquatable
