@@ -226,7 +226,8 @@ Where "message text" is:
 
 ## Delete EPA Record
 
-### To delete a previously recorded assessment outcome
+### To delete a previously recorded assessment outcome
+
    It is possible to delete the EPA Record that has been created by the EPAO using the API when a certificate has not been requested for the learner. 
 
 **Request**
@@ -838,7 +839,9 @@ Response 200, with application/json body dependent on records held.
             "familyName": "string" (as provided)
         },
         "learningDetails": {
+            "learnerReferenceNumber": "string" (lookup),
             "learningStartDate": "2018-02-22T00:00:00" (lookup),
+            "plannedEndDate": "2019-02-22T00:00:00" (lookup),
             "providerName": "string" (lookup),
             "providerUkPrn": 0 (lookup)
         },
@@ -866,7 +869,9 @@ Response 200, with application/json body dependent on records held.
             "familyName": "string" (as provided)
         },
         "learningDetails": {
+            "learnerReferenceNumber": "string" (lookup),
             "learningStartDate": "2018-02-22T00:00:00" (lookup),
+            "plannedEndDate": "2019-02-22T00:00:00" (lookup),
             "providerName": "string" (lookup),
             "providerUkPrn": 0 (lookup)
         },
@@ -909,7 +914,9 @@ Response 200, with application/json body dependent on records held.
             "familyName": "string" (as provided)
         },
         "learningDetails": {
+            "learnerReferenceNumber": "string" (lookup),
             "learningStartDate": "2018-02-22T00:00:00" (lookup),
+            "plannedEndDate": "2019-02-22T00:00:00" (lookup),
             "providerName": "string" (lookup),
             "providerUkPrn": 0 (lookup)
         },
