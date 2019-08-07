@@ -59,7 +59,7 @@
                standard1, standard2
             };
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/options")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -80,7 +80,7 @@
 
             var expectedResponse = standard;
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/{standard.StandardCode}")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/options/{standard.StandardCode}")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -100,7 +100,7 @@
 
             var expectedResponse = standard;
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/{standard.StandardReference}")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/options/{standard.StandardReference}")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -114,7 +114,7 @@
         public async Task GetOptionsForStandard_Standard_No_Options()
         {
             // arrange 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/NO_OPTIONS")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/options/NO_OPTIONS")
                 .Respond(HttpStatusCode.NoContent, "application/json", string.Empty);
 
             // act
@@ -128,7 +128,7 @@
         public async Task GetOptionsForStandard_Standard_Not_Found()
         {
             // arrange 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/INVALID")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/options/INVALID")
                 .Respond(HttpStatusCode.NotFound, "application/json", string.Empty);
 
             // act
