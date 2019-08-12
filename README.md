@@ -17,7 +17,7 @@ Licensed under the [MIT license](https://github.com/SkillsFundingAgency/das-asse
     - .NET desktop development
 	- .NET Core 2.1 SDK
 - Create an account on the [Developer Portal](https://developers.apprenticeships.sfa.bis.gov.uk/)
-	- Obtain External API Subscription Key and Base Address
+	- Obtain External API Subscription Key and Base Address to Sandbox Environment
 	- Can also be used to access the current Swagger Documentation
 
 ### Open the solution
@@ -54,6 +54,220 @@ https://www.smartsurvey.co.uk/s/certification-API/
 
 ## Sample Scenarios
 For details see the online Swagger documentation in the [Developer Portal](https://developers.apprenticeships.sfa.bis.gov.uk/).
+
+## Monthly ILR Refresh
+
+On the 1st of every month the Sandbox Environment will be refreshed with test data set based on the current Register of End Point Assessor Organisations.
+
+The set of ILR records follow this pattern:
+
+##### uln = 10 digits  
+- "1" - leading digit
+- "xxxx" - 4 digits of EPAOrgId
+- "xxx" - 3 digits of LAS Standard Code (leading 0s)
+- "00 - 09" - 10 unique ulns per standard code
+
+***Example. For EPA0001, Standard Code = 80, and 1st uln in the sequence***
+- uln = "1" + "0001" + "080" + "01" = 1000108001
+- familyName = Test
+- givenNames = 1000108001 (same value as uln)
+- standard = 80
+
+
+## Learner Details
+
+### GET Learner Details
+
+#### To get details held by the Assessor Service for a Learner
+
+**Request**
+
+```http
+GET /ap1/v1/learner/{uln}/{familyName}/{standard}
+```
+
+Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) for \{standard}.
+
+**Response** depends on whether the learner can be verified against current ILR records in the Assessor Service,
+there is an existing EPA record or a certificate has already been requested.
+
+Response 403, with message text 
+```json
+{
+  "statusCode": 403,
+  "message": "Cannot find apprentice with the specified Uln, FamilyName & Standard"
+}
+```
+
+Response 200, with application/json body dependent on records held.
+
+**Examples**
+
+***A. No EPA Record yet created, learner is known to the Assessor Service***
+
+```json
+{
+    "learnerData": {
+        "standard": {
+            "standardCode": 0 (lookup),
+            "standardReference": "string" (lookup),
+            "standardName": "string" (lookup),
+            "level": 0 (lookup)
+        },
+        "learner": {
+            "uln": 0 (as provided),
+            "givenNames": "string" (lookup),
+            "familyName": "string" (as provided)
+        },
+        "learningDetails": {
+            "learnerReferenceNumber": "string" (lookup),
+            "learningStartDate": "2018-02-22T00:00:00" (lookup),
+            "plannedEndDate": "2019-02-22T00:00:00" (lookup),
+            "providerName": "string" (lookup),
+            "providerUkPrn": 0 (lookup)
+        },
+    },
+    "status": {
+        "completionStatus": "string" (lookup)
+    }
+}
+```
+
+***B. EPA Record found for learner, there is no associated certificate***
+
+```json
+{
+    "learnerData": {
+        "standard": {
+            "standardCode": 0 (lookup),
+            "standardReference": "string" (lookup),
+            "standardName": "string" (lookup),
+            "level": 0 (lookup)
+        },
+        "learner": {
+            "uln": 0 (as provided),
+            "givenNames": "string" (lookup),
+            "familyName": "string" (as provided)
+        },
+        "learningDetails": {
+            "learnerReferenceNumber": "string" (lookup),
+            "learningStartDate": "2018-02-22T00:00:00" (lookup),
+            "plannedEndDate": "2019-02-22T00:00:00" (lookup),
+            "providerName": "string" (lookup),
+            "providerUkPrn": 0 (lookup)
+        },
+    },
+    "status": {
+        "completionStatus": "string" (lookup)
+    },
+    "epaDetails": {
+        "epaReference": "string" (lookup),
+        "epas": [{
+                    "epaDate": "2019-02-02T00:00:00Z",
+                    "epaOutcome": "pass | fail | withdrawn"
+                },
+                {
+                    "epaDate": "2019-02-12T00:00:00Z",
+                    "epaOutcome": "pass | fail | withdrawn",
+                    "resit": true | false,
+                    "retake": true | false
+                }],
+        "latestEPADate": "2019-02-12T00:00:00Z" (lookup),
+        "latestEPAOutcome": "pass | fail | withdrawn" (lookup)
+    }
+}
+```
+
+***C. Certificate found for learner, with/without EPA Record***
+
+```json
+{
+    "learnerData": {
+        "standard": {
+            "standardCode": 0 (lookup),
+            "standardReference": "string" (lookup),
+            "standardName": "string" (lookup),
+            "level": 0 (lookup)
+        },
+        "learner": {
+            "uln": 0 (as provided),
+            "givenNames": "string" (lookup),
+            "familyName": "string" (as provided)
+        },
+        "learningDetails": {
+            "learnerReferenceNumber": "string" (lookup),
+            "learningStartDate": "2018-02-22T00:00:00" (lookup),
+            "plannedEndDate": "2019-02-22T00:00:00" (lookup),
+            "providerName": "string" (lookup),
+            "providerUkPrn": 0 (lookup)
+        },
+    },
+    "status": {
+        "completionStatus": "string" (lookup)
+    },
+    "epaDetails": {
+        "epaReference": "string" (lookup),
+        "epas": [{
+                    "epaDate": "2019-02-02T00:00:00Z",
+                    "epaOutcome": "pass | fail | withdrawn"
+                },
+                {
+                    "epaDate": "2019-02-12T00:00:00Z",
+                    "epaOutcome": "pass | fail | withdrawn",
+                    "resit": true | false,
+                    "retake": true | false
+                }],
+        "latestEPADate": "2019-02-12T00:00:00Z" (lookup),
+        "latestEPAOutcome": "pass | fail | withdrawn" (lookup)
+    },
+   "certificate": {
+      "certificateData": {
+         "certificateReference": "string" (lookup),
+         "standard": {
+            "standardCode": 0 (lookup),
+            "standardReference": "string" (lookup),
+            "standardName": "string" (lookup),
+            "level": 0 (lookup)
+         },
+         "learner": {
+            "uln": 0 (as provided),
+            "givenNames": "string" (lookup),
+            "familyName": "string" (as provided)
+         },
+         "learningDetails": {
+            "courseOption": "string" (lookup),
+            "overallGrade": "string" (lookup),
+            "achievementDate": "2019-02-22T00:00:00" (lookup),
+            "learningStartDate": "2018-02-22T00:00:00" (lookup),
+            "providerName": "string" (lookup),
+            "providerUkPrn": 0 (lookup)
+         },
+         "postalContact": {
+            "contactName": "string" (lookup),
+            "department": "string" (lookup),
+            "organisation": "string" (lookup),
+            "addressLine1": "string" (lookup),
+            "addressLine2": "string" (lookup),
+            "addressLine3": "string" (lookup),
+            "city": "string" (lookup),
+            "postCode": "string" (lookup)
+         }
+      },
+      "status": {
+         "currentStatus": "Draft | Ready | Submitted"
+      },
+      "created": {
+         "createdAt": "2019-02-22T11:43:20",
+         "createdBy": "string"
+      },
+      "submitted" (if available): {
+         "submittedAt": "2019-02-22T11:43:20",
+         "submittedBy": "string"
+      }
+   }
+}
+```
+
 
 
 ## Record Assessment Outcomes
@@ -95,10 +309,15 @@ application/json body posted should contain an array with the requested EPA reco
 }]
 ```
 
+It is expected that the first EPA record created for an apprenticeship will normally contain a single EPA outcome. When initially creating EPA records on the Assessor Service via the API for historical records, it is possible that a learner may have already had multiple EPAs, in which case all of these should be provided in the initial **Create EPA Record POST**. See **Update EPA Record PUT** to handle further EPA outcomes for a learner.
+
 To request multiple EPA records in a single POST there can be multiple requests in the array, each with a distinct "requestId". 
 ```json  
 [{"requestId": .. },{"requestId": .. },{"requestId": .. }]
 ```
+
+The maximum POST size is limited to 32k bytes.
+This is approximately 50 EPA Record requests in each API call.
 
 **Response** application/json body will provide success and error responses.
 
@@ -128,7 +347,7 @@ Where "message text" is:
     * "ULN should contain exactly 10 numbers"
     * "ULN, FamilyName and Standard not found" 
 - Standard 
-	* "Provide a Standard"
+	* "Provide a valid Standard"
     * "Your organisation is not approved to assess this Standard"
 	* "StandardReference and StandardCode must be for the same Standard"
 - FamilyName 
@@ -142,7 +361,8 @@ Where "message text" is:
 
 Use this to update one or more EPA records, for all outcomes to date.
 
-Request application/json body posted should contain an array of Epa records, each with your own unique "requestId" which will be used in the response body. The latest and all previous EPA outcomes for the learner and standard combination should be included for the update.
+Request application/json body posted should contain an array of Epa records, each with your own unique "requestId" which will be used in the response body.
+The latest and all previous EPA outcomes for the learner and standard combination should be included for the update.
 If the first EPA outcome is a fail and there is subsequently a pass the EPA details can include an optional "resit" or "retake" boolean.
 If "resit" or "retake" are not included the value will be false by default.
 
@@ -217,7 +437,7 @@ Where "message text" is:
     * "ULN should contain exactly 10 numbers"
     * "ULN, FamilyName and Standard not found" 
 - Standard 
-	* "Provide a Standard"
+	* "Provide a valid Standard"
     * "Your organisation is not approved to assess this Standard"
 	* "StandardReference and StandardCode must be for the same Standard"
 - FamilyName 
@@ -258,7 +478,7 @@ Where "message text" is:
     * "ULN should contain exactly 10 numbers"
 	* "ULN, FamilyName and Standard not found" 
 - Standard 
-    * "Provide a Standard"
+    * "Provide a valid Standard"
     * "Your organisation is not approved to assess this Standard"
 - FamilyName 
     * "Provide apprentice family name"
@@ -399,6 +619,9 @@ To request multiple certificate records in a single POST there can be multiple r
 [{"requestId": .. },{"requestId": .. },{"requestId": .. }]
 ```
 
+The maximum POST size is limited to 32k bytes.
+This is approximately 25 Certificate requests in each API call.
+
 **Response** application/json body will provide success and error responses.
 
 Response 200, plus application/json containing response for the requested certificate, by your provided "requestId"
@@ -464,7 +687,7 @@ Where "message text" is:
     * "ULN should contain exactly 10 numbers"
     * "ULN, FamilyName and Standard not found" 
 - Standard 
-	* "Provide a Standard"
+	* "Provide a valid Standard"
     * "Your organisation is not approved to assess this Standard"
 	* "StandardReference and StandardCode must be for the same Standard*
 - CourseOption
@@ -707,7 +930,7 @@ Where "message text" is:
     * "ULN should contain exactly 10 numbers"
 	* "ULN, FamilyName and Standard not found" 
 - Standard 
-    * "Provide a Standard"
+    * "Provide a valid Standard"
     * "Your organisation is not approved to assess this Standard"
 - FamilyName 
     * "Provide apprentice family name"
@@ -790,199 +1013,4 @@ GET /api/v1/certificate/grades
 	"Pass with excellence",
 	"No grade awarded"
 ]
-```
-
-
-## Learner Details
-
-### GET Learner Details
-
-#### To get details held by the Assessor Service for a Learner
-
-**Request**
-
-```http
-GET /ap1/v1/learner/{uln}/{familyName}/{standard}
-```
-
-Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) for \{standard}.
-
-**Response** depends on whether the learner can be verified against current ILR records in the Assessor Service,
-there is an existing EPA record or a certificate has already been requested.
-
-Response 403, with message text 
-```json
-{
-  "statusCode": 403,
-  "message": "Cannot find apprentice with the specified Uln, FamilyName & Standard"
-}
-```
-
-Response 200, with application/json body dependent on records held.
-
-**Examples**
-
-***1. No EPA Record yet created, learner is known to the Assessor Service***
-
-```json
-{
-    "learnerData": {
-        "standard": {
-            "standardCode": 0 (lookup),
-            "standardReference": "string" (lookup),
-            "standardName": "string" (lookup),
-            "level": 0 (lookup)
-        },
-        "learner": {
-            "uln": 0 (as provided),
-            "givenNames": "string" (lookup),
-            "familyName": "string" (as provided)
-        },
-        "learningDetails": {
-            "learnerReferenceNumber": "string" (lookup),
-            "learningStartDate": "2018-02-22T00:00:00" (lookup),
-            "plannedEndDate": "2019-02-22T00:00:00" (lookup),
-            "providerName": "string" (lookup),
-            "providerUkPrn": 0 (lookup)
-        },
-    },
-    "status": {
-        "completionStatus": "string" (lookup)
-    }
-}
-```
-
-***2. EPA Record found for learner, there is no associated certificate***
-
-```json
-{
-    "learnerData": {
-        "standard": {
-            "standardCode": 0 (lookup),
-            "standardReference": "string" (lookup),
-            "standardName": "string" (lookup),
-            "level": 0 (lookup)
-        },
-        "learner": {
-            "uln": 0 (as provided),
-            "givenNames": "string" (lookup),
-            "familyName": "string" (as provided)
-        },
-        "learningDetails": {
-            "learnerReferenceNumber": "string" (lookup),
-            "learningStartDate": "2018-02-22T00:00:00" (lookup),
-            "plannedEndDate": "2019-02-22T00:00:00" (lookup),
-            "providerName": "string" (lookup),
-            "providerUkPrn": 0 (lookup)
-        },
-    },
-    "status": {
-        "completionStatus": "string" (lookup)
-    },
-    "epaDetails": {
-        "epaReference": "string" (lookup),
-        "epas": [{
-                    "epaDate": "2019-02-02T00:00:00Z",
-                    "epaOutcome": "pass | fail | withdrawn"
-                },
-                {
-                    "epaDate": "2019-02-12T00:00:00Z",
-                    "epaOutcome": "pass | fail | withdrawn",
-                    "resit": true | false,
-                    "retake": true | false
-                }],
-        "latestEPADate": "2019-02-12T00:00:00Z" (lookup),
-        "latestEPAOutcome": "pass | fail | withdrawn" (lookup)
-    }
-}
-```
-
-***3. Certificate found for learner, with/without EPA Record***
-
-```json
-{
-    "learnerData": {
-        "standard": {
-            "standardCode": 0 (lookup),
-            "standardReference": "string" (lookup),
-            "standardName": "string" (lookup),
-            "level": 0 (lookup)
-        },
-        "learner": {
-            "uln": 0 (as provided),
-            "givenNames": "string" (lookup),
-            "familyName": "string" (as provided)
-        },
-        "learningDetails": {
-            "learnerReferenceNumber": "string" (lookup),
-            "learningStartDate": "2018-02-22T00:00:00" (lookup),
-            "plannedEndDate": "2019-02-22T00:00:00" (lookup),
-            "providerName": "string" (lookup),
-            "providerUkPrn": 0 (lookup)
-        },
-    },
-    "status": {
-        "completionStatus": "string" (lookup)
-    },
-    "epaDetails": {
-        "epaReference": "string" (lookup),
-        "epas": [{
-                    "epaDate": "2019-02-02T00:00:00Z",
-                    "epaOutcome": "pass | fail | withdrawn"
-                },
-                {
-                    "epaDate": "2019-02-12T00:00:00Z",
-                    "epaOutcome": "pass | fail | withdrawn",
-                    "resit": true | false,
-                    "retake": true | false
-                }],
-        "latestEPADate": "2019-02-12T00:00:00Z" (lookup),
-        "latestEPAOutcome": "pass | fail | withdrawn" (lookup)
-    },
-   "certificate": {
-      "certificateData": {
-         "certificateReference": "string" (lookup),
-         "standard": {
-            "standardCode": 0 (lookup),
-            "standardReference": "string" (lookup),
-            "standardName": "string" (lookup),
-            "level": 0 (lookup)
-         },
-         "learner": {
-            "uln": 0 (as provided),
-            "givenNames": "string" (lookup),
-            "familyName": "string" (as provided)
-         },
-         "learningDetails": {
-            "courseOption": "string" (lookup),
-            "overallGrade": "string" (lookup),
-            "achievementDate": "2019-02-22T00:00:00" (lookup),
-            "learningStartDate": "2018-02-22T00:00:00" (lookup),
-            "providerName": "string" (lookup),
-            "providerUkPrn": 0 (lookup)
-         },
-         "postalContact": {
-            "contactName": "string" (lookup),
-            "department": "string" (lookup),
-            "organisation": "string" (lookup),
-            "addressLine1": "string" (lookup),
-            "addressLine2": "string" (lookup),
-            "addressLine3": "string" (lookup),
-            "city": "string" (lookup),
-            "postCode": "string" (lookup)
-         }
-      },
-      "status": {
-         "currentStatus": "Draft | Ready | Submitted"
-      },
-      "created": {
-         "createdAt": "2019-02-22T11:43:20",
-         "createdBy": "string"
-      },
-      "submitted" (if available): {
-         "submittedAt": "2019-02-22T11:43:20",
-         "submittedBy": "string"
-      }
-   }
-}
 ```
