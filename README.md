@@ -55,9 +55,9 @@ https://www.smartsurvey.co.uk/s/certification-API/
 ## Sample Scenarios
 For details see the online Swagger documentation in the [Developer Portal](https://developers.apprenticeships.sfa.bis.gov.uk/).
 
-## Monthly ILR Refresh
+## Monthly Sandbox ILR Refresh
 
-On the 1st of every month the Sandbox Environment will be refreshed with test data set based on the current Register of End Point Assessor Organisations.
+On the 1st of every month the Sandbox Environment will be refreshed with a test data set based on the current [Register of End Point Assessor Organisations.](https://www.gov.uk/guidance/register-of-end-point-assessment-organisations)
 
 The set of ILR records follow this pattern:
 
