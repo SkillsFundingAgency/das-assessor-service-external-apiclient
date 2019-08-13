@@ -317,7 +317,7 @@ To request multiple EPA records in a single POST there can be multiple requests 
 ```
 
 The maximum POST size is limited to 32k bytes.
-This is approximately 50 EPA Record requests in each API call.
+This is approximately 25 EPA Record requests in each API call and is capped at that limit.
 
 **Response** application/json body will provide success and error responses.
 
@@ -410,6 +410,9 @@ To update multiple EPA records in a single POST there can be multiple requests i
 ```json  
 [{"requestId": .. },{"requestId": .. },{"requestId": .. }]
 ```
+
+The maximum PUT size is limited to 32k bytes.
+This is approximately 25 EPA Record requests in each API call and is capped at that limit.
 
 **Response** application/json body will provide success and error responses.
 
@@ -620,7 +623,7 @@ To request multiple certificate records in a single POST there can be multiple r
 ```
 
 The maximum POST size is limited to 32k bytes.
-This is approximately 25 Certificate requests in each API call.
+This is approximately 25 Certificate requests in each API call and is capped at that limit.
 
 **Response** application/json body will provide success and error responses.
 
@@ -777,6 +780,9 @@ To update multiple certificate records in a single PUT there can be multiple req
 [{"requestId": .. },{"requestId": .. },{"requestId": .. }]
 ```
 
+The maximum PUT size is limited to 32k bytes.
+This is approximately 25 Certificate requests in each API call and is capped at that limit.
+
 **Response** application/json body will provide success and error responses, depending on the status of certificates.
 
 Response 200, plus application/json containing response for the requested certificate, by your provided "requestId"
@@ -824,6 +830,9 @@ To submit multiple certificate records in a single POST there can be multiple re
 ```json  
 [{"requestId": .. },{"requestId": .. },{"requestId": .. }]
 ```
+
+The maximum POST size is limited to 32k bytes.
+This is approximately 25 Submit Certificate requests in each API call and is capped at that limit.
 
 **Response** application/json body will provide success and error responses, depending on the status of certificates.
 
