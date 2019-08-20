@@ -293,7 +293,7 @@ application/json body posted should contain an array with the requested EPA reco
 [{
    "requestId" : "string",
    "standard": {
-     "standardCode": 0 (optional)
+     "standardCode": 0 (optional),
      "standardReference": "string" (optional)
    },
    "learner": {
@@ -382,9 +382,9 @@ application/json body posted should contain an array for previously requested ce
 ```json
 [{
    "requestId" : "string",
-   "epaReference" : "string",
+   "epaReference" : "string",  (as returned in  **Create EPA Record POST** or using **Get Learner Details GET**),
    "standard": {
-     "standardCode": 0 (optional)
+     "standardCode": 0 (optional),
      "standardReference": "string" (optional)
    },
    "learner": {
@@ -592,7 +592,7 @@ application/json body posted should contain an array with the requested certific
 [{
    "requestId" : "string",
    "standard": {
-     "standardCode": 0 (optional)
+     "standardCode": 0 (optional),
      "standardReference": "string" (optional)
    },
    "learner": {
@@ -748,9 +748,9 @@ application/json body posted should contain an array for previously requested ce
 ```json
 [{
    "requestId" : "string",
-   "certificateReference": "string" (as returned in  **Create Certificate POST** or using **Check Certificate GET**)
+   "certificateReference": "string" (as returned in  **Create Certificate POST** or using **Check Certificate GET**),
    "standard": {
-     "standardCode": 0 (optional)
+     "standardCode": 0 (optional),
      "standardReference": "string" (optional)
    },
    "learner": {
