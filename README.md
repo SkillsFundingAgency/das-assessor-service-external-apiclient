@@ -382,7 +382,7 @@ application/json body posted should contain an array for previously requested ce
 ```json
 [{
    "requestId" : "string",
-   "epaReference" : "string",  (as returned in  **Create EPA Record POST** or using **Get Learner Details GET**),
+   "epaReference" : "string" (as returned in  **Create EPA Record POST** or using **Get Learner Details GET**),
    "standard": {
      "standardCode": 0 (optional),
      "standardReference": "string" (optional)
