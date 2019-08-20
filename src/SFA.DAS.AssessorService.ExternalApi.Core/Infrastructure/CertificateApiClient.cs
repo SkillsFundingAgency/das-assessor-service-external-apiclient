@@ -1,9 +1,9 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure
 {
     using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Error;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Response;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Request.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Response.Certificates;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading.Tasks;

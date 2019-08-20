@@ -1,3 +1,3 @@
 RequestId,Uln,GivenNames,FamilyName,StandardCode,StandardReference,CourseOption,OverallGrade,AchievementDate,ContactName,Organisation,AddressLine1,City,PostCode
-1,1234567890,Fred,Blogs,1,,French,Pass,10/09/2018 09:38,Shreya Smith,Contoso Ltd,123 Test Road,Townsville,ZY9 9ZY
-2,9876543210,John,Smith,,98,,Merit,10/09/2018 09:38,Shreya Smith,Contoso Ltd,123 Test Road,Townsville,ZY9 9ZY
+1,1234567890,Fred,Blogs,,ST0127,French,Pass,10/09/2018 09:38,Shreya Smith,Contoso Ltd,123 Test Road,Townsville,ZY9 9ZY
+2,9876543210,John,Smith,98,,,Merit,10/09/2018 09:38,Shreya Smith,Contoso Ltd,123 Test Road,Townsville,ZY9 9ZY

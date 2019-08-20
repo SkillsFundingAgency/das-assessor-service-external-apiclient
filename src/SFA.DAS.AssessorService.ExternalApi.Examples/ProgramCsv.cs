@@ -2,11 +2,11 @@
 {
     using CsvHelper;
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Request.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Request.Epa;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Request.Learners;
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.IO;
     using System.Linq;
     using System.Net.Http;
@@ -14,7 +14,7 @@
 
     public class ProgramCsv
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             const string subscriptionKey = ""; // insert your key here
             const string apiBaseAddress = ""; // insert the API address here
@@ -25,10 +25,16 @@
             httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
             httpClient.BaseAddress = new Uri(apiBaseAddress);
 
+            LearnerApiClient learnerApiClient = new LearnerApiClient(httpClient);
+            EpaApiClient epaApiClient = new EpaApiClient(httpClient);
             CertificateApiClient certificateApiClient = new CertificateApiClient(httpClient);
             StandardsApiClient standardsApiClient = new StandardsApiClient(httpClient);
 
-            ProgramCsv p = new ProgramCsv(certificateApiClient, standardsApiClient);
+            ProgramCsv p = new ProgramCsv(learnerApiClient, epaApiClient, certificateApiClient, standardsApiClient);
+            p.GetLearnerExample().GetAwaiter().GetResult();
+            p.CreateEpaRecordsExample().GetAwaiter().GetResult();
+            p.UpdateEpaRecordsExample().GetAwaiter().GetResult();
+            p.DeleteEpaRecordExample().GetAwaiter().GetResult();
             p.CreateCertificatesExample().GetAwaiter().GetResult();
             p.UpdateCertificatesExample().GetAwaiter().GetResult();
             p.SubmitCertificatesExample().GetAwaiter().GetResult();
@@ -39,14 +45,173 @@
             p.GetOptionsForStandardExample().GetAwaiter().GetResult();
         }
 
-
+        private readonly LearnerApiClient _LearnerApiClient;
+        private readonly EpaApiClient _EpaApiClient;
         private readonly CertificateApiClient _CertificateApiClient;
         private readonly StandardsApiClient _StandardsApiClient;
 
-        public ProgramCsv(CertificateApiClient certificateApiClient, StandardsApiClient standardsApiClient)
+        public ProgramCsv(LearnerApiClient learnerApiClient, EpaApiClient epaApiClient, CertificateApiClient certificateApiClient, StandardsApiClient standardsApiClient)
         {
+            _LearnerApiClient = learnerApiClient;
+            _EpaApiClient = epaApiClient;
             _CertificateApiClient = certificateApiClient;
             _StandardsApiClient = standardsApiClient;
+        }
+
+        public async Task GetLearnerExample()
+        {
+            const string filePath = @"CsvFiles\getLearners.csv";
+
+            IEnumerable<GetLearnerRequest> learners;
+
+            using (TextReader textReader = File.OpenText(filePath))
+            {
+                using (CsvReader csv = new CsvReader(textReader))
+                {
+                    csv.Configuration.HeaderValidated = null;
+                    csv.Configuration.MissingFieldFound = null;
+                    learners = csv.GetRecords<GetLearnerRequest>().ToList();
+                }
+            }
+
+            // NOTE: The External API performs validation, however it is a good idea to check beforehand.
+            bool invalidDataSupplied = learners.Any(c => !c.IsValid(out _));
+
+            if (invalidDataSupplied)
+            {
+                throw new InvalidOperationException("The supplied CSV file contains invalid data. Please correct and then try again.");
+            }
+            else
+            {
+                // NOTE: The External API does not have an batch delete (for safety reasons). You'll have to loop.
+                foreach (var request in learners)
+                {
+                    var response = await _LearnerApiClient.GetLearner(request);
+
+                    if (response is null)
+                    {
+                        // NOTE: You may want to deal with bad records separately
+                    }
+                }
+            }
+        }
+
+        public async Task CreateEpaRecordsExample()
+        {
+            const string filePath = @"CsvFiles\createEpaRecords.csv";
+
+            IEnumerable<CreateEpaRequest> epaRecordsToCreate;
+
+            using (TextReader textReader = File.OpenText(filePath))
+            {
+                using (CsvReader csv = new CsvReader(textReader))
+                {
+                    csv.Configuration.HeaderValidated = null;
+                    csv.Configuration.MissingFieldFound = null;
+                    csv.Configuration.RegisterClassMap(new CsvClassMaps.CreateEpaRequestMap());
+                    epaRecordsToCreate = csv.GetRecords<CreateEpaRequest>().ToList();
+                }
+            }
+
+            // NOTE: The External API performs validation, however it is a good idea to check beforehand.
+            bool invalidDataSupplied = epaRecordsToCreate.Any(c => !c.IsValid(out _));
+
+            if (invalidDataSupplied)
+            {
+                throw new InvalidOperationException("The supplied CSV file contains invalid data. Please correct and then try again.");
+            }
+            else
+            {
+                var response = (await _EpaApiClient.CreateEpaRecords(epaRecordsToCreate)).ToList();
+
+                // NOTE: You may want to deal with good & bad records separately
+                var goodEpaRecords = response.Where(c => c.EpaReference != null && !c.ValidationErrors.Any());
+                var badEpaRecords = response.Except(goodEpaRecords);
+
+
+                Console.WriteLine($"Good Certificates: {goodEpaRecords.Count()}, Bad Certificates: {badEpaRecords.Count()} ");
+            }
+        }
+
+        public async Task UpdateEpaRecordsExample()
+        {
+            const string filePath = @"CsvFiles\updateEpaRecords.csv";
+
+            IEnumerable<UpdateEpaRequest> epaRecordsToUpdate;
+
+            using (TextReader textReader = File.OpenText(filePath))
+            {
+                using (CsvReader csv = new CsvReader(textReader))
+                {
+                    csv.Configuration.HeaderValidated = null;
+                    csv.Configuration.MissingFieldFound = null;
+                    csv.Configuration.RegisterClassMap(new CsvClassMaps.UpdateEpaRequestMap());
+                    epaRecordsToUpdate = csv.GetRecords<UpdateEpaRequest>().ToList();
+                }
+            }
+
+            // Let's pretend the first and last apprentices have now passed their EPA
+            epaRecordsToUpdate.First().EpaDetails.Epas.First().EpaOutcome = "Pass";
+            epaRecordsToUpdate.First().EpaDetails.Epas.First().EpaDate = DateTime.UtcNow;
+            epaRecordsToUpdate.Last().EpaDetails.Epas.First().EpaOutcome = "Pass";
+            epaRecordsToUpdate.Last().EpaDetails.Epas.First().EpaDate = DateTime.UtcNow;
+
+            // NOTE: The External API performs validation, however it is a good idea to check beforehand.
+            bool invalidDataSupplied = epaRecordsToUpdate.Any(c => !c.IsValid(out _));
+
+            if (invalidDataSupplied)
+            {
+                throw new InvalidOperationException("The supplied CSV file contains invalid data. Please correct and then try again.");
+            }
+            else
+            {
+                var response = (await _EpaApiClient.UpdateEpaRecords(epaRecordsToUpdate)).ToList();
+
+                // NOTE: You may want to deal with good & bad records separately
+                var goodEpaRecords = response.Where(c => c.EpaReference != null && !c.ValidationErrors.Any());
+                var badEpaRecords = response.Except(goodEpaRecords);
+
+                Console.WriteLine($"Good Certificates: {goodEpaRecords.Count()}, Bad Certificates: {badEpaRecords.Count()} ");
+            }
+
+        }
+
+        public async Task DeleteEpaRecordExample()
+        {
+            const string filePath = @"CsvFiles\deleteEpaRecords.csv";
+
+            IEnumerable<DeleteEpaRequest> epaRecordsToDelete;
+
+            using (TextReader textReader = File.OpenText(filePath))
+            {
+                using (CsvReader csv = new CsvReader(textReader))
+                {
+                    csv.Configuration.HeaderValidated = null;
+                    csv.Configuration.MissingFieldFound = null;
+                    epaRecordsToDelete = csv.GetRecords<DeleteEpaRequest>().ToList();
+                }
+            }
+
+            // NOTE: The External API performs validation, however it is a good idea to check beforehand.
+            bool invalidDataSupplied = epaRecordsToDelete.Any(c => !c.IsValid(out _));
+
+            if (invalidDataSupplied)
+            {
+                throw new InvalidOperationException("The supplied CSV file contains invalid data. Please correct and then try again.");
+            }
+            else
+            {
+                // NOTE: The External API does not have an batch delete (for safety reasons). You'll have to loop.
+                foreach (var request in epaRecordsToDelete)
+                {
+                    var response = await _EpaApiClient.DeleteEpaRecord(request);
+
+                    if (response.Error != null)
+                    {
+                        // NOTE: You may want to deal with bad records separately
+                    }
+                }
+            }
         }
 
         public async Task CreateCertificatesExample()
@@ -57,14 +222,16 @@
 
             using (TextReader textReader = File.OpenText(filePath))
             {
-                CsvReader csv = new CsvReader(textReader);
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
-                certificatesToCreate = csv.GetRecords<CreateCertificateRequest>().ToList();
+                using (CsvReader csv = new CsvReader(textReader))
+                {
+                    csv.Configuration.HeaderValidated = null;
+                    csv.Configuration.MissingFieldFound = null;
+                    certificatesToCreate = csv.GetRecords<CreateCertificateRequest>().ToList();
+                }
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
-            bool invalidDataSupplied = certificatesToCreate.Any(c => !c.IsValid(out ICollection<ValidationResult> validationResults));
+            bool invalidDataSupplied = certificatesToCreate.Any(c => !c.IsValid(out _));
 
             if (invalidDataSupplied)
             {
@@ -90,10 +257,12 @@
 
             using (TextReader textReader = File.OpenText(filePath))
             {
-                CsvReader csv = new CsvReader(textReader);
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<UpdateCertificateRequest>().ToList();
+                using (CsvReader csv = new CsvReader(textReader))
+                {
+                    csv.Configuration.HeaderValidated = null;
+                    csv.Configuration.MissingFieldFound = null;
+                    certificates = csv.GetRecords<UpdateCertificateRequest>().ToList();
+                }
             }
 
             // Let's pretend the first and last apprentices got better grades
@@ -101,7 +270,7 @@
             certificates.Last().LearningDetails.AchievementOutcome = "PASS";
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
-            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out ICollection<ValidationResult> validationResults));
+            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out _));
 
             if (invalidDataSupplied)
             {
@@ -128,14 +297,16 @@
 
             using (TextReader textReader = File.OpenText(filePath))
             {
-                CsvReader csv = new CsvReader(textReader);
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<SubmitCertificateRequest>().ToList();
+                using (CsvReader csv = new CsvReader(textReader))
+                {
+                    csv.Configuration.HeaderValidated = null;
+                    csv.Configuration.MissingFieldFound = null;
+                    certificates = csv.GetRecords<SubmitCertificateRequest>().ToList();
+                }
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
-            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out ICollection<ValidationResult> validationResults));
+            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out _));
 
             if (invalidDataSupplied)
             {
@@ -161,14 +332,16 @@
 
             using (TextReader textReader = File.OpenText(filePath))
             {
-                CsvReader csv = new CsvReader(textReader);
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<DeleteCertificateRequest>().ToList();
+                using (CsvReader csv = new CsvReader(textReader))
+                {
+                    csv.Configuration.HeaderValidated = null;
+                    csv.Configuration.MissingFieldFound = null;
+                    certificates = csv.GetRecords<DeleteCertificateRequest>().ToList();
+                }
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
-            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out ICollection<ValidationResult> validationResults));
+            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out _));
 
             if (invalidDataSupplied)
             {
@@ -197,14 +370,16 @@
 
             using (TextReader textReader = File.OpenText(filePath))
             {
-                CsvReader csv = new CsvReader(textReader);
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.MissingFieldFound = null;
-                certificates = csv.GetRecords<GetCertificateRequest>().ToList();
+                using (CsvReader csv = new CsvReader(textReader))
+                {
+                    csv.Configuration.HeaderValidated = null;
+                    csv.Configuration.MissingFieldFound = null;
+                    certificates = csv.GetRecords<GetCertificateRequest>().ToList();
+                }
             }
 
             // NOTE: The External API performs validation, however it is a good idea to check beforehand.
-            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out ICollection<ValidationResult> validationResults));
+            bool invalidDataSupplied = certificates.Any(c => !c.IsValid(out _));
 
             if (invalidDataSupplied)
             {

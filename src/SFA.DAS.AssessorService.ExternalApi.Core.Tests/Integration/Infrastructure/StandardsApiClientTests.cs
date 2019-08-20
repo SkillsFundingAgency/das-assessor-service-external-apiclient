@@ -1,25 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SFA.DAS.AssessorService.ExternalApi.Core.Tests.Integration.Infrastructure
+﻿namespace SFA.DAS.AssessorService.ExternalApi.Core.Tests.Integration.Infrastructure
 {
     using FizzWare.NBuilder;
     using Newtonsoft.Json;
     using NUnit.Framework;
     using RichardSzalay.MockHttp;
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Error;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Response;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Standards;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Standards;
 
     [TestFixture(Category = "Infrastructure")]
     public sealed class StandardsApiClientTests : IDisposable
@@ -67,7 +59,7 @@ namespace SFA.DAS.AssessorService.ExternalApi.Core.Tests.Integration.Infrastruct
                standard1, standard2
             };
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/options")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -88,7 +80,7 @@ namespace SFA.DAS.AssessorService.ExternalApi.Core.Tests.Integration.Infrastruct
 
             var expectedResponse = standard;
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/{standard.StandardCode}")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/options/{standard.StandardCode}")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -108,7 +100,7 @@ namespace SFA.DAS.AssessorService.ExternalApi.Core.Tests.Integration.Infrastruct
 
             var expectedResponse = standard;
 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/{standard.StandardReference}")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/options/{standard.StandardReference}")
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
@@ -122,7 +114,7 @@ namespace SFA.DAS.AssessorService.ExternalApi.Core.Tests.Integration.Infrastruct
         public async Task GetOptionsForStandard_Standard_No_Options()
         {
             // arrange 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/NO_OPTIONS")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/options/NO_OPTIONS")
                 .Respond(HttpStatusCode.NoContent, "application/json", string.Empty);
 
             // act
@@ -136,7 +128,7 @@ namespace SFA.DAS.AssessorService.ExternalApi.Core.Tests.Integration.Infrastruct
         public async Task GetOptionsForStandard_Standard_Not_Found()
         {
             // arrange 
-            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/INVALID")
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/options/INVALID")
                 .Respond(HttpStatusCode.NotFound, "application/json", string.Empty);
 
             // act

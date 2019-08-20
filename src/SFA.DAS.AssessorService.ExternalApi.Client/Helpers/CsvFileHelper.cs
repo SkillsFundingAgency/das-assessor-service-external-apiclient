@@ -1,7 +1,7 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Client.Helpers
 {
     using CsvHelper;
-    using CsvHelper.TypeConversion;
+    using CsvHelper.Configuration;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -9,7 +9,7 @@
 
     public static class CsvFileHelper<T>
     {
-        public static IEnumerable<T> GetFromFile(string filePath)
+        public static IEnumerable<T> GetFromFile(string filePath, ClassMap<T> map = null)
         {
             FileStream stream = null;
             try
@@ -18,13 +18,20 @@
 
                 using (TextReader textReader = new StreamReader(stream))
                 {
-                    CsvReader csv = new CsvReader(textReader);
-                    csv.Configuration.HeaderValidated = null;
-                    csv.Configuration.MissingFieldFound = null;
-                    csv.Configuration.BadDataFound = null;
-                    csv.Configuration.ReadingExceptionOccurred = null;
+                    using (CsvReader csv = new CsvReader(textReader))
+                    {
+                        csv.Configuration.HeaderValidated = null;
+                        csv.Configuration.MissingFieldFound = null;
+                        csv.Configuration.BadDataFound = null;
+                        csv.Configuration.ReadingExceptionOccurred = null;
 
-                    return csv.GetRecords<T>().ToList();
+                        if (map != null)
+                        {
+                            csv.Configuration.RegisterClassMap(map);
+                        }
+
+                        return csv.GetRecords<T>().ToList();
+                    }
                 }
             }
             catch (SystemException)
@@ -46,12 +53,13 @@
             {
                 using (TextWriter textReader = File.CreateText(filePath))
                 {
-                    CsvWriter csv = new CsvWriter(textReader);
-
-                    csv.WriteHeader<T>();
-                    csv.NextRecord();
-                    csv.WriteRecords(records);
-                    csv.NextRecord();
+                    using (CsvWriter csv = new CsvWriter(textReader))
+                    {
+                        csv.WriteHeader<T>();
+                        csv.NextRecord();
+                        csv.WriteRecords(records);
+                        csv.NextRecord();
+                    }
                 }
             }
             catch (SystemException)

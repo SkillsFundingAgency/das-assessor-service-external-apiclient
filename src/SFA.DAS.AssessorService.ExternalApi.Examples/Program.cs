@@ -1,17 +1,19 @@
 ﻿namespace SFA.DAS.AssessorService.ExternalApi.Examples
 {
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Request.Certificates;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Request.Epa;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Messages.Request.Learners;
     using SFA.DAS.AssessorService.ExternalApi.Core.Models.Certificates;
-    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Request;
+    using SFA.DAS.AssessorService.ExternalApi.Core.Models.Epa;
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.Net.Http;
     using System.Threading.Tasks;
 
     public class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             const string subscriptionKey = ""; // insert your key here
             const string apiBaseAddress = ""; // insert the API address here
@@ -22,10 +24,16 @@
             httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
             httpClient.BaseAddress = new Uri(apiBaseAddress);
 
+            LearnerApiClient learnerApiClient = new LearnerApiClient(httpClient);
+            EpaApiClient epaApiClient = new EpaApiClient(httpClient);
             CertificateApiClient certificateApiClient = new CertificateApiClient(httpClient);
             StandardsApiClient standardsApiClient = new StandardsApiClient(httpClient);
 
-            Program p = new Program(certificateApiClient, standardsApiClient);
+            Program p = new Program(learnerApiClient, epaApiClient, certificateApiClient, standardsApiClient);
+            p.GetLearnerExample().GetAwaiter().GetResult();
+            p.CreateEpaRecordsExample().GetAwaiter().GetResult();
+            p.UpdateEpaRecordsExample().GetAwaiter().GetResult();
+            p.DeleteEpaRecordExample().GetAwaiter().GetResult();
             p.CreateCertificatesExample().GetAwaiter().GetResult();
             p.UpdateCertificatesExample().GetAwaiter().GetResult();
             p.SubmitCertificatesExample().GetAwaiter().GetResult();
@@ -36,14 +44,111 @@
             p.GetOptionsForStandardExample().GetAwaiter().GetResult();
         }
 
-
+        private readonly LearnerApiClient _LearnerApiClient;
+        private readonly EpaApiClient _EpaApiClient;
         private readonly CertificateApiClient _CertificateApiClient;
         private readonly StandardsApiClient _StandardsApiClient;
 
-        public Program(CertificateApiClient certificateApiClient, StandardsApiClient standardsApiClient)
+        public Program(LearnerApiClient learnerApiClient, EpaApiClient epaApiClient, CertificateApiClient certificateApiClient, StandardsApiClient standardsApiClient)
         {
+            _LearnerApiClient = learnerApiClient;
+            _EpaApiClient = epaApiClient;
             _CertificateApiClient = certificateApiClient;
             _StandardsApiClient = standardsApiClient;
+        }
+
+        public async Task GetLearnerExample()
+        {
+            long uln = 1234567890;
+            string lastName = "Blogs";
+            string standard = "1";
+
+            GetLearnerRequest learnerToGet = new GetLearnerRequest
+            {
+                Uln = uln,
+                FamilyName = lastName,
+                Standard = standard,
+            };
+
+            if (learnerToGet.IsValid(out _))
+            {
+                // NOTE: The External API performs validation, however it is a good idea to check beforehand
+                await _LearnerApiClient.GetLearner(learnerToGet);
+            }
+        }
+
+        public async Task CreateEpaRecordsExample()
+        {
+            long uln = 1234567890;
+            string firstName = "Fred";
+            string lastName = "Blogs";
+            int standardCode = 1;
+            string standardReference = "ST0127";
+            string epaOutcome = "Fail";
+            DateTime epaDate = DateTime.UtcNow;
+
+            CreateEpaRequest newEpa = new CreateEpaRequest
+            {
+                Learner = new Learner { Uln = uln, GivenNames = firstName, FamilyName = lastName },
+                Standard = new Standard { StandardCode = standardCode, StandardReference = standardReference },
+                EpaDetails = new EpaDetails { Epas = new List<EpaRecord> { new EpaRecord { EpaOutcome = epaOutcome, EpaDate = epaDate } } }
+            };
+
+            if (newEpa.IsValid(out _))
+            {
+                // NOTE: The External API performs validation, however it is a good idea to check beforehand
+                await _EpaApiClient.CreateEpaRecords(new List<CreateEpaRequest> { newEpa });
+            }
+        }
+
+        public async Task UpdateEpaRecordsExample()
+        {
+            // NOTE: You will need to know the Epa Reference
+            string epaReference = "1234567890";
+            long uln = 1234567890;
+            string firstName = "Fred";
+            string lastName = "Blogs";
+            int standardCode = 1;
+            string standardReference = "ST0127";
+            string epaOutcome = "Pass";
+            DateTime epaDate = DateTime.UtcNow;
+
+            // Let's pretend the apprentice has now passed their EPA
+            UpdateEpaRequest updatedEpa = new UpdateEpaRequest
+            {
+                EpaReference = epaReference,
+                Learner = new Learner { Uln = uln, GivenNames = firstName, FamilyName = lastName },
+                Standard = new Standard { StandardCode = standardCode, StandardReference = standardReference },
+                EpaDetails = new EpaDetails { Epas = new List<EpaRecord> { new EpaRecord { EpaOutcome = epaOutcome, EpaDate = epaDate } } }
+            };
+
+            if (updatedEpa.IsValid(out _))
+            {
+                // NOTE: The External API performs validation, however it is a good idea to check beforehand
+                await _EpaApiClient.UpdateEpaRecords(new List<UpdateEpaRequest> { updatedEpa });
+            }
+        }
+
+        public async Task DeleteEpaRecordExample()
+        {
+            long uln = 1234567890;
+            string lastName = "Blogs";
+            string standard = "1";
+            string epaReference = "1234567890";
+
+            DeleteEpaRequest epaToDelete = new DeleteEpaRequest
+            {
+                Uln = uln,
+                FamilyName = lastName,
+                Standard = standard,
+                EpaReference = epaReference
+            };
+
+            if (epaToDelete.IsValid(out _))
+            {
+                // NOTE: The External API performs validation, however it is a good idea to check beforehand
+                await _EpaApiClient.DeleteEpaRecord(epaToDelete);
+            }
         }
 
         public async Task CreateCertificatesExample()
@@ -52,6 +157,7 @@
             string firstName = "Fred";
             string lastName = "Blogs";
             int standardCode = 1;
+            string standardReference = "ST0127";
             string overallGrade = "PASS";
             string contactName = "Shreya Smith";
             string organisation = "Contoso Ltd";
@@ -62,12 +168,12 @@
             CreateCertificateRequest newCertificate = new CreateCertificateRequest
             {
                 Learner = new Learner { Uln = uln, GivenNames = firstName, FamilyName = lastName },
-                Standard = new Standard { StandardCode = standardCode },
+                Standard = new Standard { StandardCode = standardCode, StandardReference = standardReference },
                 LearningDetails = new LearningDetails { OverallGrade = overallGrade, AchievementDate = DateTime.UtcNow },
                 PostalContact = new PostalContact { ContactName = contactName, Organisation = organisation, AddressLine1 = address, City = city, PostCode = postcode }
             };
 
-            if (newCertificate.IsValid(out ICollection<ValidationResult> validationResults))
+            if (newCertificate.IsValid(out _))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
                 await _CertificateApiClient.CreateCertificates(new List<CreateCertificateRequest> { newCertificate });
@@ -85,7 +191,7 @@
                 {
                     CertificateReference = "00012001",
                     Learner = new Learner { Uln = 1234567890, GivenNames = "Fred", FamilyName = "Bloggs" },
-                    Standard = new Standard { StandardCode = 1, Level = 1, StandardName = "Example Standard", },
+                    Standard = new Standard { StandardCode = 1, StandardReference = "ST0127", Level = 1, StandardName = "Example Standard", },
                     LearningDetails = new LearningDetails
                     {
                         LearningStartDate = DateTime.UtcNow.AddYears(-1),
@@ -110,7 +216,7 @@
 
             updatedCertificate.LearningDetails.OverallGrade = "Merit";
 
-            if (updatedCertificate.IsValid(out ICollection<ValidationResult> validationResults))
+            if (updatedCertificate.IsValid(out _))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
                 await _CertificateApiClient.UpdateCertificates(new List<UpdateCertificateRequest> { updatedCertificate });
@@ -122,6 +228,7 @@
             long uln = 1234567890;
             string lastName = "Blogs";
             int standardCode = 1;
+            string standardReference = "ST0127";
             string certificateReference = "00012001";
 
             SubmitCertificateRequest certificateToSubmit = new SubmitCertificateRequest
@@ -129,10 +236,11 @@
                 Uln = uln,
                 FamilyName = lastName,
                 StandardCode = standardCode,
+                StandardReference = standardReference,
                 CertificateReference = certificateReference
             };
 
-            if (certificateToSubmit.IsValid(out ICollection<ValidationResult> validationResults))
+            if (certificateToSubmit.IsValid(out _))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
                 await _CertificateApiClient.SubmitCertificates(new List<SubmitCertificateRequest> { certificateToSubmit });
@@ -154,7 +262,7 @@
                 CertificateReference = certificateReference
             };
 
-            if (certificateToDelete.IsValid(out ICollection<ValidationResult> validationResults))
+            if (certificateToDelete.IsValid(out _))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
                 await _CertificateApiClient.DeleteCertificate(certificateToDelete);
@@ -174,7 +282,7 @@
                 Standard = standard,
             };
 
-            if (certificateToGet.IsValid(out ICollection<ValidationResult> validationResults))
+            if (certificateToGet.IsValid(out _))
             {
                 // NOTE: The External API performs validation, however it is a good idea to check beforehand
                 await _CertificateApiClient.GetCertificate(certificateToGet);

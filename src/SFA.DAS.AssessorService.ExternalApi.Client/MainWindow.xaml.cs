@@ -1,5 +1,4 @@
 ﻿using Microsoft.Win32;
-using SFA.DAS.AssessorService.ExternalApi.Client.Controls;
 using SFA.DAS.AssessorService.ExternalApi.Client.Helpers;
 using SFA.DAS.AssessorService.ExternalApi.Client.Properties;
 using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
@@ -22,45 +21,81 @@ namespace SFA.DAS.AssessorService.ExternalApi.Client
             InitializeComponent();
         }
 
-        private void btnCreate_Click(object sender, RoutedEventArgs e)
+        private void btnGetLearners_Click(object sender, RoutedEventArgs e)
         {
-            CreateWindow window = new CreateWindow
+            Controls.Learners.GetWindow window = new Controls.Learners.GetWindow
             {
                 Owner = this
             };
             window.ShowDialog();
         }
 
-        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        private void btnCreateEpaRecords_Click(object sender, RoutedEventArgs e)
         {
-            UpdateWindow window = new UpdateWindow
+            Controls.Epa.CreateWindow window = new Controls.Epa.CreateWindow
             {
                 Owner = this
             };
             window.ShowDialog();
         }
 
-        private void btnSubmit_Click(object sender, RoutedEventArgs e)
+        private void btnUpdateEpaRecords_Click(object sender, RoutedEventArgs e)
         {
-            SubmitWindow window = new SubmitWindow
+            Controls.Epa.UpdateWindow window = new Controls.Epa.UpdateWindow
             {
                 Owner = this
             };
             window.ShowDialog();
         }
 
-        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        private void btnDeleteEpaRecords_Click(object sender, RoutedEventArgs e)
         {
-            DeleteWindow window = new DeleteWindow
+            Controls.Epa.DeleteWindow window = new Controls.Epa.DeleteWindow
             {
                 Owner = this
             };
             window.ShowDialog();
         }
 
-        private void btnGet_Click(object sender, RoutedEventArgs e)
+        private void btnCreateCertificates_Click(object sender, RoutedEventArgs e)
         {
-            GetWindow window = new GetWindow
+            Controls.Certificates.CreateWindow window = new Controls.Certificates.CreateWindow
+            {
+                Owner = this
+            };
+            window.ShowDialog();
+        }
+
+        private void btnUpdateCertificates_Click(object sender, RoutedEventArgs e)
+        {
+            Controls.Certificates.UpdateWindow window = new Controls.Certificates.UpdateWindow
+            {
+                Owner = this
+            };
+            window.ShowDialog();
+        }
+
+        private void btnSubmitCertificates_Click(object sender, RoutedEventArgs e)
+        {
+            Controls.Certificates.SubmitWindow window = new Controls.Certificates.SubmitWindow
+            {
+                Owner = this
+            };
+            window.ShowDialog();
+        }
+
+        private void btnDeleteCertificates_Click(object sender, RoutedEventArgs e)
+        {
+            Controls.Certificates.DeleteWindow window = new Controls.Certificates.DeleteWindow
+            {
+                Owner = this
+            };
+            window.ShowDialog();
+        }
+
+        private void btnGetCertificates_Click(object sender, RoutedEventArgs e)
+        {
+            Controls.Certificates.GetWindow window = new Controls.Certificates.GetWindow
             {
                 Owner = this
             };
@@ -69,7 +104,7 @@ namespace SFA.DAS.AssessorService.ExternalApi.Client
 
         private void btnOptions_Click(object sender, RoutedEventArgs e)
         {
-            StandardOptionsWindow window = new StandardOptionsWindow
+            Controls.Standards.StandardOptionsWindow window = new Controls.Standards.StandardOptionsWindow
             {
                 Owner = this
             };
@@ -123,7 +158,7 @@ namespace SFA.DAS.AssessorService.ExternalApi.Client
             string sMessageBoxText = " Do you want to save the grades for later use?";
             string sCaption = "Save Grades";
 
-            MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Error);
+            MessageBoxResult rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (rsltMessageBox == MessageBoxResult.No)
             {
@@ -138,7 +173,7 @@ namespace SFA.DAS.AssessorService.ExternalApi.Client
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                CsvFileHelper<dynamic>.SaveToFile(saveFileDialog.FileName, grades);
+                CsvFileHelper<dynamic>.SaveToFile(saveFileDialog.FileName, grades.Select(g => new { Grade = g }));
                 System.Diagnostics.Process.Start(saveFileDialog.FileName);
             }
         }

@@ -93,6 +93,9 @@
         {
             public static ValidationResult ValidateAchievementDate(DateTime? achievementDate, ValidationContext validationContext)
             {
+                if (validationContext.MemberName != "AchievementDate")
+                    throw new InvalidOperationException("This Validator is exclusive to AchievementDate");
+
                 if (!achievementDate.HasValue)
                 {
                     return new ValidationResult("Enter the achievement date", new List<string> { "AchievementDate" });
@@ -116,6 +119,9 @@
         {
             public static ValidationResult ValidateOverallGrade(string overallGrade, ValidationContext validationContext)
             {
+                if (validationContext.MemberName != "OverallGrade")
+                    throw new InvalidOperationException("This Validator is exclusive to OverallGrade");
+
                 var grades = new string[] { "Pass", "Credit", "Merit", "Distinction", "Pass with excellence", "No grade awarded" };
 
                 if (string.IsNullOrWhiteSpace(overallGrade))
