@@ -55,7 +55,7 @@ https://www.smartsurvey.co.uk/s/certification-API/
 ## Sample Scenarios
 For details see the online Swagger documentation in the [Developer Portal](https://developers.apprenticeships.sfa.bis.gov.uk/).
 
-## Monthly Sandbox ILR Refresh
+## Monthly Sandbox ILR Test data refresh
 
 On the 1st of every month the Sandbox Environment will be refreshed with a test data set based on the current [Register of End Point Assessor Organisations.](https://www.gov.uk/guidance/register-of-end-point-assessment-organisations)
 
@@ -69,8 +69,8 @@ The set of ILR records follow this pattern:
 
 ***Example. For EPA0001, Standard Code = 80, and 1st uln in the sequence***
 - uln = "1" + "0001" + "080" + "01" = 1000108001
-- familyName = Test
-- givenNames = 1000108001 (same value as uln)
+- givenNames = Test
+- familyName = 1000108001 (same value as uln)
 - standard = 80
 
 
