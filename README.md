@@ -64,7 +64,7 @@ The set of ILR records follow this pattern:
 ##### uln = 10 digits  
 - "1" - leading digit
 - "xxxx" - 4 digits of EPAOrgId
-- "xxx" - 3 digits of LAS Standard Code (leading 0s)
+- "xxx" - 3 digits of LARS Standard Code (leading 0s)
 - "00 - 09" - 10 unique ulns per standard code
 
 ***Example. For EPA0001, Standard Code = 80, and 1st uln in the sequence***
