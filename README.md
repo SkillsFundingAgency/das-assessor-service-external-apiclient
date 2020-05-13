@@ -16,7 +16,7 @@ Licensed under the [MIT license](https://github.com/SkillsFundingAgency/das-asse
     - ASP.NET and web development
     - .NET desktop development
 	- .NET Core 2.1 SDK
-- Create an account on the [Developer Portal](https://developers.apprenticeships.sfa.bis.gov.uk/)
+- Create an account on the [Developer Portal](https://developers.apprenticeships.education.gov.uk/)
 	- Obtain External API Subscription Key and Base Address to Sandbox Environment
 	- Can also be used to access the current Swagger Documentation
 
@@ -53,7 +53,7 @@ https://www.smartsurvey.co.uk/s/certification-API/
 
 
 ## Sample Scenarios
-For details see the online Swagger documentation in the [Developer Portal](https://developers.apprenticeships.sfa.bis.gov.uk/).
+For details see the online Swagger documentation in the [Developer Portal](https://developers.apprenticeships.education.gov.uk/).
 
 ## Monthly Sandbox ILR Test data refresh
 
