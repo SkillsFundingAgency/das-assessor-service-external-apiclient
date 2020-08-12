@@ -54,21 +54,6 @@
         }
 
         [Test]
-        public void OrganisationMissing()
-        {
-            // arrange
-            var postalContact = Builder<PostalContact>.CreateNew().With(l => l.PostCode = "ZY9 9ZY").With(l => l.Organisation = null).Build();
-
-            // act
-            bool isValid = postalContact.IsValid(out var validationResults);
-
-            // assert
-            Assert.IsFalse(isValid);
-            Assert.That(validationResults, Has.Count.EqualTo(1));
-            StringAssert.AreEqualIgnoringCase("Enter an organisation", validationResults.First().ErrorMessage);
-        }
-
-        [Test]
         public void AddressMissing()
         {
             // arrange
