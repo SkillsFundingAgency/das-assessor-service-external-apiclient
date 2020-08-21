@@ -11,7 +11,6 @@
 
         public string Department { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Enter an organisation")]
         public string Organisation { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Enter an address")]
