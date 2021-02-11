@@ -75,6 +75,7 @@ The set of ILR records follow this pattern:
 
 ### Standard versions
 Standard versions available are as published by IfATE [Standards](https://www.instituteforapprenticeships.org/apprenticeship-standards)
+The explicit use of standard version on creation of EPA records and certificates is now expected. If supplied the "version" field will be taken from the request application/json data object, and validated against the IfATE standard data. If the "version" field is not supplied a default value will be calculated, based on the apprenticeship start date and the version of the standard active at that time. Note, that this may not always be accurate and hence it is preferred that the "version" always be provided.
 
 ## Learner Details
 
@@ -284,7 +285,7 @@ Response 200, with application/json body dependent on records held.
 Request application/json body posted should contain an array of EPA records, each with your own unique "requestId", which will be used in the response body.
 
 Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) to identify the standard.
-At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is required, and relates to the available IfATE versions for the "standardReference". 
+At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is optional but should be provided where known, and relates to the available IfATE versions for the "standardReference", and will be validated against available versions of the standard. If "version" is not provided a default value will be calcluated based on "learningStartDate".
 
 **Request**
 
@@ -300,7 +301,7 @@ application/json body posted should contain an array with the requested EPA reco
    "standard": {
      "standardCode": 0 (optional),
      "standardReference": "string" (optional),
-     "version": "string"
+     "version": "string" (optional)
    },
    "learner": {
       "uln": 0,
@@ -374,7 +375,7 @@ If the first EPA outcome is a fail and there is subsequently a pass the EPA deta
 If "resit" or "retake" are not included the value will be false by default.
 
 Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) to identify the standard.
-At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is required, and relates to the available IfATE versions for the "standardReference". 
+At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is optional and relates to the available IfATE versions for the "standardReference", and will be validated against available versions of the standard if provided. If "version" is not provided the value will be taken from the initial **Create EPA Record POST**.
 
 The request should use the previously returned EPA Reference (which can also be obtained using GET Learner Details)
 
@@ -586,9 +587,9 @@ Response 200 plus certificate details, if certificate already created.
 Request application/json body posted should contain an array of certificate records, for a uln, familyName and Standard combination, each with your own unique "requestId" which will be used in the response body.
 
 Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) to identify the standard.
-At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is required, and relates to the available IfATE versions for the "standardReference". 
+At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is optional but should be provided where known, and relates to the available IfATE versions for the "standardReference", and will be validated against available versions of the standard. If "version" is not provided the value will be taken from a previous **Create EPA Record POST** (if used) or a default value will be calcluated based on "learningStartDate".
 
-Where the Standard has a Course Option then a valid choice must be provided.
+Where the Standard has a Course Option then a valid choice must be provided, that is valid for the specific standard version.
 
 **Request**
 
@@ -746,7 +747,7 @@ Previously created certificates can be updated, where they have not yet been sub
 The certificate records to be updated have to be identified using uln, familyName, standard and the previously assigned certificateReference.
 
 Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) to identify the standard.
-At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is required, and relates to the available IfATE versions for the "standardReference". 
+At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is optional but should be provided where known, and relates to the available IfATE versions for the "standardReference", and will be validated against available versions of the standard. If "version" is not provided the value will be taken from a previous **Create Certificate POST**
 
 Where the Standard has a Course Option then a valid choice must be provided.
 
