@@ -466,7 +466,7 @@ Where "message text" is:
 **Request**
    
 ```http
-DELETE /api/v1/certificate/{uln}/{familyName}/{standard}/{epaReference}
+DELETE /api/v1/epa/{uln}/{familyName}/{standard}/{epaReference}
 ```
 
 **Response** code indicates success or failure of the request.
@@ -971,8 +971,8 @@ The full list of options can be provided, or the list can be filtered by a stand
 **Request**
 
 ```http
-GET /api/v1/certificate/options
-GET /api/v1/certificate/options/{standard}
+GET /api/v1/standard/options
+GET /api/v1/standard/options/{standard}
 
 ```
 
@@ -985,6 +985,7 @@ Response 200
 [{
    "standardCode": 6,
    "standardReference": "ST0156",
+   "version": "1.1",   
    "courseOption": [
       "Overhead lines",
       "Substation fitting",
@@ -995,6 +996,7 @@ Response 200
 {
    "standardCode": 7,
    "standardReference": "ST0184",
+   "version": "1.0",
    "courseOption": [
       "Card services",
       "Corporate/Commercial",
@@ -1003,10 +1005,11 @@ Response 200
    ]
 }
 ,
-... for all available standards and options
+... for all available active standards and options
 {
    "standardCode": 314,
    "standardReference": "ST0018",
+   "version": "1.0",   
    "courseOption": [
       "Container Based System",
       "Soil Based System"
@@ -1023,8 +1026,6 @@ The full list of options can be provided, or the list can be filtered by a stand
 **Request**
 
 ```http
-GET /api/v1/standard/options
-GET /api/v1/standard/options/{standard}
 GET /api/v1/standard/options/{standard}/{version}
 
 ```
@@ -1033,7 +1034,7 @@ Request can either use numeric "standardCode" (LARS Standard code) or "standardR
 
 **Response** application/json list of standard codes and related options.
 
-Response 200 
+Response 200 (example for **ST0156** version **1.0**)
 ```json
 [{
    "standardCode": 6,
@@ -1043,40 +1044,6 @@ Response 200
       "Overhead lines",
       "Substation fitting",
       "Underground cables"
-   ]
-}
-,
-{
-   "standardCode": 6,
-   "standardReference": "ST0156",
-   "version": "1.1"
-   "courseOption": [
-      "Overhead lines",
-      "Substation fitting",
-      "Underground cables"
-   ]
-}
-,
-{
-   "standardCode": 7,
-   "standardReference": "ST0184",
-   "version": "1.0"
-   "courseOption": [
-      "Card services",
-      "Corporate/Commercial",
-      "Retail",
-      "Wealth"
-   ]
-}
-,
-... for all available standards and options
-{
-   "standardCode": 314,
-   "standardReference": "ST0018",
-   "version": "1.0"
-   "courseOption": [
-      "Container Based System",
-      "Soil Based System"
    ]
 }]
 ```
