@@ -15,10 +15,10 @@ Licensed under the [MIT license](https://github.com/SkillsFundingAgency/das-asse
 - Install [Visual Studio 2017 or 2019](https://www.visualstudio.com/downloads/) with these workloads:
     - ASP.NET and web development
     - .NET desktop development
-	- .NET Core 2.1 SDK
+    - .NET Core 2.1 SDK
 - Create an account on the [Developer Portal](https://developers.apprenticeships.education.gov.uk/)
-	- Obtain External API Subscription Key and Base Address to Sandbox Environment
-	- Can also be used to access the current Swagger Documentation
+    - Obtain External API Subscription Key and Base Address to Sandbox Environment
+    - Can also be used to access the current Swagger Documentation
 
 ### Open the solution
 
@@ -30,7 +30,7 @@ Licensed under the [MIT license](https://github.com/SkillsFundingAgency/das-asse
 
 A simple Windows Presentation Foundation (WPF) client.
 - Reads in CSV formatted files
-	- There are examples in the following solution folder: [CsvFiles](https://github.com/SkillsFundingAgency/das-assessor-service-external-apiclient/tree/master/src/SFA.DAS.AssessorService.ExternalApi.Examples/CsvFiles)
+    - There are examples in the following solution folder: [CsvFiles](https://github.com/SkillsFundingAgency/das-assessor-service-external-apiclient/tree/master/src/SFA.DAS.AssessorService.ExternalApi.Examples/CsvFiles)
 
 ####  SFA.DAS.AssessorService.ExternalApi.Examples
 
@@ -75,7 +75,7 @@ The set of ILR records follow this pattern:
 
 ### Standard versions
 Versions of standards supported are as published by IfATE [Standards](https://www.instituteforapprenticeships.org/apprenticeship-standards)
-The explicit use of standard version on creation of EPA records and certificates is now expected. If supplied the "version" field value will be taken from the request application/json data object, and validated against the IfATE standard data. If the "version" field is not supplied a default value will be calculated, based on the apprenticeship start date and the version of the standard active at that time. Note, that this may not always be accurate and hence it is recommended that the "version" always be provided.
+The explicit use of standard version on creation of EPA records and certificates is now expected. If supplied the "version" field value will be taken from the request application/json data object, and validated against the IfATE standard data, and the EPAOs approved versions of the standard. If the "version" field is not supplied a default value will be calculated, based on the apprenticeship start date and the version of the standard active at that time. Note, that this may not always be accurate and hence it is recommended that the "version" always be provided.
 
 ## Learner Details
 
@@ -115,7 +115,8 @@ Response 200, with application/json body dependent on records held.
             "standardCode": 0 (lookup),
             "standardReference": "string" (lookup),
             "standardName": "string" (lookup),
-            "level": 0 (lookup)
+            "level": 0 (lookup),
+            "version": "string" (lookup, where pre-defined)
         },
         "learner": {
             "uln": 0 (as provided),
@@ -146,7 +147,7 @@ Response 200, with application/json body dependent on records held.
             "standardReference": "string" (lookup),
             "standardName": "string" (lookup),
             "level": 0 (lookup),
-            "version": "string" (lookup)
+            "version": "string" (lookup, where pre-defined)
         },
         "learner": {
             "uln": 0 (as provided),
@@ -168,11 +169,13 @@ Response 200, with application/json body dependent on records held.
         "epaReference": "string" (lookup),
         "epas": [{
                     "epaDate": "2019-02-02T00:00:00Z",
-                    "epaOutcome": "pass | fail | withdrawn"
+                    "epaOutcome": "pass | fail | withdrawn",
+                    "version": "string" (optional, lookup)
                 },
                 {
                     "epaDate": "2019-02-12T00:00:00Z",
                     "epaOutcome": "pass | fail | withdrawn",
+                    "version": "string" (optional, lookup),
                     "resit": true | false,
                     "retake": true | false
                 }],
@@ -192,7 +195,7 @@ Response 200, with application/json body dependent on records held.
             "standardReference": "string" (lookup),
             "standardName": "string" (lookup),
             "level": 0 (lookup),
-            "version": "string" (lookup)
+            "version": "string" (lookup, where pre-defined)
         },
         "learner": {
             "uln": 0 (as provided),
@@ -214,11 +217,13 @@ Response 200, with application/json body dependent on records held.
         "epaReference": "string" (lookup),
         "epas": [{
                     "epaDate": "2019-02-02T00:00:00Z",
-                    "epaOutcome": "pass | fail | withdrawn"
+                    "epaOutcome": "pass | fail | withdrawn",
+                    "version": "string" (optional, lookup)
                 },
                 {
                     "epaDate": "2019-02-12T00:00:00Z",
                     "epaOutcome": "pass | fail | withdrawn",
+                    "version": "string" (optional, lookup),
                     "resit": true | false,
                     "retake": true | false
                 }],
@@ -233,7 +238,7 @@ Response 200, with application/json body dependent on records held.
             "standardReference": "string" (lookup),
             "standardName": "string" (lookup),
             "level": 0 (lookup),
-            "version": "String" (lookup)
+            "version": "string" (lookup)
          },
          "learner": {
             "uln": 0 (as provided),
@@ -285,7 +290,7 @@ Response 200, with application/json body dependent on records held.
 Request application/json body posted should contain an array of EPA records, each with your own unique "requestId", which will be used in the response body.
 
 Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) to identify the standard.
-At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is optional but should be provided where known, and relates to the available IfATE versions for the "standardReference", and will be validated against available versions of the standard. If "version" is not provided a default value will be calculated based on "learningStartDate".
+At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is optional but should be provided where known, and relates to the available IfATE versions for the "standardReference", and will be validated against available versions of the standard, and the EPAOs approved versions of the standard. If "version" is not provided a default value will be calculated based on "learningStartDate".
 
 **Request**
 
@@ -354,10 +359,11 @@ Where "message text" is:
     * "ULN should contain exactly 10 numbers"
     * "ULN, FamilyName and Standard not found" 
 - Standard 
-	* "Provide a valid Standard"
+    * "Provide a valid Standard"
     * "Invalid version for Standard"
     * "Your organisation is not approved to assess this Standard"
-	* "StandardReference and StandardCode must be for the same Standard"
+    * "Your organisation is not approved to assess this Standard version"
+    * "StandardReference and StandardCode must be for the same Standard"
 - FamilyName 
     * "Provide apprentice family name" 
 
@@ -372,10 +378,11 @@ Use this to update one or more EPA records, for all outcomes to date.
 Request application/json body posted should contain an array of Epa records, each with your own unique "requestId" which will be used in the response body.
 The latest and all previous EPA outcomes for the learner and standard combination should be included for the update.
 If the first EPA outcome is a fail and there is subsequently a pass the EPA details can include an optional "resit" or "retake" boolean.
-If "resit" or "retake" are not included the value will be false by default.
+If "resit" or "retake" are not included the value will be false by default. If an earlier EPA was for a different version of the standard the "version" can be provided, otherwise the version will be taken from the latest EPA.
 
 Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) to identify the standard.
-At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is optional and relates to the available IfATE versions for the "standardReference", and will be validated against available versions of the standard if provided. If "version" is not provided the value will be taken from the initial **Create EPA Record POST**.
+At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is optional and relates to the available IfATE versions for the "standardReference", and will be validated against available versions of the standard if provided, and the EPAOs approved versions of the standard. If "version" is not provided the value will be taken from the initial **Create EPA Record POST**.
+
 
 The request should use the previously returned EPA Reference (which can also be obtained using GET Learner Details)
 
@@ -402,8 +409,9 @@ application/json body posted should contain an array for previously requested ce
    },
    "epaDetails": {
         "epas": [{
-                "epaDate": "2019-02-02T00:00:00Z",
+                "epaDate": "2019-01-02T00:00:00Z",
                 "epaOutcome": "pass | fail | withdrawn"
+                "version": "string" (optional, where different to the latest EPA)
             }, {
                 "epaDate": "2019-02-12T00:00:00Z",
                 "epaOutcome": "pass | fail | withdrawn",
@@ -449,10 +457,11 @@ Where "message text" is:
     * "ULN should contain exactly 10 numbers"
     * "ULN, FamilyName and Standard not found" 
 - Standard 
-	* "Provide a valid Standard"
+    * "Provide a valid Standard"
     * "Invalid version for Standard"
     * "Your organisation is not approved to assess this Standard"
-	* "StandardReference and StandardCode must be for the same Standard"
+    * "Your organisation is not approved to assess this Standard version"
+    * "StandardReference and StandardCode must be for the same Standard"
 - FamilyName 
     * "Provide apprentice family name" 
 
@@ -484,12 +493,12 @@ Response 403
 Where "message text" is:
 - EPA data 
     * "Provide the EPA reference"
-	* "EPA not found"
+    * "EPA not found"
     * "Your organisation is not the creator of this EPA"
     * "Certificate already exists, cannot delete EPA record"
 - Uln 
     * "ULN should contain exactly 10 numbers"
-	* "ULN, FamilyName and Standard not found" 
+    * "ULN, FamilyName and Standard not found" 
 - Standard 
     * "Provide a valid Standard"
     * "Your organisation is not approved to assess this Standard"
@@ -703,10 +712,11 @@ Where "message text" is:
     * "ULN should contain exactly 10 numbers"
     * "ULN, FamilyName and Standard not found" 
 - Standard 
-	* "Provide a valid Standard"
+    * "Provide a valid Standard"
     * "Invalid version for Standard"
-    * "Your organisation is not approved to assess this Standard and version"
-	* "StandardReference and StandardCode must be for the same Standard*
+    * "Your organisation is not approved to assess this Standard"
+    * "Your organisation is not approved to assess this Standard version"
+    * "StandardReference and StandardCode must be for the same Standard*
 - CourseOption
     * "No course option available for this Standard and version. Must be empty"
     * "Invalid course option for this Standard and version. Must be one of the following: 'list of course options'"
@@ -736,7 +746,7 @@ Where "message text" is:
     * "Provide a city or town"
 - Postcode
     * "Provide a postcode"
-	* "Provide a valid UK postcode"
+    * "Provide a valid UK postcode"
 
 
 ### 3.   Update Certificate (Optional)
@@ -807,7 +817,7 @@ Response 200, plus application/json containing response for the requested certif
 Response body is as for **Create Certificate POST**, except alternative "message text" is:
 - Certificate 
     * "Provide the certificate reference"
-	* "Certificate not found"
+    * "Certificate not found"
     * "Your organisation is not the creator of this Certificate"
     * "Certificate does not exist in Draft status"
 
@@ -914,7 +924,7 @@ Response 200, plus application/json containing response for the submitted certif
 Response body is as for **Create Certificate POST**, except alternative "message text" is:
 - Certificate 
     * "Provide the certificate reference"
-	* "Certificate not found"
+    * "Certificate not found"
     * "Your organisation is not the creator of this Certificate"
     * "Certificate has already been Submitted"
     * "Certificate is not in Ready status"
@@ -948,12 +958,12 @@ Response 403
 Where "message text" is:
 - Certificate 
     * "Provide the certificate reference"
-	* "Certificate not found"
+    * "Certificate not found"
     * "Your organisation is not the creator of this Certificate"
     * "Cannot delete a Submitted Certificate"
 - Uln 
     * "ULN should contain exactly 10 numbers"
-	* "ULN, FamilyName and Standard not found" 
+    * "ULN, FamilyName and Standard not found" 
 - Standard 
     * "Provide a valid Standard"
     * "Your organisation is not approved to assess this Standard"
@@ -1066,11 +1076,11 @@ GET /api/v1/certificate/grades
 **Response** 200, plus application/json list of pass grades
 ```json
 [
-	"Pass",
-	"Credit",
-	"Merit",
-	"Distinction",
-	"Pass with excellence",
-	"No grade awarded"
+    "Pass",
+    "Credit",
+    "Merit",
+    "Distinction",
+    "Pass with excellence",
+    "No grade awarded"
 ]
 ```
