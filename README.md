@@ -91,8 +91,8 @@ GET /ap1/v1/learner/{uln}/{familyName}/{standard}
 
 Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) for \{standard}.
 
-**Response** depends on whether the learner can be verified against current ILR records in the Assessor Service,
-there is an existing EPA record or a certificate has already been requested.
+**Response** depends on whether the learner can be verified against current ILR and Apprenticeship records in the Assessor Service,
+there is an existing EPA record or a certificate has already been requested. If already held in the Apprenticeship service records for the learner, then "version" will be provided in the "standard" response. 
 
 Response 403, with message text 
 ```json
@@ -116,7 +116,7 @@ Response 200, with application/json body dependent on records held.
             "standardReference": "string" (lookup),
             "standardName": "string" (lookup),
             "level": 0 (lookup),
-            "version": "string" (lookup, where pre-defined)
+            "version": "string" (lookup, where already held)
         },
         "learner": {
             "uln": 0 (as provided),
@@ -147,7 +147,7 @@ Response 200, with application/json body dependent on records held.
             "standardReference": "string" (lookup),
             "standardName": "string" (lookup),
             "level": 0 (lookup),
-            "version": "string" (lookup, where pre-defined)
+            "version": "string" (lookup, where already held)
         },
         "learner": {
             "uln": 0 (as provided),
@@ -170,12 +170,10 @@ Response 200, with application/json body dependent on records held.
         "epas": [{
                     "epaDate": "2019-02-02T00:00:00Z",
                     "epaOutcome": "pass | fail | withdrawn",
-                    "version": "string" (optional, lookup)
                 },
                 {
                     "epaDate": "2019-02-12T00:00:00Z",
                     "epaOutcome": "pass | fail | withdrawn",
-                    "version": "string" (optional, lookup),
                     "resit": true | false,
                     "retake": true | false
                 }],
@@ -195,7 +193,7 @@ Response 200, with application/json body dependent on records held.
             "standardReference": "string" (lookup),
             "standardName": "string" (lookup),
             "level": 0 (lookup),
-            "version": "string" (lookup, where pre-defined)
+            "version": "string" (lookup, where already held)
         },
         "learner": {
             "uln": 0 (as provided),
@@ -218,12 +216,10 @@ Response 200, with application/json body dependent on records held.
         "epas": [{
                     "epaDate": "2019-02-02T00:00:00Z",
                     "epaOutcome": "pass | fail | withdrawn",
-                    "version": "string" (optional, lookup)
                 },
                 {
                     "epaDate": "2019-02-12T00:00:00Z",
                     "epaOutcome": "pass | fail | withdrawn",
-                    "version": "string" (optional, lookup),
                     "resit": true | false,
                     "retake": true | false
                 }],
@@ -401,7 +397,7 @@ application/json body posted should contain an array for previously requested ce
    "standard": {
      "standardCode": 0 (optional),
      "standardReference": "string" (optional),
-     "version": "string"
+     "version": "string" (optional)
    },
    "learner": {
       "uln": 0,
@@ -598,7 +594,7 @@ Request application/json body posted should contain an array of certificate reco
 Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) to identify the standard.
 At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is optional but should be provided where known, and relates to the available IfATE versions for the "standardReference", and will be validated against available versions of the standard. If "version" is not provided the value will be taken from a previous **Create EPA Record POST** (if used) or a default value will be calculated based on "learningStartDate".
 
-Where the Standard has a Course Option then a valid choice must be provided, that is valid for the specific standard version.
+Where the Standard has a Course Option then a valid choice must be provided, which is valid for the specific standard version.
 
 **Request**
 
@@ -759,7 +755,7 @@ The certificate records to be updated have to be identified using uln, familyNam
 Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) to identify the standard.
 At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is optional but should be provided where known, and relates to the available IfATE versions for the "standardReference", and will be validated against available versions of the standard. If "version" is not provided the value will be taken from a previous **Create Certificate POST**
 
-Where the Standard has a Course Option then a valid choice must be provided, that is valid for the specific standard version.
+Where the Standard has a Course Option then a valid choice must be provided, which is valid for the specific standard version.
 
 **Request**
 
