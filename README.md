@@ -543,7 +543,7 @@ Response 403, with message text
 ```json
 {
   "statusCode": 403,
-  "message": "Cannot find apprentice with the specified Uln, FamilyName & Standard"
+  "message": "Cannot find [ apprentice | certificate ] with the specified Uln, FamilyName & Standard"
 }
 ```
 
