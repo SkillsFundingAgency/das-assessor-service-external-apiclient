@@ -18,5 +18,10 @@
         {
             return await Get<StandardOptions>($"api/v1/standards/options/{standard}");
         }
+
+        public async Task<StandardOptions> GetOptionsForStandardVersion(string standard, string version)
+        {
+            return await Get<StandardOptions>($"api/v1/standards/options/{standard}/{version}");
+        }
     }
 }

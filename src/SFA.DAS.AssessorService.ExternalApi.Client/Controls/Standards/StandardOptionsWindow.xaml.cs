@@ -63,7 +63,17 @@
                     }
                     else
                     {
-                        var response = await standardsApiClient.GetOptionsForStandard(_ViewModel.Standard);
+                        StandardOptions response;
+
+                        if (string.IsNullOrWhiteSpace(_ViewModel.Version))
+                        {
+                            response = await standardsApiClient.GetOptionsForStandard(_ViewModel.Standard);
+                        }
+                        else
+                        {
+                            response = await standardsApiClient.GetOptionsForStandardVersion(_ViewModel.Standard, _ViewModel.Version);
+                        }
+                        
                         if (response != null)
                         {
                             options.Add(response);
@@ -109,7 +119,7 @@
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                var optionsToSave = options.Select(o => new { o.StandardCode, o.StandardReference, CourseOptions = string.Join(",", o.CourseOption)});
+                var optionsToSave = options.Select(o => new { o.StandardCode, o.StandardReference, o.Version, CourseOptions = string.Join(",", o.CourseOption)});
 
                 CsvFileHelper<dynamic>.SaveToFile(saveFileDialog.FileName, optionsToSave);
                 System.Diagnostics.Process.Start(saveFileDialog.FileName);

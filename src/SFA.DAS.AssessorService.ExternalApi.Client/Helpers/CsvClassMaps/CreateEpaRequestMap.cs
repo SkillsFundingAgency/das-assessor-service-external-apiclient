@@ -11,6 +11,7 @@
             Map(m => m.RequestId);
             Map(m => m.Standard).ConvertUsing(row => row.GetRecord<Core.Models.Certificates.Standard>());
             Map(m => m.Learner).ConvertUsing(row => row.GetRecord<Core.Models.Certificates.Learner>());
+            Map(m => m.LearningDetails).ConvertUsing(row => row.GetRecord<Core.Models.Certificates.LearningDetails>());
             References<EpaDetailsMap>(m => m.EpaDetails);
         }
 

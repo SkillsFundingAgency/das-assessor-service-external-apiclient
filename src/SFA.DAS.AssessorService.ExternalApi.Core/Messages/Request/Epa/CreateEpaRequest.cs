@@ -19,6 +19,8 @@
         [Required(ErrorMessage = "EpaDetails is required"), ValidateObject]
         public Models.Epa.EpaDetails EpaDetails { get; set; }
 
+        public LearningDetails LearningDetails { get; set; }
+
         #region GetHashCode, Equals and IEquatable
         public override int GetHashCode()
         {

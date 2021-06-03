@@ -45,6 +45,8 @@
                             </MultiBinding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
+                    <DataGridTextColumn Header="Version" Binding="{Binding Path=LearningDetails.Version}" />
+                    <DataGridTextColumn Header="Course Option" Binding="{Binding Path=LearningDetails.CourseOption}" />
                     <DataGridTextColumn Header="Epa Outcome" Binding="{Binding Path=EpaDetails.Epas[0].EpaOutcome}" />
                     <DataGridTextColumn Header="Epa Date" Binding="{Binding Path=EpaDetails.Epas[0].EpaDate, StringFormat='dd/MM/yy HH:mm'}" />
                 </DataGrid.Columns>
@@ -72,6 +74,8 @@
                             </MultiBinding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
+                    <DataGridTextColumn Header="Version" Binding="{Binding Path=LearningDetails.Version}" />
+                    <DataGridTextColumn Header="Course Option" Binding="{Binding Path=LearningDetails.CourseOption}" />
                     <DataGridTextColumn Header="Epa Outcome" Binding="{Binding Path=EpaDetails.Epas[0].EpaOutcome}" />
                     <DataGridTextColumn Header="Epa Date" Binding="{Binding Path=EpaDetails.Epas[0].EpaDate, StringFormat='dd/MM/yy HH:mm'}" />
                 </DataGrid.Columns>

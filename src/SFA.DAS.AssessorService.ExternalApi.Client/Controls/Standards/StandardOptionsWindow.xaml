@@ -6,7 +6,7 @@
         xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:viewmodel="clr-namespace:SFA.DAS.AssessorService.ExternalApi.Client.ViewModels.Standards"
         mc:Ignorable="d"
-        Title="Get Options for Standard" Height="125" Width="400" WindowStyle="ToolWindow" ResizeMode="NoResize">
+        Title="Get Options for Standard" Height="168" Width="400" WindowStyle="ToolWindow" ResizeMode="NoResize">
     <Window.DataContext>
         <viewmodel:StandardOptionsViewModel />
     </Window.DataContext>
@@ -14,6 +14,8 @@
         <Grid>
             <Label Content="Standard" HorizontalAlignment="Left" Margin="31,4,0,0" VerticalAlignment="Top"/>
             <TextBox x:Name="txtStandard" HorizontalAlignment="Left" Height="23" Margin="31,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="156" Text="{Binding Standard, Mode=TwoWay}" />
+            <Label Content="Version" HorizontalAlignment="Left" Margin="31,65,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtVersion" HorizontalAlignment="Left" Height="23" Margin="31,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="156" Text="{Binding Version, Mode=TwoWay}" />
             <Button x:Name="btnGet" Content="Get Options" HorizontalAlignment="Left" Margin="216,38,0,0" VerticalAlignment="Top" Width="158" Click="btnGet_Click" />
             <Button x:Name="btnClear" Content="Clear" HorizontalAlignment="Left" Margin="216,63,0,0" VerticalAlignment="Top" Width="75" Click="btnClear_Click"/>
             
