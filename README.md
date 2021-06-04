@@ -15,10 +15,10 @@ Licensed under the [MIT license](https://github.com/SkillsFundingAgency/das-asse
 - Install [Visual Studio 2017 or 2019](https://www.visualstudio.com/downloads/) with these workloads:
     - ASP.NET and web development
     - .NET desktop development
-	- .NET Core 2.1 SDK
+    - .NET Core 2.1 SDK
 - Create an account on the [Developer Portal](https://developers.apprenticeships.education.gov.uk/)
-	- Obtain External API Subscription Key and Base Address to Sandbox Environment
-	- Can also be used to access the current Swagger Documentation
+    - Obtain External API Subscription Key and Base Address to Sandbox Environment
+    - Can also be used to access the current Swagger Documentation
 
 ### Open the solution
 
@@ -30,7 +30,7 @@ Licensed under the [MIT license](https://github.com/SkillsFundingAgency/das-asse
 
 A simple Windows Presentation Foundation (WPF) client.
 - Reads in CSV formatted files
-	- There are examples in the following solution folder: [CsvFiles](https://github.com/SkillsFundingAgency/das-assessor-service-external-apiclient/tree/master/src/SFA.DAS.AssessorService.ExternalApi.Examples/CsvFiles)
+    - There are examples in the following solution folder: [CsvFiles](https://github.com/SkillsFundingAgency/das-assessor-service-external-apiclient/tree/master/src/SFA.DAS.AssessorService.ExternalApi.Examples/CsvFiles)
 
 ####  SFA.DAS.AssessorService.ExternalApi.Examples
 
@@ -73,6 +73,9 @@ The set of ILR records follow this pattern:
 - familyName = 1000108001 (same value as uln)
 - standard = 80
 
+### Standard versions
+Versions of standards supported are as published by IfATE [Standards](https://www.instituteforapprenticeships.org/apprenticeship-standards)
+The explicit use of standard version on creation of EPA records and certificates is now expected. If supplied the "version" field value will be taken from the request application/json data object, and validated against the IfATE standard data, and the EPAO's approved versions of the standard. If the "version" field is not supplied a default value will be calculated, based on the apprenticeship start date and the version of the standard active at that time. Note, that this may not always be accurate and hence it is recommended that the "version" should be provided.
 
 ## Learner Details
 
@@ -86,10 +89,10 @@ The set of ILR records follow this pattern:
 GET /ap1/v1/learner/{uln}/{familyName}/{standard}
 ```
 
-Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) for \{standard}.
+Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) for \{standard}.
 
-**Response** depends on whether the learner can be verified against current ILR records in the Assessor Service,
-there is an existing EPA record or a certificate has already been requested.
+**Response** depends on whether the learner can be verified against current ILR and Apprenticeship records in the Assessor Service,
+there is an existing EPA record or a certificate has already been requested. If already held in the Apprenticeship service records for the learner, then "version" will be provided in the "standard" response. 
 
 Response 403, with message text 
 ```json
@@ -109,8 +112,8 @@ Response 200, with application/json body dependent on records held.
 {
     "learnerData": {
         "standard": {
-            "standardCode": 0 (lookup),
-            "standardReference": "string" (lookup),
+            "standardCode": 0 (as provided/lookup),
+            "standardReference": "string" (as provided/lookup),
             "standardName": "string" (lookup),
             "level": 0 (lookup)
         },
@@ -124,8 +127,10 @@ Response 200, with application/json body dependent on records held.
             "learningStartDate": "2018-02-22T00:00:00" (lookup),
             "plannedEndDate": "2019-02-22T00:00:00" (lookup),
             "providerName": "string" (lookup),
-            "providerUkPrn": 0 (lookup)
-        },
+            "providerUkPrn": 0 (lookup),
+            "version": "string" (lookup, where already held),
+            "courseOption": "string" (lookup, where already held)
+},
     },
     "status": {
         "completionStatus": "string" (lookup)
@@ -139,8 +144,8 @@ Response 200, with application/json body dependent on records held.
 {
     "learnerData": {
         "standard": {
-            "standardCode": 0 (lookup),
-            "standardReference": "string" (lookup),
+            "standardCode": 0 (as provided/lookup),
+            "standardReference": "string" (as provided/lookup),
             "standardName": "string" (lookup),
             "level": 0 (lookup)
         },
@@ -154,7 +159,9 @@ Response 200, with application/json body dependent on records held.
             "learningStartDate": "2018-02-22T00:00:00" (lookup),
             "plannedEndDate": "2019-02-22T00:00:00" (lookup),
             "providerName": "string" (lookup),
-            "providerUkPrn": 0 (lookup)
+            "providerUkPrn": 0 (lookup),
+            "version": "string" (lookup, where already held),
+            "courseOption": "string" (lookup, where already held)
         },
     },
     "status": {
@@ -164,15 +171,15 @@ Response 200, with application/json body dependent on records held.
         "epaReference": "string" (lookup),
         "epas": [{
                     "epaDate": "2019-02-02T00:00:00Z",
-                    "epaOutcome": "pass | fail | withdrawn"
+                    "epaOutcome": "pass | fail | withdrawn",
                 },
                 {
-                    "epaDate": "2019-02-12T00:00:00Z",
+                    "epaDate": "2019-02-16T00:00:00Z",
                     "epaOutcome": "pass | fail | withdrawn",
                     "resit": true | false,
                     "retake": true | false
                 }],
-        "latestEPADate": "2019-02-12T00:00:00Z" (lookup),
+        "latestEPADate": "2019-02-16T00:00:00Z" (lookup),
         "latestEPAOutcome": "pass | fail | withdrawn" (lookup)
     }
 }
@@ -184,8 +191,8 @@ Response 200, with application/json body dependent on records held.
 {
     "learnerData": {
         "standard": {
-            "standardCode": 0 (lookup),
-            "standardReference": "string" (lookup),
+            "standardCode": 0 (as provided/lookup),
+            "standardReference": "string" (as provided/lookup),
             "standardName": "string" (lookup),
             "level": 0 (lookup)
         },
@@ -199,7 +206,9 @@ Response 200, with application/json body dependent on records held.
             "learningStartDate": "2018-02-22T00:00:00" (lookup),
             "plannedEndDate": "2019-02-22T00:00:00" (lookup),
             "providerName": "string" (lookup),
-            "providerUkPrn": 0 (lookup)
+            "providerUkPrn": 0 (lookup),
+            "version": "string" (lookup),
+            "courseOption": "string" (lookup, optional)
         },
     },
     "status": {
@@ -209,7 +218,7 @@ Response 200, with application/json body dependent on records held.
         "epaReference": "string" (lookup),
         "epas": [{
                     "epaDate": "2019-02-02T00:00:00Z",
-                    "epaOutcome": "pass | fail | withdrawn"
+                    "epaOutcome": "pass | fail | withdrawn",
                 },
                 {
                     "epaDate": "2019-02-12T00:00:00Z",
@@ -224,8 +233,8 @@ Response 200, with application/json body dependent on records held.
       "certificateData": {
          "certificateReference": "string" (lookup),
          "standard": {
-            "standardCode": 0 (lookup),
-            "standardReference": "string" (lookup),
+            "standardCode": 0 (as provided/ookup),
+            "standardReference": "string" (as provided/lookup),
             "standardName": "string" (lookup),
             "level": 0 (lookup)
          },
@@ -235,6 +244,7 @@ Response 200, with application/json body dependent on records held.
             "familyName": "string" (as provided)
          },
          "learningDetails": {
+            "version": "string" (lookup),
             "courseOption": "string" (lookup),
             "overallGrade": "string" (lookup),
             "achievementDate": "2019-02-22T00:00:00" (lookup),
@@ -278,8 +288,7 @@ Response 200, with application/json body dependent on records held.
 
 Request application/json body posted should contain an array of EPA records, each with your own unique "requestId", which will be used in the response body.
 
-Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) to identify the standard.
-At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared.
+Request body can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) to identify the standard. At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "learningDetails" data object, comprising "version" and "courseOption" fields, is optional but should be provided if known, where "version" relates to the available IfATE versions for the "standardReference", and will be validated against available versions of the standard, and the EPAO's approved versions for the standard. If "version" is not provided a default value will be calculated based on the apprenticeship start date held by the Assessor Service. When provided "courseOption" will be validated against possible Course options for the standard version. 
 
 **Request**
 
@@ -293,13 +302,17 @@ application/json body posted should contain an array with the requested EPA reco
 [{
    "requestId" : "string",
    "standard": {
-     "standardCode": 0 (optional),
-     "standardReference": "string" (optional)
+      "standardCode": 0 (optional),
+      "standardReference": "string" (optional)
    },
    "learner": {
       "uln": 0,
       "familyName": "string"
    },
+   "learningDetails": {
+      "version": "string" (optional),
+      "courseOption": "string" (optional)
+   } (optional),   
    "epaDetails": {
         "epas": [{
                 "epaDate": "2019-02-02T00:00:00Z",
@@ -347,9 +360,18 @@ Where "message text" is:
     * "ULN should contain exactly 10 numbers"
     * "ULN, FamilyName and Standard not found" 
 - Standard 
-	* "Provide a valid Standard"
+    * "Provide a valid Standard"
+    * "Invalid version for Standard"
     * "Your organisation is not approved to assess this Standard"
-	* "StandardReference and StandardCode must be for the same Standard"
+    * "Your organisation is not approved to assess this Standard version"
+    * "StandardReference and StandardCode must be for the same Standard"
+- CourseOption
+    * "No course option available for this Standard and version. Must be empty"
+    * "Invalid course option for this Standard and version. Must be one of the following: 'list of course options'"
+    where 'list of course options' depends on the standard code, and can be obtained with 
+    ```http 
+    GET /api/v1/standard/options/{standard}/{version}
+    ```
 - FamilyName 
     * "Provide apprentice family name" 
 
@@ -361,13 +383,14 @@ Where "message text" is:
 
 Use this to update one or more EPA records, for all outcomes to date.
 
-Request application/json body posted should contain an array of Epa records, each with your own unique "requestId" which will be used in the response body.
+Request application/json body posted should contain an array of EPA records, each with your own unique "requestId" which will be used in the response body.
 The latest and all previous EPA outcomes for the learner and standard combination should be included for the update.
 If the first EPA outcome is a fail and there is subsequently a pass the EPA details can include an optional "resit" or "retake" boolean.
-If "resit" or "retake" are not included the value will be false by default.
+If "resit" or "retake" are not included the value will be false by default. If an earlier EPA was for a different version of the standard the "version" must be provided, otherwise the version will be taken from the earlier EPA record held by the Assessor Service.
 
-Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) to identify the standard.
-At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared.
+Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) to identify the standard.
+At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "learningDetails" data object, comprising "version" and "courseOption" fields, is optional but should be provided if known, where  "version" field relates to the available IfATE versions for the "standardReference", and will be validated against available versions of the standard if provided, and the EPAO's approved versions for the standard. If "version" is not provided the value will be taken from the initial **Create EPA Record POST**. When provided "courseOption" will be validated against possible Course options for the standard version. 
+
 
 The request should use the previously returned EPA Reference (which can also be obtained using GET Learner Details)
 
@@ -384,16 +407,20 @@ application/json body posted should contain an array for previously requested ce
    "requestId" : "string",
    "epaReference" : "string" (as returned in  **Create EPA Record POST** or using **Get Learner Details GET**),
    "standard": {
-     "standardCode": 0 (optional),
-     "standardReference": "string" (optional)
+      "standardCode": 0 (optional),
+      "standardReference": "string" (optional)
    },
    "learner": {
       "uln": 0,
       "familyName": "string"
    },
+   "learningDetails": {
+      "version": "string" (optional),
+      "courseOption": "string" (optional)
+   } (optional),
    "epaDetails": {
         "epas": [{
-                "epaDate": "2019-02-02T00:00:00Z",
+                "epaDate": "2019-01-02T00:00:00Z",
                 "epaOutcome": "pass | fail | withdrawn"
             }, {
                 "epaDate": "2019-02-12T00:00:00Z",
@@ -440,9 +467,18 @@ Where "message text" is:
     * "ULN should contain exactly 10 numbers"
     * "ULN, FamilyName and Standard not found" 
 - Standard 
-	* "Provide a valid Standard"
+    * "Provide a valid Standard"
+    * "Invalid version for Standard"
     * "Your organisation is not approved to assess this Standard"
-	* "StandardReference and StandardCode must be for the same Standard"
+    * "Your organisation is not approved to assess this Standard version"
+    * "StandardReference and StandardCode must be for the same Standard"
+- CourseOption
+    * "No course option available for this Standard and version. Must be empty"
+    * "Invalid course option for this Standard and version. Must be one of the following: 'list of course options'"
+    where 'list of course options' depends on the standard code, and can be obtained with 
+    ```http 
+    GET /api/v1/standard/options/{standard}/{version}
+    ```
 - FamilyName 
     * "Provide apprentice family name" 
 
@@ -456,7 +492,7 @@ Where "message text" is:
 **Request**
    
 ```http
-DELETE /api/v1/certificate/{uln}/{familyName}/{standard}/{epaReference}
+DELETE /api/v1/epa/{uln}/{familyName}/{standard}/{epaReference}
 ```
 
 **Response** code indicates success or failure of the request.
@@ -474,12 +510,12 @@ Response 403
 Where "message text" is:
 - EPA data 
     * "Provide the EPA reference"
-	* "EPA not found"
+    * "EPA not found"
     * "Your organisation is not the creator of this EPA"
     * "Certificate already exists, cannot delete EPA record"
 - Uln 
     * "ULN should contain exactly 10 numbers"
-	* "ULN, FamilyName and Standard not found" 
+    * "ULN, FamilyName and Standard not found" 
 - Standard 
     * "Provide a valid Standard"
     * "Your organisation is not approved to assess this Standard"
@@ -499,7 +535,7 @@ Where "message text" is:
 GET /ap1/v1/certificate/{uln}/{familyName}/{standard}
 ```
 
-Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) for \{standard}.
+Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) for \{standard}.
 
 **Response** code indicates success or failure of the request.
 
@@ -507,7 +543,7 @@ Response 403, with message text
 ```json
 {
   "statusCode": 403,
-  "message": "Cannot find apprentice with the specified Uln, FamilyName & Standard"
+  "message": "Cannot find [ apprentice | certificate ] with the specified Uln, FamilyName & Standard"
 }
 ```
 
@@ -524,8 +560,8 @@ Response 200 plus certificate details, if certificate already created.
       "certificateData": {
          "certificateReference": "string" (lookup),
          "standard": {
-            "standardCode": 0 (lookup),
-            "standardReference": "string" (lookup),
+            "standardCode": 0 (as provided/lookup),
+            "standardReference": "string" (as provided/lookup),
             "standardName": "string" (lookup),
             "level": 0 (lookup)
          },
@@ -535,6 +571,7 @@ Response 200 plus certificate details, if certificate already created.
             "familyName": "string" (as provided)
          },
          "learningDetails": {
+            "version": "string" (lookup),
             "courseOption": "string" (lookup),
             "overallGrade": "string" (lookup),
             "achievementDate": "2019-02-22T00:00:00" (lookup),
@@ -575,10 +612,10 @@ Response 200 plus certificate details, if certificate already created.
 
 Request application/json body posted should contain an array of certificate records, for a uln, familyName and Standard combination, each with your own unique "requestId" which will be used in the response body.
 
-Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) to identify the standard.
-At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared.
+Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) to identify the standard.
+At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is optional but should be provided where known, and relates to the available IfATE versions for the "standardReference", and will be validated against available versions of the standard, and the EPAO's approved versions for the standard. If "version" is not provided the value will be taken from a previous **Create EPA Record POST** (if used) or a default value will be calculated based on the apprenticeship start date held by the Assessor Service.
 
-Where the Standard has a Course Option then a valid choice must be provided.
+Where the Standard has a Course Option then a valid choice must be provided, which is valid for the specific standard version.
 
 **Request**
 
@@ -592,14 +629,15 @@ application/json body posted should contain an array with the requested certific
 [{
    "requestId" : "string",
    "standard": {
-     "standardCode": 0 (optional),
-     "standardReference": "string" (optional)
+      "standardCode": 0 (optional),
+      "standardReference": "string" (optional)
    },
    "learner": {
       "uln": 0,
       "familyName": "string"
    },
    "learningDetails": {
+      "version": "string" (optional),
       "courseOption": "string" (optional),
       "overallGrade": "string",
       "achievementDate": "2018-11-16T14:26:57"
@@ -649,6 +687,7 @@ Response 200, plus application/json containing response for the requested certif
             "familyName": "string" (as provided)
          },
          "learningDetails": {
+            "version": "string" (lookup),
             "courseOption": "string" (as provided),
             "overallGrade": "string" (as provided),
             "achievementDate": "2019-02-22T00:00:00" (as provided),
@@ -690,15 +729,17 @@ Where "message text" is:
     * "ULN should contain exactly 10 numbers"
     * "ULN, FamilyName and Standard not found" 
 - Standard 
-	* "Provide a valid Standard"
+    * "Provide a valid Standard"
+    * "Invalid version for Standard"
     * "Your organisation is not approved to assess this Standard"
-	* "StandardReference and StandardCode must be for the same Standard*
+    * "Your organisation is not approved to assess this Standard version"
+    * "StandardReference and StandardCode must be for the same Standard*
 - CourseOption
-    * "No course option available for this Standard. Must be empty"
-    * "Invalid course option for this Standard. Must be one of the following: 'list of course options'"
+    * "No course option available for this Standard and version. Must be empty"
+    * "Invalid course option for this Standard and version. Must be one of the following: 'list of course options'"
     where 'list of course options' depends on the standard code, and can be obtained with 
     ```http 
-    GET api/v1/certificate/options/(standard}
+    GET /api/v1/standard/options/{standard}/{version}
     ```
 - OverallGrade
     * "Select the grade the apprentice achieved"
@@ -722,7 +763,7 @@ Where "message text" is:
     * "Provide a city or town"
 - Postcode
     * "Provide a postcode"
-	* "Provide a valid UK postcode"
+    * "Provide a valid UK postcode"
 
 
 ### 3.   Update Certificate (Optional)
@@ -732,10 +773,10 @@ Where "message text" is:
 Previously created certificates can be updated, where they have not yet been submitted, to amend any of the data fields provided.
 The certificate records to be updated have to be identified using uln, familyName, standard and the previously assigned certificateReference.
 
-Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) to identify the standard.
-At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared.
+Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) to identify the standard.
+At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. The "version" field is optional but should be provided where known, and relates to the available IfATE versions for the "standardReference", and will be validated against available versions of the standard, and the EPAO's approved versions for the standard. If "version" is not provided the value will be taken from a previous **Create Certificate POST**
 
-Where the Standard has a Course Option then a valid choice must be provided.
+Where the Standard has a Course Option then a valid choice must be provided, which is valid for the specific standard version.
 
 **Request**
 
@@ -750,14 +791,15 @@ application/json body posted should contain an array for previously requested ce
    "requestId" : "string",
    "certificateReference": "string" (as returned in  **Create Certificate POST** or using **Check Certificate GET**),
    "standard": {
-     "standardCode": 0 (optional),
-     "standardReference": "string" (optional)
+      "standardCode": 0 (optional),
+      "standardReference": "string" (optional)
    },
    "learner": {
       "uln": 0,
       "familyName": "string"
    },
    "learningDetails": {
+      "version": "string" (optional),
       "courseOption": "string" (optional),
       "overallGrade": "string",
       "achievementDate": "2018-11-16T14:26:57.009"
@@ -792,7 +834,7 @@ Response 200, plus application/json containing response for the requested certif
 Response body is as for **Create Certificate POST**, except alternative "message text" is:
 - Certificate 
     * "Provide the certificate reference"
-	* "Certificate not found"
+    * "Certificate not found"
     * "Your organisation is not the creator of this Certificate"
     * "Certificate does not exist in Draft status"
 
@@ -812,8 +854,8 @@ POST /api/v1/certificate/submit
 ```
   
 The application/json body posted should contain an array of previously created certificates to be submitted, each with your own unique "requestId" which will be used in the response body
-Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) to identify the standard.
-At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared.
+Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) to identify the standard.
+At least one standard identifier must be provided, and if both are provided then "standardCode" and "standardReference" will be looked-up and compared. 
 
 ```json  
 [{
@@ -857,6 +899,7 @@ Response 200, plus application/json containing response for the submitted certif
             "familyName": "string"
          },
          "learningDetails": {
+            "version": "string",
             "courseOption": "string",
             "overallGrade": "string",
             "achievementDate": "2019-02-22T00:00:00",
@@ -898,7 +941,7 @@ Response 200, plus application/json containing response for the submitted certif
 Response body is as for **Create Certificate POST**, except alternative "message text" is:
 - Certificate 
     * "Provide the certificate reference"
-	* "Certificate not found"
+    * "Certificate not found"
     * "Your organisation is not the creator of this Certificate"
     * "Certificate has already been Submitted"
     * "Certificate is not in Ready status"
@@ -932,12 +975,12 @@ Response 403
 Where "message text" is:
 - Certificate 
     * "Provide the certificate reference"
-	* "Certificate not found"
+    * "Certificate not found"
     * "Your organisation is not the creator of this Certificate"
     * "Cannot delete a Submitted Certificate"
 - Uln 
     * "ULN should contain exactly 10 numbers"
-	* "ULN, FamilyName and Standard not found" 
+    * "ULN, FamilyName and Standard not found" 
 - Standard 
     * "Provide a valid Standard"
     * "Your organisation is not approved to assess this Standard"
@@ -955,11 +998,12 @@ The full list of options can be provided, or the list can be filtered by a stand
 **Request**
 
 ```http
-GET /api/v1/certificate/options
-GET /api/v1/certificate/options/{standard}
+GET /api/v1/standard/options
+GET /api/v1/standard/options/{standard}
+
 ```
 
-Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IFA STxxxx reference) for \{standard}..
+Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) for \{standard}. Where Options are available, these will be for the most recent version of a standard.
 
 **Response** application/json list of standard codes and related options.
 
@@ -968,6 +1012,7 @@ Response 200
 [{
    "standardCode": 6,
    "standardReference": "ST0156",
+   "version": "1.1",   
    "courseOption": [
       "Overhead lines",
       "Substation fitting",
@@ -978,6 +1023,7 @@ Response 200
 {
    "standardCode": 7,
    "standardReference": "ST0184",
+   "version": "1.0",
    "courseOption": [
       "Card services",
       "Corporate/Commercial",
@@ -986,13 +1032,14 @@ Response 200
    ]
 }
 ,
-... for all available standards and options
+... for all available active standards and options
 {
    "standardCode": 314,
    "standardReference": "ST0018",
+   "version": "1.0",   
    "courseOption": [
-      "Container based system",
-      "Soil based system"
+      "Container Based System",
+      "Soil Based System"
    ]
 }]
 ```
@@ -1000,6 +1047,37 @@ Response 200
 Response 204 - the standard was found, however it has no options
 
 Response 404 - the standard was not found
+The full list of options can be provided, or the list can be filtered by a standard.
+
+
+**Request**
+
+```http
+GET /api/v1/standard/options/{standard}/{version}
+
+```
+
+Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) for \{standard}. The optional "version" parameter will return options related to the specific version of the Standard. 
+
+**Response** application/json list of standard codes and related options.
+
+Response 200 (example for **ST0156** version **1.0**)
+```json
+[{
+   "standardCode": 6,
+   "standardReference": "ST0156",
+   "version": "1.0"
+   "courseOption": [
+      "Overhead lines",
+      "Substation fitting",
+      "Underground cables"
+   ]
+}]
+```
+
+Response 204 - the standard (or standard version) was found, however it has no options
+
+Response 404 - the standard (or standard version) was not found
 
 
 ## Get Grades 
@@ -1015,11 +1093,11 @@ GET /api/v1/certificate/grades
 **Response** 200, plus application/json list of pass grades
 ```json
 [
-	"Pass",
-	"Credit",
-	"Merit",
-	"Distinction",
-	"Pass with excellence",
-	"No grade awarded"
+    "Pass",
+    "Credit",
+    "Merit",
+    "Distinction",
+    "Pass with excellence",
+    "No grade awarded"
 ]
 ```
