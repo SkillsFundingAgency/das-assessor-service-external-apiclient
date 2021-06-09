@@ -862,7 +862,7 @@ At least one standard identifier must be provided, and if both are provided then
     "requestId" : "string",
     "uln": 0,
     "standardCode": 0 (optional),
-    "standardReference": "string" (optional)
+    "standardReference": "string" (optional),
     "familyName": "string",
     "certificateReference": "string"
 }]
