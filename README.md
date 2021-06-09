@@ -370,7 +370,7 @@ Where "message text" is:
     * "Invalid course option for this Standard and version. Must be one of the following: 'list of course options'"
     where 'list of course options' depends on the standard code, and can be obtained with 
     ```http 
-    GET /api/v1/standard/options/{standard}/{version}
+    GET /api/v1/standards/options/{standard}/{version}
     ```
 - FamilyName 
     * "Provide apprentice family name" 
@@ -477,7 +477,7 @@ Where "message text" is:
     * "Invalid course option for this Standard and version. Must be one of the following: 'list of course options'"
     where 'list of course options' depends on the standard code, and can be obtained with 
     ```http 
-    GET /api/v1/standard/options/{standard}/{version}
+    GET /api/v1/standards/options/{standard}/{version}
     ```
 - FamilyName 
     * "Provide apprentice family name" 
@@ -739,7 +739,7 @@ Where "message text" is:
     * "Invalid course option for this Standard and version. Must be one of the following: 'list of course options'"
     where 'list of course options' depends on the standard code, and can be obtained with 
     ```http 
-    GET /api/v1/standard/options/{standard}/{version}
+    GET /api/v1/standards/options/{standard}/{version}
     ```
 - OverallGrade
     * "Select the grade the apprentice achieved"
@@ -998,8 +998,8 @@ The full list of options can be provided, or the list can be filtered by a stand
 **Request**
 
 ```http
-GET /api/v1/standard/options
-GET /api/v1/standard/options/{standard}
+GET /api/v1/standards/options
+GET /api/v1/standards/options/{standard}
 
 ```
 
@@ -1053,7 +1053,7 @@ The full list of options can be provided, or the list can be filtered by a stand
 **Request**
 
 ```http
-GET /api/v1/standard/options/{standard}/{version}
+GET /api/v1/standards/options/{standard}/{version}
 
 ```
 
