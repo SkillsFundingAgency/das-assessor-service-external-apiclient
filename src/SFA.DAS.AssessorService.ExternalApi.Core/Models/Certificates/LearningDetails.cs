@@ -8,6 +8,7 @@
     public sealed class LearningDetails : IEquatable<LearningDetails>
     {
         public DateTime StandardPublicationDate { get; set; }
+        public string Version { get; set; }
         public string CourseOption { get; set; }
 
         [CustomValidation(typeof(OverallGradeValidator), "ValidateOverallGrade")]

@@ -84,12 +84,14 @@
             string lastName = "Blogs";
             int standardCode = 1;
             string standardReference = "ST0127";
+            string version = "1.0";
             string epaOutcome = "Fail";
             DateTime epaDate = DateTime.UtcNow;
 
             CreateEpaRequest newEpa = new CreateEpaRequest
             {
                 Learner = new Learner { Uln = uln, GivenNames = firstName, FamilyName = lastName },
+                LearningDetails = new LearningDetails { Version = version },
                 Standard = new Standard { StandardCode = standardCode, StandardReference = standardReference },
                 EpaDetails = new EpaDetails { Epas = new List<EpaRecord> { new EpaRecord { EpaOutcome = epaOutcome, EpaDate = epaDate } } }
             };
@@ -110,6 +112,7 @@
             string lastName = "Blogs";
             int standardCode = 1;
             string standardReference = "ST0127";
+            string version = "1.0",
             string epaOutcome = "Pass";
             DateTime epaDate = DateTime.UtcNow;
 
@@ -118,6 +121,7 @@
             {
                 EpaReference = epaReference,
                 Learner = new Learner { Uln = uln, GivenNames = firstName, FamilyName = lastName },
+                LearningDetails = new LearningDetails { Version = version },
                 Standard = new Standard { StandardCode = standardCode, StandardReference = standardReference },
                 EpaDetails = new EpaDetails { Epas = new List<EpaRecord> { new EpaRecord { EpaOutcome = epaOutcome, EpaDate = epaDate } } }
             };
@@ -158,6 +162,7 @@
             string lastName = "Blogs";
             int standardCode = 1;
             string standardReference = "ST0127";
+            string version = "1.0",
             string overallGrade = "PASS";
             string contactName = "Shreya Smith";
             string organisation = "Contoso Ltd";
@@ -169,7 +174,7 @@
             {
                 Learner = new Learner { Uln = uln, GivenNames = firstName, FamilyName = lastName },
                 Standard = new Standard { StandardCode = standardCode, StandardReference = standardReference },
-                LearningDetails = new LearningDetails { OverallGrade = overallGrade, AchievementDate = DateTime.UtcNow },
+                LearningDetails = new LearningDetails { OverallGrade = overallGrade, AchievementDate = DateTime.UtcNow, Version = version },
                 PostalContact = new PostalContact { ContactName = contactName, Organisation = organisation, AddressLine1 = address, City = city, PostCode = postcode }
             };
 
@@ -198,7 +203,8 @@
                         ProviderName = "Test Provider",
                         ProviderUkPrn = 123456,
                         OverallGrade = "Pass",
-                        AchievementDate = DateTime.UtcNow
+                        AchievementDate = DateTime.UtcNow,
+                        Version = "1.0"
                     },
                     PostalContact = new PostalContact { ContactName = "Shreya Smith", Organisation = "Contoso Ltd", AddressLine1 = "123 Test Road", City = "Townsville", PostCode = "ZY99ZZ" }
                 }
@@ -306,6 +312,7 @@
 
             await _StandardsApiClient.GetOptionsForStandard(standardCode);
             await _StandardsApiClient.GetOptionsForStandard(standardReference);
+            await _StandardsApiClient.GetOptionsForStandardVersion(standardCode, "1.0");
         }
     }
 }

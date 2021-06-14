@@ -9,6 +9,7 @@
     {
         public int? StandardCode { get; set; }
         public string StandardReference { get; set; }
+        public string Version { get; set; }
         public IEnumerable<string> CourseOption { get; set; }
 
         #region GetHashCode, Equals and IEquatable

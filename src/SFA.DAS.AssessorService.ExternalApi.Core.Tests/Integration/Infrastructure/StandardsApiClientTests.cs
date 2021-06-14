@@ -137,5 +137,33 @@
             // assert
             Assert.That(actual, Is.Null);
         }
+
+        [Test]
+        public async Task GetOptionsForStandardVersion_VersionFound()
+        {
+            var standard = Builder<StandardOptions>.CreateNew().With(so => so.StandardCode = 1)
+                                                                        .With(so => so.StandardReference = "ST0127")
+                                                                        .With(so => so.Version = "1.0")
+                                                                        .With(cd => cd.CourseOption = new List<string> { "English", "French", "German" })
+                                                                        .Build();
+
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/options/{standard.StandardReference}/{standard.Version}")
+                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(standard));
+
+            var actual = await _ApiClient.GetOptionsForStandardVersion("ST0127", "1.0");
+
+            Assert.That(actual, Is.EqualTo(standard));
+        }
+
+        [Test]
+        public async Task GetOptionsForStandardVerion_VersionNotFound()
+        {
+            _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/standards/options/INVALID/INVALID")
+                .Respond(HttpStatusCode.NotFound, "application/json", string.Empty);
+
+            var actual = await _ApiClient.GetOptionsForStandardVersion("INVALID","INVALID");
+
+            Assert.That(actual, Is.Null);
+        }
     }
 }

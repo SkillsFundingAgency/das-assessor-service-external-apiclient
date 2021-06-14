@@ -45,8 +45,9 @@
                             </MultiBinding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Overall Grade" Binding="{Binding Path=LearningDetails.OverallGrade}" />
+                    <DataGridTextColumn Header="Version" Binding="{Binding Path=LearningDetails.Version}" />
                     <DataGridTextColumn Header="Course Option" Binding="{Binding Path=LearningDetails.CourseOption}" />
+                    <DataGridTextColumn Header="Overall Grade" Binding="{Binding Path=LearningDetails.OverallGrade}" />
                     <DataGridTextColumn Header="Achievement Date" Binding="{Binding Path=LearningDetails.AchievementDate, StringFormat='dd/MM/yy HH:mm'}" />
                     <DataGridTextColumn Header="Contact" Binding="{Binding Path=PostalContact.ContactName}" />
                     <DataGridTextColumn Header="Organisation" Binding="{Binding Path=PostalContact.Organisation}" />
@@ -84,8 +85,9 @@
                             </MultiBinding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Overall Grade" Binding="{Binding Path=LearningDetails.OverallGrade}" />
+                    <DataGridTextColumn Header="Version" Binding="{Binding Path=LearningDetails.Version}" />
                     <DataGridTextColumn Header="Course Option" Binding="{Binding Path=LearningDetails.CourseOption}" />
+                    <DataGridTextColumn Header="Overall Grade" Binding="{Binding Path=LearningDetails.OverallGrade}" />
                     <DataGridTextColumn Header="Achievement Date" Binding="{Binding Path=LearningDetails.AchievementDate, StringFormat='dd/MM/yy HH:mm'}" />
                     <DataGridTextColumn Header="Contact" Binding="{Binding Path=PostalContact.ContactName}" />
                     <DataGridTextColumn Header="Organisation" Binding="{Binding Path=PostalContact.Organisation}" />
