@@ -112,7 +112,7 @@
             string lastName = "Blogs";
             int standardCode = 1;
             string standardReference = "ST0127";
-            string version = "1.0",
+            string version = "1.0";
             string epaOutcome = "Pass";
             DateTime epaDate = DateTime.UtcNow;
 
@@ -162,7 +162,7 @@
             string lastName = "Blogs";
             int standardCode = 1;
             string standardReference = "ST0127";
-            string version = "1.0",
+            string version = "1.0";
             string overallGrade = "PASS";
             string contactName = "Shreya Smith";
             string organisation = "Contoso Ltd";
