@@ -684,7 +684,7 @@ Response 200, plus application/json containing response for the requested certif
          "learner": {
             "uln": 0 (as provided),
             "givenNames": "string" (lookup),
-            "familyName": "string" (as provided)
+            "familyName": "string" (as provided),
          },
          "learningDetails": {
             "version": "string" (lookup),
@@ -764,6 +764,9 @@ Where "message text" is:
 - Postcode
     * "Provide a postcode"
     * "Provide a valid UK postcode"
+- Learner
+    * "Incorrect version for learner"
+    * "Incorrect course option for learner"
 
 
 ### 3.   Update Certificate (Optional)
@@ -946,6 +949,9 @@ Response body is as for **Create Certificate POST**, except alternative "message
     * "Certificate has already been Submitted"
     * "Certificate is not in Ready status"
     * "Certificate is missing mandatory data"
+- Learner
+    * "Certificate update is required as version has changed on Learner record"
+    * "Certificate update is required as course option has changed on Learner record"
    
   
 ## Delete Certificate
