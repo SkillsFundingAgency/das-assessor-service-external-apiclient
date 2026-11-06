@@ -76,26 +76,38 @@
             Assert.That(validationResults.First().ErrorMessage, Is.EqualTo("LearningDetails is required").IgnoreCase);
         }
 
-        [Test]
-        public void PostalContactMissing()
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("NOT-A-POSTCODE")]
+        public void WhenPostalContactIsMissingOrInvalid_ThenRequestIsValid(string postcode)
         {
-            // arrange
-            var learner = Builder<Learner>.CreateNew().With(l => l.Uln = 1243567890).Build();
+            // Arrange
+            var learner = Builder<Learner>.CreateNew()
+                .With(x => x.Uln = 1243567890)
+                .Build();
+
             var standard = Builder<Standard>.CreateNew().Build();
-            var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.OverallGrade = "Pass").Build();
 
-            var certificate = Builder<CreateCertificateRequest>.CreateNew().With(cd => cd.Learner = learner)
-                                                                        .With(cd => cd.Standard = standard)
-                                                                        .With(cd => cd.LearningDetails = learningDetails)
-                                                                        .With(cd => cd.PostalContact = null).Build();
+            var learningDetails = Builder<LearningDetails>.CreateNew()
+                .With(x => x.OverallGrade = "Pass")
+                .Build();
 
-            // act
-            bool isValid = certificate.IsValid(out var validationResults);
+            var _sut = new CreateCertificateRequest
+            {
+                Learner = learner,
+                Standard = standard,
+                LearningDetails = learningDetails,
+                PostalContact = postcode is null
+                    ? null
+                    : new PostalContact { PostCode = postcode }
+            };
 
-            // assert
-            Assert.That(isValid, Is.False);
-            Assert.That(validationResults, Has.Count.EqualTo(1));
-            Assert.That(validationResults.First().ErrorMessage, Is.EqualTo("PostalContact is required").IgnoreCase);
+            // Act
+            var isValid = _sut.IsValid(out var validationResults);
+
+            // Assert
+            Assert.That(isValid, Is.True);
+            Assert.That(validationResults, Is.Empty);
         }
 
         [Test]

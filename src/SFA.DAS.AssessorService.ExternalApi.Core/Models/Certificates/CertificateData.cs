@@ -19,7 +19,6 @@
         [Required(ErrorMessage = "LearningDetails is required"), ValidateObject]
         public LearningDetails LearningDetails { get; set; }
 
-        [Required(ErrorMessage = "PostalContact is required"), ValidateObject]
         public PostalContact PostalContact { get; set; }
 
         #region GetHashCode, Equals and IEquatable
