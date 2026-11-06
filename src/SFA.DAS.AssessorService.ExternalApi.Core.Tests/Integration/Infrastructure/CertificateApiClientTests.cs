@@ -2,6 +2,8 @@
 {
     using FizzWare.NBuilder;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using Newtonsoft.Json.Serialization;
     using NUnit.Framework;
     using RichardSzalay.MockHttp;
     using SFA.DAS.AssessorService.ExternalApi.Core.Infrastructure;
@@ -14,6 +16,7 @@
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Text;
     using System.Threading.Tasks;
 
     [TestFixture(Category = "Infrastructure")]
@@ -22,7 +25,7 @@
         private const string apiBaseAddress = "http://localhost";
         private const string subscriptionKey = "test";
 
-        private CertificateApiClient _ApiClient;
+        private CertificateApiClient _sut;
         private MockHttpMessageHandler _MockHttp;
 
         [SetUp]
@@ -36,7 +39,7 @@
             httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
             httpClient.BaseAddress = new Uri(apiBaseAddress);
 
-            _ApiClient = new CertificateApiClient(httpClient);
+            _sut = new CertificateApiClient(httpClient);
         }
 
         [TearDown]
@@ -45,14 +48,15 @@
             _MockHttp?.Dispose();
         }
 
-        [Test]
-        public async Task CreateCertificate()
+        [TestCase(null)]
+        [TestCase("NOT-A-POSTCODE")]
+        public async Task CreateCertificate(string legacyPostcode)
         {
-            // arrange 
+            // Arrange
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.Standard = Builder<Standard>.CreateNew().Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
-                                                                        .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
+                                                                        .With(cd => cd.PostalContact = null)
                                                                         .Build();
 
             var status = new Status { CurrentStatus = "Draft" };
@@ -64,7 +68,13 @@
                 Learner = certificate.CertificateData.Learner,
                 Standard = certificate.CertificateData.Standard,
                 LearningDetails = certificate.CertificateData.LearningDetails,
-                PostalContact = certificate.CertificateData.PostalContact
+                PostalContact = legacyPostcode is null
+                    ? null
+                    : new PostalContact
+                    {
+                        ContactName = "Legacy recipient",
+                        PostCode = legacyPostcode
+                    }
             };
 
             var expectedResponse = new List<CreateCertificateResponse>
@@ -72,15 +82,29 @@
                 new CreateCertificateResponse { Certificate = certificate }
             };
 
+            string requestBody = null;
             _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate")
-                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+                .Respond(async request =>
+                {
+                    requestBody = await request.Content.ReadAsStringAsync();
 
-            // act
-            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        Content = new StringContent(
+                            SerializeResponse(expectedResponse),
+                            Encoding.UTF8,
+                            "application/json")
+                    };
+                });
 
-            // assert
+            // Act
+            var actual = await _sut.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
+
+            // Assert
+            AssertRequestPostalContact(requestBody, legacyPostcode);
             Assert.That(actual, Has.Count.EqualTo(1));
             Assert.That(actual.First().ValidationErrors, Has.Count.EqualTo(0));
+            Assert.That(actual.Single().Certificate.CertificateData.PostalContact, Is.Null);
             Assert.That(actual.ToList()[0].Certificate, Is.EqualTo(expectedResponse.ToList()[0].Certificate));
         }
 
@@ -105,7 +129,7 @@
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
+            var actual = await _sut.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -134,7 +158,7 @@
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
+            var actual = await _sut.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -163,7 +187,7 @@
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
+            var actual = await _sut.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -192,7 +216,7 @@
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
+            var actual = await _sut.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -221,7 +245,7 @@
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
+            var actual = await _sut.CreateCertificates(new List<CreateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -229,15 +253,16 @@
             Assert.That(actual.First().Certificate, Is.Null);
         }
 
-        [Test]
-        public async Task UpdateCertificate()
+        [TestCase(null)]
+        [TestCase("NOT-A-POSTCODE")]
+        public async Task UpdateCertificate(string legacyPostcode)
         {
-            // arrange 
+            // Arrange
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.CertificateReference = "DRAFT CERTIFICATE")
                                                                         .With(cd => cd.Standard = Builder<Standard>.CreateNew().Build())
                                                                         .With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
-                                                                        .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
+                                                                        .With(cd => cd.PostalContact = null)
                                                                         .Build();
 
             var status = new Status { CurrentStatus = "Draft" };
@@ -250,7 +275,13 @@
                 Learner = certificate.CertificateData.Learner,
                 Standard = certificate.CertificateData.Standard,
                 LearningDetails = certificate.CertificateData.LearningDetails,
-                PostalContact = certificate.CertificateData.PostalContact
+                PostalContact = legacyPostcode is null
+                    ? null
+                    : new PostalContact
+                    {
+                        ContactName = "Legacy recipient",
+                        PostCode = legacyPostcode
+                    }
             };
 
             var expectedResponse = new List<UpdateCertificateResponse>
@@ -258,15 +289,29 @@
                 new UpdateCertificateResponse { Certificate = certificate }
             };
 
+            string requestBody = null;
             _MockHttp.When(HttpMethod.Put, $"{apiBaseAddress}/api/v1/certificate")
-                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+                .Respond(async request =>
+                {
+                    requestBody = await request.Content.ReadAsStringAsync();
 
-            // act
-            var actual = await _ApiClient.UpdateCertificates(new List<UpdateCertificateRequest> { certificateRequest });
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        Content = new StringContent(
+                            SerializeResponse(expectedResponse),
+                            Encoding.UTF8,
+                            "application/json")
+                    };
+                });
 
-            // assert
+            // Act
+            var actual = await _sut.UpdateCertificates(new List<UpdateCertificateRequest> { certificateRequest });
+
+            // Assert
+            AssertRequestPostalContact(requestBody, legacyPostcode);
             Assert.That(actual, Has.Count.EqualTo(1));
             Assert.That(actual.First().ValidationErrors, Has.Count.EqualTo(0));
+            Assert.That(actual.Single().Certificate.CertificateData.PostalContact, Is.Null);
             Assert.That(actual.ToList()[0].Certificate, Is.EqualTo(expectedResponse.ToList()[0].Certificate));
         }
 
@@ -292,7 +337,7 @@
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.UpdateCertificates(new List<UpdateCertificateRequest> { certificateRequest });
+            var actual = await _sut.UpdateCertificates(new List<UpdateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -322,7 +367,7 @@
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.UpdateCertificates(new List<UpdateCertificateRequest> { certificateRequest });
+            var actual = await _sut.UpdateCertificates(new List<UpdateCertificateRequest> { certificateRequest });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -333,14 +378,14 @@
         [Test]
         public async Task SubmitCertificate_Using_StandardCode()
         {
-            // arrange 
+            // Arrange
             var submitCertificate = new SubmitCertificateRequest { Uln = 9876543210, FamilyName = "Blogs", StandardCode = 1 };
 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.CertificateReference = "DRAFT CERTIFICATE")
                                                                         .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardCode = 1).With(s => s.StandardReference = null).Build())
                                                                         .With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
-                                                                        .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
+                                                                        .With(cd => cd.PostalContact = null)
                                                                         .Build();
 
             var status = new Status { CurrentStatus = "Submitted" };
@@ -355,14 +400,15 @@
             };
 
             _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate/submit")
-                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+                .Respond(HttpStatusCode.OK, "application/json", SerializeResponse(expectedResponse));
 
-            // act
-            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificateRequest> { submitCertificate });
+            // Act
+            var actual = await _sut.SubmitCertificates(new List<SubmitCertificateRequest> { submitCertificate });
 
-            // assert
+            // Assert
             Assert.That(actual, Has.Count.EqualTo(1));
             Assert.That(actual.First().ValidationErrors, Has.Count.EqualTo(0));
+            Assert.That(actual.Single().Certificate.CertificateData.PostalContact, Is.Null);
             Assert.That(actual.ToList()[0].Certificate, Is.EqualTo(expectedResponse.ToList()[0].Certificate));
 
         }
@@ -370,14 +416,14 @@
         [Test]
         public async Task SubmitCertificate_Using_StandardReference()
         {
-            // arrange 
+            // Arrange
             var submitCertificate = new SubmitCertificateRequest { Uln = 9876543210, FamilyName = "Blogs", StandardReference = "1" };
 
             var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.CertificateReference = "DRAFT CERTIFICATE")
                                                                         .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardCode = null).With(s => s.StandardReference = "1").Build())
                                                                         .With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                                         .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
-                                                                        .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
+                                                                        .With(cd => cd.PostalContact = null)
                                                                         .Build();
 
             var status = new Status { CurrentStatus = "Submitted" };
@@ -392,14 +438,15 @@
             };
 
             _MockHttp.When(HttpMethod.Post, $"{apiBaseAddress}/api/v1/certificate/submit")
-                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+                .Respond(HttpStatusCode.OK, "application/json", SerializeResponse(expectedResponse));
 
-            // act
-            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificateRequest> { submitCertificate });
+            // Act
+            var actual = await _sut.SubmitCertificates(new List<SubmitCertificateRequest> { submitCertificate });
 
-            // assert
+            // Assert
             Assert.That(actual, Has.Count.EqualTo(1));
             Assert.That(actual.First().ValidationErrors, Has.Count.EqualTo(0));
+            Assert.That(actual.Single().Certificate.CertificateData.PostalContact, Is.Null);
             Assert.That(actual.ToList()[0].Certificate, Is.EqualTo(expectedResponse.ToList()[0].Certificate));
         }
 
@@ -420,7 +467,7 @@
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificateRequest> { submitCertificate });
+            var actual = await _sut.SubmitCertificates(new List<SubmitCertificateRequest> { submitCertificate });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -445,7 +492,7 @@
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificateRequest> { submitCertificate });
+            var actual = await _sut.SubmitCertificates(new List<SubmitCertificateRequest> { submitCertificate });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -470,7 +517,7 @@
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.SubmitCertificates(new List<SubmitCertificateRequest> { submitCertificate });
+            var actual = await _sut.SubmitCertificates(new List<SubmitCertificateRequest> { submitCertificate });
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(1));
@@ -492,7 +539,7 @@
 
             // act
             var request = new DeleteCertificateRequest { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
-            var actual = await _ApiClient.DeleteCertificate(request);
+            var actual = await _sut.DeleteCertificate(request);
 
             // assert
             Assert.That(actual.Error, Is.Null);
@@ -518,7 +565,7 @@
 
             // act
             var request = new DeleteCertificateRequest { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
-            var actual = await _ApiClient.DeleteCertificate(request);
+            var actual = await _sut.DeleteCertificate(request);
 
             // assert
             Assert.That(actual.Error, Is.Not.Null);
@@ -546,7 +593,7 @@
 
             // act
             var request = new DeleteCertificateRequest { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
-            var actual = await _ApiClient.DeleteCertificate(request);
+            var actual = await _sut.DeleteCertificate(request);
 
             // assert
             Assert.That(actual.Error, Is.Not.Null);
@@ -574,7 +621,7 @@
 
             // act
             var request = new DeleteCertificateRequest { Uln = uln, FamilyName = lastname, Standard = standard, CertificateReference = certificateReference };
-            var actual = await _ApiClient.DeleteCertificate(request);
+            var actual = await _sut.DeleteCertificate(request);
 
             // assert
             Assert.That(actual.Error, Is.Not.Null);
@@ -585,7 +632,7 @@
         [Test]
         public async Task GetCertificate()
         {
-            // arrange 
+            // Arrange
             long uln = 1234567890;
             string lastname = "Bloggs";
             string standard = "1";
@@ -595,7 +642,7 @@
                                                             .With(cd => cd.Standard = Builder<Standard>.CreateNew().With(s => s.StandardCode = 1).Build())
                                                             .With(cd => cd.Learner = Builder<Learner>.CreateNew().Build())
                                                             .With(cd => cd.LearningDetails = Builder<LearningDetails>.CreateNew().Build())
-                                                            .With(cd => cd.PostalContact = Builder<PostalContact>.CreateNew().Build())
+                                                            .With(cd => cd.PostalContact = null)
                                                             .Build();
 
             var status = new Status { CurrentStatus = "Submitted" };
@@ -605,15 +652,16 @@
             var expectedResponse = new Certificate { CertificateData = certificateData, Status = status, Created = created, Submitted = submitted };
 
             _MockHttp.When(HttpMethod.Get, $"{apiBaseAddress}/api/v1/certificate/{uln}/{lastname}/{standard}")
-                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+                .Respond(HttpStatusCode.OK, "application/json", SerializeResponse(expectedResponse));
 
-            // act
+            // Act
             var request = new GetCertificateRequest { Uln = uln, FamilyName = lastname, Standard = standard };
-            var actual = await _ApiClient.GetCertificate(request);
+            var actual = await _sut.GetCertificate(request);
 
-            // assert
+            // Assert
             Assert.That(actual.Error, Is.Null);
             Assert.That(actual.Certificate, Is.Not.Null);
+            Assert.That(actual.Certificate.CertificateData.PostalContact, Is.Null);
         }
 
         [Test]
@@ -629,7 +677,7 @@
 
             // act
             var request = new GetCertificateRequest { Uln = uln, FamilyName = lastname, Standard = standard };
-            var actual = await _ApiClient.GetCertificate(request);
+            var actual = await _sut.GetCertificate(request);
 
             // assert
             Assert.That(actual.Error, Is.Null);
@@ -655,7 +703,7 @@
 
             // act
             var request = new GetCertificateRequest { Uln = uln, FamilyName = lastname, Standard = standard };
-            var actual = await _ApiClient.GetCertificate(request);
+            var actual = await _sut.GetCertificate(request);
 
             // assert
             Assert.That(actual.Error, Is.Not.Null);
@@ -677,12 +725,39 @@
                 .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // act
-            var actual = await _ApiClient.GetGrades();
+            var actual = await _sut.GetGrades();
 
             // assert
             Assert.That(actual, Has.Count.EqualTo(6));
             Assert.That(actual, Contains.Item("Distinction"));
         }
 
+
+        private static string SerializeResponse(object response)
+        {
+            return JsonConvert.SerializeObject(response, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                NullValueHandling = NullValueHandling.Include,
+                DefaultValueHandling = DefaultValueHandling.Include
+            });
+        }
+
+        private static void AssertRequestPostalContact(string requestBody, string legacyPostcode)
+        {
+            var request = (JObject)JArray.Parse(requestBody).Single();
+            var postalContact = request.Property("postalContact");
+
+            if (legacyPostcode is null)
+            {
+                Assert.That(postalContact, Is.Null);
+                return;
+            }
+
+            Assert.That(postalContact, Is.Not.Null);
+            Assert.That(postalContact.Value.Type, Is.EqualTo(JTokenType.Object));
+            Assert.That((string)postalContact.Value["contactName"], Is.EqualTo("Legacy recipient"));
+            Assert.That((string)postalContact.Value["postCode"], Is.EqualTo(legacyPostcode));
+        }
     }
 }

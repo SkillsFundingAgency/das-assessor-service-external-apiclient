@@ -75,25 +75,28 @@
         }
 
         [Test]
-        public void PostalContactMissing()
+        public void WhenPostalContactIsNull_ThenCertificateDataIsValid()
         {
-            // arrange
-            var learner = Builder<Learner>.CreateNew().With(l => l.Uln = 1243567890).Build();
-            var standard = Builder<Standard>.CreateNew().Build();
-            var learningDetails = Builder<LearningDetails>.CreateNew().With(l => l.OverallGrade = "Pass").Build();
+            // Arrange
+            var _sut = new CertificateData
+            {
+                CertificateReference = "TEST",
+                Learner = Builder<Learner>.CreateNew()
+                    .With(x => x.Uln = 1243567890)
+                    .Build(),
+                Standard = Builder<Standard>.CreateNew().Build(),
+                LearningDetails = Builder<LearningDetails>.CreateNew()
+                    .With(x => x.OverallGrade = "Pass")
+                    .Build(),
+                PostalContact = null
+            };
 
-            var certificateData = Builder<CertificateData>.CreateNew().With(cd => cd.Learner = learner)
-                                                                        .With(cd => cd.Standard = standard)
-                                                                        .With(cd => cd.LearningDetails = learningDetails)
-                                                                        .With(cd => cd.PostalContact = null).Build();
+            // Act
+            var isValid = _sut.IsValid(out var validationResults);
 
-            // act
-            bool isValid = certificateData.IsValid(out var validationResults);
-
-            // assert
-            Assert.That(isValid, Is.False);
-            Assert.That(validationResults, Has.Count.EqualTo(1));
-            Assert.That(validationResults.First().ErrorMessage, Is.EqualTo("PostalContact is required").IgnoreCase);
+            // Assert
+            Assert.That(isValid, Is.True);
+            Assert.That(validationResults, Is.Empty);
         }
 
         [Test]
@@ -142,7 +145,7 @@
             bool areEqual = certificateData1 == certificateData2;
 
             // assert
-             Assert.That(areEqual, Is.True);
+            Assert.That(areEqual, Is.True);
         }
 
         [Test]

@@ -164,18 +164,12 @@
             string standardReference = "ST0127";
             string version = "1.0";
             string overallGrade = "PASS";
-            string contactName = "Shreya Smith";
-            string organisation = "Contoso Ltd";
-            string address = "123 Test Road";
-            string city = "Townsville";
-            string postcode = "ZY9 9ZY";
 
             CreateCertificateRequest newCertificate = new CreateCertificateRequest
             {
                 Learner = new Learner { Uln = uln, GivenNames = firstName, FamilyName = lastName },
                 Standard = new Standard { StandardCode = standardCode, StandardReference = standardReference },
-                LearningDetails = new LearningDetails { OverallGrade = overallGrade, AchievementDate = DateTime.UtcNow, Version = version },
-                PostalContact = new PostalContact { ContactName = contactName, Organisation = organisation, AddressLine1 = address, City = city, PostCode = postcode }
+                LearningDetails = new LearningDetails { OverallGrade = overallGrade, AchievementDate = DateTime.UtcNow, Version = version }
             };
 
             if (newCertificate.IsValid(out _))
@@ -206,7 +200,7 @@
                         AchievementDate = DateTime.UtcNow,
                         Version = "1.0"
                     },
-                    PostalContact = new PostalContact { ContactName = "Shreya Smith", Organisation = "Contoso Ltd", AddressLine1 = "123 Test Road", City = "Townsville", PostCode = "ZY99ZZ" }
+                    PostalContact = null
                 }
             };
 
@@ -216,8 +210,7 @@
                 CertificateReference = currentCertificate.CertificateData.CertificateReference,
                 Learner = currentCertificate.CertificateData.Learner,
                 Standard = currentCertificate.CertificateData.Standard,
-                LearningDetails = currentCertificate.CertificateData.LearningDetails,
-                PostalContact = currentCertificate.CertificateData.PostalContact,
+                LearningDetails = currentCertificate.CertificateData.LearningDetails
             };
 
             updatedCertificate.LearningDetails.OverallGrade = "Merit";

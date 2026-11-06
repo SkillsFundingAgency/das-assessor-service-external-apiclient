@@ -252,16 +252,7 @@ Response 200, with application/json body dependent on records held.
             "providerName": "string" (lookup),
             "providerUkPrn": 0 (lookup)
          },
-         "postalContact": {
-            "contactName": "string" (lookup),
-            "department": "string" (lookup),
-            "organisation": "string" (lookup),
-            "addressLine1": "string" (lookup),
-            "addressLine2": "string" (lookup),
-            "addressLine3": "string" (lookup),
-            "city": "string" (lookup),
-            "postCode": "string" (lookup)
-         }
+         "postalContact": null
       },
       "status": {
          "currentStatus": "Draft | Ready | Submitted"
@@ -523,7 +514,11 @@ Where "message text" is:
     * "Provide apprentice family name"
 
 
-## Request Certificate for Apprenticeships 
+## Request Certificate for Apprenticeships
+
+`postalContact` is optional in create and update requests and is retained for backwards compatibility. The API ignores supplied delivery details and preserves any delivery details already stored. Certificate responses return `"postalContact": null`, including certificate data returned through the learner endpoint. An eligible certificate can be reported as `Ready` and submitted without delivery details.
+
+The standard create and update CSV examples omit delivery details. To test a legacy payload, use [updateCertificatesLegacyPostalContact.csv](src/SFA.DAS.AssessorService.ExternalApi.Examples/CsvFiles/updateCertificatesLegacyPostalContact.csv). It supplies a synthetic address with an invalid postcode so you can verify that the API accepts the request and returns no delivery details.
 
 ### 1.   Check Certificate (Optional) 
 
@@ -579,16 +574,7 @@ Response 200 plus certificate details, if certificate already created.
             "providerName": "string" (lookup),
             "providerUkPrn": 0 (lookup)
          },
-         "postalContact": {
-            "contactName": "string" (lookup),
-            "department": "string" (lookup),
-            "organisation": "string" (lookup),
-            "addressLine1": "string" (lookup),
-            "addressLine2": "string" (lookup),
-            "addressLine3": "string" (lookup),
-            "city": "string" (lookup),
-            "postCode": "string" (lookup)
-         }
+         "postalContact": null
       },
       "status": {
          "currentStatus": "Draft | Ready | Submitted"
@@ -641,16 +627,6 @@ application/json body posted should contain an array with the requested certific
       "courseOption": "string" (optional),
       "overallGrade": "string",
       "achievementDate": "2018-11-16T14:26:57"
-   },
-   "postalContact": {
-      "contactName": "string",
-      "department": "string" (optional),
-      "organisation": "string",
-      "addressLine1": "string",
-      "addressLine2": "string" (optional),
-      "addressLine3": "string" (optional),
-      "city": "string",
-      "postCode": "string"
    }
 }]
 ```
@@ -695,16 +671,7 @@ Response 200, plus application/json containing response for the requested certif
             "providerName": "string" (lookup),
             "providerUkPrn": 0 (lookup)
          },
-         "postalContact": {
-            "contactName": "string" (as provided),
-            "department": "string" (as provided),
-            "organisation": "string" (as provided),
-            "addressLine1": "string" (as provided),
-            "addressLine2": "string" (as provided),
-            "addressLine3": "string" (as provided),
-            "city": "string" (as provided),
-            "postCode": "string" (as provided),
-         }
+         "postalContact": null
       },
       "status": {
          "currentStatus": "Draft | Ready"
@@ -753,17 +720,6 @@ Where "message text" is:
     * "Provide the achievement date"
     * "Achievement date cannot be before 01 01 2017"
     * "Achievement date cannot be in the future"
-- ContactName
-    * "Provide a contact name"
-- Organisation
-    * "Provide an organisation"
-- AddressLine1
-    * "Provide an address"
-- City
-    * "Provide a city or town"
-- Postcode
-    * "Provide a postcode"
-    * "Provide a valid UK postcode"
 - Learner
     * "Incorrect version for learner"
     * "Incorrect course option for learner"
@@ -773,7 +729,7 @@ Where "message text" is:
 
 #### To enable previously created certificates to be updated.
 
-Previously created certificates can be updated, where they have not yet been submitted, to amend any of the data fields provided.
+Eligible certificates can be updated before submission. Supplied delivery details are ignored, and any delivery details already stored are preserved.
 The certificate records to be updated have to be identified using uln, familyName, standard and the previously assigned certificateReference.
 
 Request can either use numeric "standardCode" (LARS Standard code) or "standardReference" (IfATE STxxxx reference) to identify the standard.
@@ -806,16 +762,6 @@ application/json body posted should contain an array for previously requested ce
       "courseOption": "string" (optional),
       "overallGrade": "string",
       "achievementDate": "2018-11-16T14:26:57.009"
-   },
-   "postalContact": {
-      "contactName": "string",
-      "department": "string" (optional),
-      "organisation": "string",
-      "addressLine1": "string",
-      "addressLine2": "string" (optional),
-      "addressLine3": "string" (optional),
-      "city": "string",
-      "postCode": "string"
    }
 }]
 ```
@@ -844,11 +790,9 @@ Response body is as for **Create Certificate POST**, except alternative "message
 
 ### 4.   Submit Certificate
 
-#### To submit certificates to be issued to Apprentices 
+#### To submit an eligible certificate
 
-Certificates that have been created with **Create Certificate POST**, or updated **Update Certificate PUT**, should be submitted to be printed and delivered when all data has been correctly provided and checked by the EPAO.
-
-Certificates can only be submitted after all validation checks have been successfully performed, and the certificate is 'Ready'
+Submit the certificate once the assessment details have been checked and the certificate is `Ready`. Delivery details are not required for submission.
 
 **Request**
   
@@ -910,16 +854,7 @@ Response 200, plus application/json containing response for the submitted certif
             "providerName": "string",
             "providerUkPrn": 0
          },
-         "postalContact": {
-            "contactName": "string",
-            "department": "string",
-            "organisation": "string",
-            "addressLine1": "string",
-            "addressLine2": "string",
-            "addressLine3": "string",
-            "city": "string",
-            "postCode": "string"
-         }
+         "postalContact": null
       },
       "status": {
          "currentStatus": "Submitted"

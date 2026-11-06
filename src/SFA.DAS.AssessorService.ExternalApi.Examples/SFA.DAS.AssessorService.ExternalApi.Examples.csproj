@@ -14,7 +14,6 @@
     <None Remove="CsvFiles\getCertificates.csv" />
     <None Remove="CsvFiles\getLearners.csv" />
     <None Remove="CsvFiles\submitCertificates.csv" />
-    <None Remove="CsvFiles\updateCertificates.csv" />
     <None Remove="CsvFiles\updateEpaRecords.csv" />
   </ItemGroup>
 
@@ -37,10 +36,13 @@
     <Content Include="CsvFiles\submitCertificates.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="CsvFiles\updateCertificates.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="CsvFiles\updateEpaRecords.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="CsvFiles\updateCertificates.csv">
+    <Content Include="CsvFiles\updateCertificatesLegacyPostalContact.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="CsvFiles\deleteCertificates.csv">
